@@ -14,7 +14,7 @@ parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
 
 # Import station_list from config.py
-from config import station_list, name_of_station
+from src.config import station_list, name_of_station
 
 app = Flask(__name__)
 

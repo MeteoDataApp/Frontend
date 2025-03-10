@@ -7,9 +7,11 @@ Recommended to have conda installed, for easier environment management.
 ```bash
 git clone https://github.com/lucky0218/meteo.git
 git checkout -b your_branch
-python -m venv venv
-venv/Scripts/activate
-pip install -r requirements.txt
-python show/app.py
+pip install uv
+uv venv venv
+venv\Scripts\activate
+uv pip install .
+cd src
+python -m show.app
 ```
 Check `localhost:5000` to see the website.
