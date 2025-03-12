@@ -15,3 +15,11 @@ cd src
 python -m show.app
 ```
 Check `localhost:5000` to see the website.
+
+## `integrate` branch
+Application runs on Vite-based React Frontend and Flask Backend.
+
+Run the Frontend Server: `npm run dev`
+
+Frontend URL: `localhost:5173`
+Backend URL: `localhost:5000`
