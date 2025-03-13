@@ -87,7 +87,7 @@ const AboutUs = () => {
                     colorScheme="blue"
                     bgGradient="linear(to-r, #6366f1, #ec4899)"
                     _hover={{ boxShadow: "lg" }}
-                    onClick={() => navigate("/")}
+                    onClick={() => navigate("/dashboard")}
                     fontWeight="bold"
                     borderRadius="xl"
                     py={6}

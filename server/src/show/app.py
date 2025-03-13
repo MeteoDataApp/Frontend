@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, json
+from flask_cors import CORS
 from pymongo import MongoClient
 import datetime
 import os
@@ -17,6 +18,7 @@ sys.path.append(parent_dir)
 from config import station_list, name_of_station
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
 
 # MongoDB connection string – replace the password/credentials as needed
 MONGO_CONNECTION_STRING = "mongodb+srv://jim:lucky0218@cluster0.lqm6b.mongodb.net/"
@@ -28,14 +30,15 @@ test_collection = db["test"]
 def home():
     return render_template("home.html")
 
-@app.route("/by_station", methods=["GET", "POST"])
+@app.route("/by_station", methods=["GET"])
 def by_station():
     data = []
     selected_station = None
-    if request.method == "POST":
+    if request.method == "GET":
         # Retrieve selected station from the form
         try:
-            selected_station = int(request.form.get("station"))
+            # Get the station from the query string
+            selected_station = request.args.get("station")
         except (ValueError, TypeError):
             selected_station = None
 
