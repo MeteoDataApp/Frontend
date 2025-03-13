@@ -2,21 +2,24 @@
 import { motion } from 'framer-motion';
 import { Box, Heading, Text, Icon, Grid, useBreakpointValue, Button } from '@chakra-ui/react';
 import { FiCloud, FiSun, FiWind, FiMap, FiClock, FiAlertTriangle } from 'react-icons/fi';
-
-const features = [
-    { icon: FiCloud, title: "Real-time Updates", description: "Minute-by-minute weather tracking with ultra-low latency" },
-    { icon: FiSun, title: "AI Forecasting", description: "Machine learning predictions with 96-hour outlook" },
-    { icon: FiWind, title: "Severe Alerts", description: "Instant notifications for dangerous weather conditions" },
-    { icon: FiMap, title: "Global Coverage", description: "Detailed maps for any location worldwide" },
-    { icon: FiClock, title: "Historical Data", description: "Access decade-long weather archives" },
-    { icon: FiAlertTriangle, title: "Risk Analysis", description: "Advanced impact assessment for businesses" },
-];
+import { useNavigate } from 'react-router-dom';
 
 const AboutUs = () => {
+    const navigate = useNavigate();
+
     const MotionBox = motion(Box);
     const MotionButton = motion(Button);
 
     const gridColumns = useBreakpointValue({ base: 1, md: 2, lg: 3 });
+
+    const features = [
+        { icon: FiCloud, title: "Real-time Updates", description: "Minute-by-minute weather tracking with ultra-low latency" },
+        { icon: FiSun, title: "AI Forecasting", description: "Machine learning predictions with 96-hour outlook" },
+        { icon: FiWind, title: "Severe Alerts", description: "Instant notifications for dangerous weather conditions" },
+        { icon: FiMap, title: "Global Coverage", description: "Detailed maps for any location worldwide" },
+        { icon: FiClock, title: "Historical Data", description: "Access decade-long weather archives" },
+        { icon: FiAlertTriangle, title: "Risk Analysis", description: "Advanced impact assessment for businesses" },
+    ];
 
     return (
         <MotionBox
@@ -81,13 +84,13 @@ const AboutUs = () => {
                 <Heading fontSize="3xl" mb={6}>Ready for Better Weather Insights?</Heading>
                 <MotionButton
                     size="lg"
-                    colorScheme="purple"
-                    bgGradient="linear(to-r, #6366f1, #a855f7)"
-                    _hover={{ bgGradient: 'linear(to-r, #818cf8, #c084fc)' }}
-                    px={12}
+                    colorScheme="blue"
+                    bgGradient="linear(to-r, #6366f1, #ec4899)"
+                    _hover={{ boxShadow: "lg" }}
+                    onClick={() => navigate("/")}
+                    fontWeight="bold"
+                    borderRadius="xl"
                     py={6}
-                    fontSize="xl"
-                    whileHover={{ scale: 1.05 }}
                 >
                     Start Exploring Now
                 </MotionButton>
