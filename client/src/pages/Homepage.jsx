@@ -42,15 +42,24 @@ export default function HomePage() {
             minH="80vh"
             maxH="100%"
         >
-            <Heading
-                bgGradient="linear(to-r, #6366f1, #ec4899)"
-                bgClip="text"
-                fontSize="5xl"
-                fontWeight="extrabold"
+            <MotionBox
                 textAlign="center"
+                mb={16}
+                initial={{ y: 20 }}
+                animate={{ y: 0 }}
+                transition={{ duration: 0.5 }}
             >
-                Welcome to Meteo Data
-            </Heading>
+                <Heading
+                    bgGradient="linear(to-r, #6366f1, #ec4899)"
+                    bgClip="text"
+                    fontSize="5xl"
+                    fontWeight="extrabold"
+                    textAlign="center"
+                >
+                    Welcome to Meteo Data
+                </Heading>
+            </MotionBox>
+
             <MotionBox
                 bg="whiteAlpha.900"
                 p={8}

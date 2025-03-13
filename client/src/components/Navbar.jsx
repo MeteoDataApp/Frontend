@@ -1,7 +1,7 @@
 import { Box, Flex } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { Heading, Text, HStack, Link } from '@chakra-ui/react';
-import { FaCalendarAlt, FaTrain } from 'react-icons/fa';
+import { FaHome, FaInfoCircle } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
@@ -49,17 +49,17 @@ const Navbar = () => {
                     <MotionBox>
                         <Link href="/" fontSize="lg" color="gray.600" _hover={{ color: '#4F46E5' }}>
                             <HStack>
-                                <FaTrain />
-                                <Text>By Station</Text>
+                                <FaHome />
+                                <Text>Home</Text>
                             </HStack>
                         </Link>
                     </MotionBox>
 
                     <MotionBox>
-                        <Link href="/" fontSize="lg" color="gray.600" _hover={{ color: '#4F46E5' }}>
+                        <Link href="/about" fontSize="lg" color="gray.600" _hover={{ color: '#4F46E5' }}>
                             <HStack>
-                                <FaCalendarAlt />
-                                <Text>By Date</Text>
+                                <FaInfoCircle />
+                                <Text>About Us</Text>
                             </HStack>
                         </Link>
                     </MotionBox>
