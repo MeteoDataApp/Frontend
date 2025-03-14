@@ -48,19 +48,61 @@ const Navbar = () => {
 
                 <HStack spacing={8} display={{ base: 'none', md: 'flex' }}>
                     <MotionBox>
-                        <Link href="/" fontSize="lg" color="gray.600" _hover={{ color: '#4F46E5' }}>
-                            <HStack>
-                                <FaHome />
-                                <Text>Home</Text>
+                        <Link
+                            href="/"
+                            fontSize="lg"
+                            color="gray.600"
+                            position="relative"
+                            _hover={{
+                                textDecoration: "none", 
+                            }}
+                        >
+                            <HStack
+                                _hover={{
+                                    color: '#4F46E5',
+                                    transform: "scale(1.05)",
+                                }}
+                                _active={{
+                                    transform: "scale(0.95)", 
+                                }}
+                                transition="all 0.2s" 
+                            >
+                                <Box as="span">
+                                    <FaHome />
+                                </Box>
+                                <Box as="span">
+                                    <Text>Home</Text>
+                                </Box>
                             </HStack>
                         </Link>
                     </MotionBox>
 
                     <MotionBox>
-                        <Link href="/about" fontSize="lg" color="gray.600" _hover={{ color: '#4F46E5' }}>
-                            <HStack>
-                                <FaInfoCircle />
-                                <Text>About Us</Text>
+                        <Link
+                            href="/about"
+                            fontSize="lg"
+                            color="gray.600"
+                            position="relative"
+                            _hover={{
+                                textDecoration: "none", 
+                            }}
+                        >
+                            <HStack
+                                _hover={{
+                                    color: '#4F46E5',
+                                    transform: "scale(1.05)", 
+                                }}
+                                _active={{
+                                    transform: "scale(0.95)", 
+                                }}
+                                transition="all 0.2s" 
+                            >
+                                <Box as="span">
+                                    <FaInfoCircle />
+                                </Box>
+                                <Box as="span">
+                                    <Text>About Us</Text>
+                                </Box>
                             </HStack>
                         </Link>
                     </MotionBox>
