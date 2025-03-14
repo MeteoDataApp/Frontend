@@ -4,12 +4,15 @@ import { Heading, Button, Tabs, TabList, TabPanels, Tab, TabPanel, Menu, MenuBut
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { useState } from 'react';
 import server from "../../networking";
+import { useShowToast } from '../extensions/useShowToast';
 
 const Dashboard = () => {
     const MotionBox = motion.div;
 
+    const showToast = useShowToast();
+
     const [selectedStation, setSelectedStation] = useState(null);
-    const [selectedDate, setSelectedDate] = useState('');
+    const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState([]);
     const [sortOrderAvg, setSortOrderAvg] = useState('desc');
@@ -20,8 +23,10 @@ const Dashboard = () => {
         setLoading(true);
         try {
             const response = await server.get(`/by_station?station=${selectedStation}`);
-            setData(Array.isArray(response.data) ? response.data : []);
-            console.log(Array.isArray(response.data));
+            setData(response.data);
+            if (response.data.length === 0) {
+                showToast("error", "No data found", "Please try another station");
+            }
         } catch (error) {
             console.error("Error fetching data:", error);
             setData([]);
@@ -35,7 +40,10 @@ const Dashboard = () => {
         setLoading(true);
         try {
             const response = await server.get(`/by_date?date=${selectedDate}`);
-            setData(Array.isArray(response.data) ? response.data : []);
+            setData(response.data);
+            if (response.data.length === 0) {
+                showToast("error", "No data found", "Please try another date");
+            }
         } catch (error) {
             console.error("Error fetching data:", error);
             setData([]);
@@ -139,12 +147,12 @@ const Dashboard = () => {
                                 </MenuList>
                             </Menu>
 
-                            <Button ml={3} onClick={handleSubmitStation} colorScheme='green' isLoading={loading}>
+                            <Button ml={3} onClick={handleSubmitStation} colorScheme='green' isLoading={loading} isDisabled={!selectedStation}>
                                 Search
                             </Button>
                         </TabPanel>
                         <TabPanel>
-                            <Flex gap={3} align="center">
+                            <Flex gap={3} align="center" justifyContent={"center"}>
                                 <Input
                                     type="date"
                                     value={selectedDate}
@@ -154,7 +162,7 @@ const Dashboard = () => {
                                     maxW="200px"
                                 />
                                 <Button
-                                    colorScheme="purple"
+                                    colorScheme="green"
                                     onClick={handleSubmitDate}
                                     isLoading={loading}
                                 >
