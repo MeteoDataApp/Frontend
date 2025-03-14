@@ -59,8 +59,7 @@ const Navbar = () => {
                         >
                             <HStack
                                 _hover={{
-                                    color: '#4F46E5',
-                                    transform: "scale(1.05)",
+                                    color: '#4F46E5'
                                 }}
                                 _active={{
                                     transform: "scale(0.95)", 
@@ -89,8 +88,7 @@ const Navbar = () => {
                         >
                             <HStack
                                 _hover={{
-                                    color: '#4F46E5',
-                                    transform: "scale(1.05)",
+                                    color: '#4F46E5'
                                 }}
                                 _active={{
                                     transform: "scale(0.95)", 
@@ -119,8 +117,7 @@ const Navbar = () => {
                         >
                             <HStack
                                 _hover={{
-                                    color: '#4F46E5',
-                                    transform: "scale(1.05)", 
+                                    color: '#4F46E5'
                                 }}
                                 _active={{
                                     transform: "scale(0.95)", 
