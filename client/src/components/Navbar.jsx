@@ -1,7 +1,7 @@
 import { Box, Flex } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { Heading, Text, HStack, Link } from '@chakra-ui/react';
-import { FaHome, FaInfoCircle } from 'react-icons/fa';
+import { FaDatabase, FaHome, FaInfoCircle } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
@@ -72,6 +72,36 @@ const Navbar = () => {
                                 </Box>
                                 <Box as="span">
                                     <Text>Home</Text>
+                                </Box>
+                            </HStack>
+                        </Link>
+                    </MotionBox>
+
+                    <MotionBox>
+                        <Link
+                            href="/dashboard"
+                            fontSize="lg"
+                            color="gray.600"
+                            position="relative"
+                            _hover={{
+                                textDecoration: "none", 
+                            }}
+                        >
+                            <HStack
+                                _hover={{
+                                    color: '#4F46E5',
+                                    transform: "scale(1.05)",
+                                }}
+                                _active={{
+                                    transform: "scale(0.95)", 
+                                }}
+                                transition="all 0.2s" 
+                            >
+                                <Box as="span">
+                                    <FaDatabase />
+                                </Box>
+                                <Box as="span">
+                                    <Text>Dashboard</Text>
                                 </Box>
                             </HStack>
                         </Link>
