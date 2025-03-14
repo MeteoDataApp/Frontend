@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { motion } from 'framer-motion';
-import { Heading, Button, Tabs, TabList, TabPanels, Tab, TabPanel, Menu, MenuButton, MenuList, MenuItem, Flex, Input, Table, Thead, Tbody, Tr, Th, Td, TableContainer, Box, Text, IconButton } from '@chakra-ui/react';
+import { Heading, Button, Tabs, TabList, TabPanels, Tab, TabPanel, Menu, MenuButton, MenuList, MenuItem, Flex, Input, Table, Thead, Tbody, Tr, Th, Td, TableContainer, Box, Text, IconButton, Checkbox } from '@chakra-ui/react';
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { useState } from 'react';
 import { useShowToast } from '../extensions/useShowToast';
@@ -14,11 +14,13 @@ const Dashboard = () => {
     const [selectedStation, setSelectedStation] = useState(null);
     const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
     const [loading, setLoading] = useState(false);
+    const [advancedLoading, setAdvancedLoading] = useState(false);
     const [data, setData] = useState([]);
     const [sortOrderAvg, setSortOrderAvg] = useState('desc');
     const [sortOrderFD, setSortOrderFD] = useState('desc');
     const [currentPage, setCurrentPage] = useState(1);
     const [activeTab, setActiveTab] = useState("station");
+    const [advancedAnalysisList, setAdvancedAnalysisList] = useState([]);
     const recordsPerPage = 7;
 
     const handleSubmitStation = async () => {
@@ -55,6 +57,10 @@ const Dashboard = () => {
         }
     };
 
+    const handleAdvancedAnalysis = async () => {
+        console.log("Selected station codes for advanced analysis:", advancedAnalysisList);
+    };
+
     const sortDataAvg = () => {
         const sorted = [...data].sort((a, b) =>
             sortOrderAvg === 'asc' ? a.Avg - b.Avg : b.Avg - a.Avg
@@ -69,6 +75,19 @@ const Dashboard = () => {
         );
         setData(sorted);
         setSortOrderFD(sortOrderFD === 'asc' ? 'desc' : 'asc');
+    };
+
+    const handleCheckboxChange = (e, stationCode) => {
+        if (e.target.checked) {
+            setAdvancedAnalysisList((prev) => {
+                if (!prev.includes(stationCode) && prev.length < 3) {
+                    return [...prev, stationCode];
+                }
+                return prev;
+            });
+        } else {
+            setAdvancedAnalysisList((prev) => prev.filter(code => code !== stationCode));
+        }
     };
 
     const stationList = [
@@ -142,8 +161,8 @@ const Dashboard = () => {
                         <TabList display="flex" justifyContent="center" mt={10} mb={5}>
                             <Tab
                                 onClick={() => {
-                                    setCurrentPage(1)
-                                    setActiveTab("station")
+                                    setCurrentPage(1);
+                                    setActiveTab("station");
                                 }}
                                 _selected={{
                                     bgGradient: "linear(to-r, #6366f1, #ec4899)",
@@ -162,8 +181,8 @@ const Dashboard = () => {
                             </Tab>
                             <Tab
                                 onClick={() => {
-                                    setCurrentPage(1)
-                                    setActiveTab("date")
+                                    setCurrentPage(1);
+                                    setActiveTab("date");
                                 }}
                                 _selected={{
                                     bgGradient: "linear(to-r, #6366f1, #ec4899)",
@@ -235,6 +254,7 @@ const Dashboard = () => {
                                         borderRadius="md"
                                         maxW="200px"
                                     />
+
                                     <Button
                                         onClick={handleSubmitDate}
                                         bgGradient="linear(to-r, #6366f1, #ec4899)"
@@ -251,6 +271,25 @@ const Dashboard = () => {
                                         isLoading={loading}
                                     >
                                         Search
+                                    </Button>
+
+                                    <Button
+                                        onClick={handleAdvancedAnalysis}
+                                        bgGradient="linear(to-r, #6366f1, #ec4899)"
+                                        color="white"
+                                        _hover={advancedAnalysisList.length >= 2 && advancedAnalysisList.length < 3 && {
+                                            bgGradient: "linear(to-r, #6366f1, #ec4899)",
+                                            transform: "scale(1.05)",
+                                            boxShadow: "lg",
+                                        }}
+                                        _active={advancedAnalysisList.length >= 2 && advancedAnalysisList.length < 3 && {
+                                            bgGradient: "linear(to-r, #6366f1, #ec4899)",
+                                            transform: "scale(0.95)",
+                                        }}
+                                        isLoading={advancedLoading}
+                                        isDisabled={advancedAnalysisList.length < 2}
+                                    >
+                                        Advanced Analysis
                                     </Button>
                                 </Flex>
                             </TabPanel>
@@ -269,6 +308,7 @@ const Dashboard = () => {
                             <Table variant="striped">
                                 <Thead>
                                     <Tr>
+
                                         <Th>Station</Th>
                                         <Th>Date</Th>
                                         <Th cursor="pointer" onClick={sortDataAvg}>
@@ -287,7 +327,21 @@ const Dashboard = () => {
                                         return (
                                             <Tr key={record._id}>
                                                 <Td>
-                                                    {stationInfo ? `${stationInfo.name} (${record.Station})` : record.Station}
+                                                    <Box display="flex" gap={3}>
+                                                        {activeTab === "date" && (
+                                                            <Checkbox
+                                                                isChecked={advancedAnalysisList.includes(record.Station)}
+                                                                isDisabled={
+                                                                    !advancedAnalysisList.includes(record.Station) &&
+                                                                    advancedAnalysisList.length >= 3
+                                                                }
+                                                                onChange={(e) => handleCheckboxChange(e, record.Station)}
+                                                                borderColor={"gray.400"}
+                                                            />
+                                                        )}
+
+                                                        {stationInfo ? `${stationInfo.name} (${record.Station})` : record.Station}
+                                                    </Box>
                                                 </Td>
                                                 <Td>{record.Date}</Td>
                                                 <Td fontWeight="bold">{record.Avg}</Td>
