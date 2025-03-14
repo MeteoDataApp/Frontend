@@ -106,7 +106,7 @@ const Dashboard = () => {
                     bgClip="text"
                     fontSize={{ base: '3xl', md: '4xl' }}
                     mb={3}
-                    mt={3}
+                    mt={24}
                 >
                     Weather Dashboard
                 </Heading>
