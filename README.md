@@ -164,6 +164,18 @@ Retrieves all records for a given date from the database, filtering only those r
 ]
 ```
 
+### Database Schema
+```json
+[
+  {
+    "Avg": <float>,
+    "Date": <datetime>,
+    "FDAvg": <float>,
+    "Station": <int>,
+    "_id": <str>
+  }
+```
+
 **Documented by [Joshua](https://github.com/Sadliquid) and [Lincoln](https://github.com/lincoln0623)**
 
-**API Documentation Last Updated on `14 March 2025 11:43AM`**
+**API Documentation and Database Schema Last Updated on `14 March 2025 11:54AM`**
