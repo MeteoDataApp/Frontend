@@ -174,6 +174,7 @@ Retrieves all records for a given date from the database, filtering only those r
     "Station": <int>,
     "_id": <str>
   }
+]
 ```
 
 **Documented by [Joshua](https://github.com/Sadliquid) and [Lincoln](https://github.com/lincoln0623)**
