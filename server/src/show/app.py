@@ -1,4 +1,4 @@
-from flask import Flask, json, request
+from flask import Flask, json, render_template, request
 from flask_cors import CORS
 from pymongo import MongoClient
 import datetime
@@ -25,6 +25,10 @@ MONGO_CONNECTION_STRING = "mongodb+srv://jim:lucky0218@cluster0.lqm6b.mongodb.ne
 client = MongoClient(MONGO_CONNECTION_STRING)
 db = client["meteo"]
 test_collection = db["test"]
+
+@app.route("/", methods=["GET"])
+def server():
+    return render_template("server.html")
 
 @app.route("/by_station", methods=["GET"])
 def by_station():
