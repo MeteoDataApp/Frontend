@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { motion } from 'framer-motion';
-import { Heading, Button, Tabs, TabList, TabPanels, Tab, TabPanel, Menu, MenuButton, MenuList, MenuItem, Flex, Input, Table, Thead, Tbody, Tr, Th, Td, TableContainer, Box, Text } from '@chakra-ui/react';
-import { ChevronDownIcon } from '@chakra-ui/icons';
+import { Heading, Button, Tabs, TabList, TabPanels, Tab, TabPanel, Menu, MenuButton, MenuList, MenuItem, Flex, Input, Table, Thead, Tbody, Tr, Th, Td, TableContainer, Box, Text, IconButton } from '@chakra-ui/react';
+import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { useState } from 'react';
 import { useShowToast } from '../extensions/useShowToast';
 import server from "../../networking";
@@ -17,6 +17,9 @@ const Dashboard = () => {
     const [data, setData] = useState([]);
     const [sortOrderAvg, setSortOrderAvg] = useState('desc');
     const [sortOrderFD, setSortOrderFD] = useState('desc');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [activeTab, setActiveTab] = useState("station");
+    const recordsPerPage = 7;
 
     const handleSubmitStation = async () => {
         if (!selectedStation) return;
@@ -84,6 +87,23 @@ const Dashboard = () => {
         { code: 58131, name: "宿迁" },
     ];
 
+    const paginateData = (data) => {
+        const startIndex = (currentPage - 1) * recordsPerPage;
+        const endIndex = startIndex + recordsPerPage;
+        return data.slice(startIndex, endIndex);
+    };
+
+    const totalPages = Math.ceil(data.length / recordsPerPage);
+    const displayedData = paginateData(data);
+
+    const handleNextPage = () => {
+        if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+    };
+
+    const handlePrevPage = () => {
+        if (currentPage > 1) setCurrentPage(currentPage - 1);
+    };
+
     return (
         <MotionBox
             display="flex"
@@ -121,6 +141,10 @@ const Dashboard = () => {
                     <Tabs variant='soft-rounded' colorScheme='green'>
                         <TabList display="flex" justifyContent="center" mt={10} mb={5}>
                             <Tab
+                                onClick={() => {
+                                    setCurrentPage(1)
+                                    setActiveTab("station")
+                                }}
                                 _selected={{
                                     bgGradient: "linear(to-r, #6366f1, #ec4899)",
                                     color: "white",
@@ -137,6 +161,10 @@ const Dashboard = () => {
                                 Search By Station
                             </Tab>
                             <Tab
+                                onClick={() => {
+                                    setCurrentPage(1)
+                                    setActiveTab("date")
+                                }}
                                 _selected={{
                                     bgGradient: "linear(to-r, #6366f1, #ec4899)",
                                     color: "white",
@@ -230,7 +258,7 @@ const Dashboard = () => {
                     </Tabs>
                 </MotionBox>
 
-                {data.length > 0 && (
+                {displayedData.length > 0 && (
                     <MotionBox
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -254,7 +282,7 @@ const Dashboard = () => {
                                     </Tr>
                                 </Thead>
                                 <Tbody>
-                                    {data.map((record) => {
+                                    {displayedData.map((record) => {
                                         const stationInfo = stationList.find(s => s.code === record.Station);
                                         return (
                                             <Tr key={record._id}>
@@ -274,22 +302,56 @@ const Dashboard = () => {
                 )}
             </Box>
 
-            <Box 
+            <Box
                 as="footer"
                 position="fixed"
                 bottom="0"
                 left="0"
                 width="100%"
                 bg="white"
-                textAlign="center" 
-                py={4} 
-                borderTop="1px solid" 
+                textAlign="left"
+                py={4}
+                borderTop="1px solid"
                 borderColor="gray.200"
                 zIndex="docked"
+                display="flex"
+                justifyContent="space-between"
+                px={4}
             >
-                <Text fontSize="sm" color="gray.600">
+                <Text fontSize="sm" color="gray.600" mt={activeTab === "date" ? 2 : 0}>
                     Data is only available until 9 March 2025.
                 </Text>
+                {activeTab === "date" && data.length > 0 && (
+                    <Flex align="center">
+                        <Text fontSize="sm" color="gray.600">
+                            Showing {((currentPage - 1) * recordsPerPage) + 1} - {Math.min(currentPage * recordsPerPage, data.length)} of {data.length} records
+                        </Text>
+
+                        <IconButton
+                            padding={0}
+                            variant={'ghost'}
+                            _hover={{ bg: 'none' }}
+                            icon={<ChevronLeftIcon />}
+                            onClick={handlePrevPage}
+                            isDisabled={currentPage === 1}
+                            aria-label="Previous Page"
+                            mx={2}
+                            fontSize="2xl"
+                        />
+        
+                        <IconButton
+                            padding={0}
+                            variant={'ghost'}
+                            _hover={{ bg: 'none' }}
+                            icon={<ChevronRightIcon />}
+                            onClick={handleNextPage}
+                            isDisabled={currentPage === totalPages}
+                            aria-label="Next Page"
+                            mx={2}
+                            fontSize="2xl"
+                        />
+                    </Flex>
+                )}
             </Box>
         </MotionBox>
     );
