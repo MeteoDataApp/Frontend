@@ -43,6 +43,7 @@ const AboutUs = () => {
                     bgClip="text"
                     fontSize={{ base: '4xl', md: '6xl' }}
                     mb={6}
+                    mt={10}
                 >
                     About Meteo Data
                 </Heading>
