@@ -210,12 +210,12 @@ const Dashboard = () => {
                                     onClick={handleSubmitStation}
                                     bgGradient="linear(to-r, #6366f1, #ec4899)"
                                     color="white"
-                                    _hover={{
+                                    _hover={selectedStation && {
                                         bgGradient: "linear(to-r, #6366f1, #ec4899)",
                                         transform: "scale(1.05)",
                                         boxShadow: "lg",
                                     }}
-                                    _active={{
+                                    _active={selectedStation && {
                                         bgGradient: "linear(to-r, #6366f1, #ec4899)",
                                         transform: "scale(0.95)",
                                     }}
