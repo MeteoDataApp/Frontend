@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { motion } from 'framer-motion';
 import { Box, Heading, Text, Icon, Grid, useBreakpointValue, Button } from '@chakra-ui/react';
-import { FiCloud, FiSun, FiWind, FiMap, FiClock, FiAlertTriangle } from 'react-icons/fi';
+import { FiClock, FiAlertTriangle, FiUser } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 
 const AboutUs = () => {
@@ -13,11 +13,8 @@ const AboutUs = () => {
     const gridColumns = useBreakpointValue({ base: 1, md: 2, lg: 3 });
 
     const features = [
-        { icon: FiCloud, title: "Real-time Updates", description: "Minute-by-minute weather tracking with ultra-low latency" },
-        { icon: FiSun, title: "AI Forecasting", description: "Machine learning predictions with 96-hour outlook" },
-        { icon: FiWind, title: "Severe Alerts", description: "Instant notifications for dangerous weather conditions" },
-        { icon: FiMap, title: "Global Coverage", description: "Detailed maps for any location worldwide" },
-        { icon: FiClock, title: "Historical Data", description: "Access decade-long weather archives" },
+        { icon: FiUser, title: "Ease of use", description: "Intuitive web-based solution for accurate weather information" },
+        { icon: FiClock, title: "Historical Data", description: "Access accurate weather archives and view detailed data comparisons" },
         { icon: FiAlertTriangle, title: "Risk Analysis", description: "Advanced impact assessment for businesses" },
     ];
 
