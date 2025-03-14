@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { motion } from 'framer-motion';
-import { Heading, Button, Tabs, TabList, TabPanels, Tab, TabPanel, Menu, MenuButton, MenuList, MenuItem, Flex, Input, Table, Thead, Tbody, Tr, Th, Td, TableContainer } from '@chakra-ui/react';
+import { Heading, Button, Tabs, TabList, TabPanels, Tab, TabPanel, Menu, MenuButton, MenuList, MenuItem, Flex, Input, Table, Thead, Tbody, Tr, Th, Td, TableContainer, Box, Text } from '@chakra-ui/react';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { useState } from 'react';
 import server from "../../networking";
@@ -272,6 +272,12 @@ const Dashboard = () => {
                     </TableContainer>
                 </MotionBox>
             )}
+
+            <Box position="fixed" bottom="10px" left="15px" fontSize="sm" color="gray.500">
+                <Text>
+                    Data is only available until the 9th of March 2025
+                </Text>
+            </Box>
         </MotionBox>
     );
 };
