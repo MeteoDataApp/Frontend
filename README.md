@@ -82,7 +82,9 @@ The application includes three main endpoints:
 
 #### Error Handling
 `400 Bad Request`: If the `station` argument was not received, the server responds with `400 Bad Request`.
+
 `405 Method Not Allowed`: If the server receives an unrecognised HTTP/S Method, it responds with `405 Method Not Allowed`
+
 `500 Internal Server Error`: If the server fails to construct the JSON Response, the server responds with `500 Internal Server Error`
 
 #### Behavior
@@ -142,7 +144,9 @@ Retrieves all records for a given date from the database, filtering only those r
 
 #### Error Handling
 `400 Bad Request`: If the `date` argument was not received, the server responds with `400 Bad Request`.
+
 `405 Method Not Allowed`: If the server receives an unrecognised HTTP/S Method, it responds with `405 Method Not Allowed`
+
 `500 Internal Server Error`: If the server fails to construct the JSON Response, the server responds with `500 Internal Server Error`
 
 #### Behavior
@@ -195,4 +199,4 @@ Retrieves all records for a given date from the database, filtering only those r
 
 **Documentation written by [Joshua](https://github.com/Sadliquid) and [Lincoln](https://github.com/lincoln0623)**
 
-**API Documentation and Database Schema Last Updated on `14 March 2025 3:37PM`**
+**API Documentation and Database Schema Last Updated on `14 March 2025 3:41PM`**
