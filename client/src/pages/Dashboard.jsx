@@ -53,7 +53,7 @@ const Dashboard = () => {
     };
 
     const sortDataAvg = () => {
-        const sorted = [...data].sort((a, b) => 
+        const sorted = [...data].sort((a, b) =>
             sortOrderAvg === 'asc' ? a.Avg - b.Avg : b.Avg - a.Avg
         );
         setData(sorted);
@@ -61,7 +61,7 @@ const Dashboard = () => {
     };
 
     const sortDataFD = () => {
-        const sorted = [...data].sort((a, b) => 
+        const sorted = [...data].sort((a, b) =>
             sortOrderFD === 'asc' ? a.FDAvg - b.FDAvg : b.FDAvg - a.FDAvg
         );
         setData(sorted);
@@ -120,24 +120,54 @@ const Dashboard = () => {
             >
                 <Tabs variant='soft-rounded' colorScheme='green'>
                     <TabList display="flex" justifyContent="center" mt={10} mb={5}>
-                        <Tab>Search By Station</Tab>
-                        <Tab>Search By Date</Tab>
+                        <Tab
+                            _selected={{
+                                bgGradient: "linear(to-r, #6366f1, #ec4899)",
+                                color: "white",
+                                boxShadow: "md",
+                            }}
+                            _hover={{ transform: "scale(1.05)" }}
+                            _active={{ transform: "scale(0.95)" }}
+                            mx={2}
+                            px={6}
+                            py={2}
+                            borderRadius="full"
+                            transition="all 0.2s"
+                        >
+                            Search By Station
+                        </Tab>
+                        <Tab
+                            _selected={{
+                                bgGradient: "linear(to-r, #6366f1, #ec4899)",
+                                color: "white",
+                                boxShadow: "md",
+                            }}
+                            _hover={{ transform: "scale(1.05)" }}
+                            _active={{ transform: "scale(0.95)" }}
+                            mx={2}
+                            px={6}
+                            py={2}
+                            borderRadius="full"
+                            transition="all 0.2s"
+                        >
+                            Search By Date
+                        </Tab>
                     </TabList>
                     <TabPanels>
                         <TabPanel>
                             <Menu>
-                                <MenuButton 
-                                    as={Button} 
+                                <MenuButton
+                                    as={Button}
                                     rightIcon={<ChevronDownIcon />}
                                 >
-                                    {selectedStation ? 
-                                        `${stationList.find(s => s.code === selectedStation).name} (${selectedStation})` : 
+                                    {selectedStation ?
+                                        `${stationList.find(s => s.code === selectedStation).name} (${selectedStation})` :
                                         'Select Station'
                                     }
                                 </MenuButton>
                                 <MenuList maxH="300px" overflowY="auto">
                                     {stationList.map((station) => (
-                                        <MenuItem 
+                                        <MenuItem
                                             key={station.code}
                                             onClick={() => setSelectedStation(station.code)}
                                         >
@@ -147,7 +177,23 @@ const Dashboard = () => {
                                 </MenuList>
                             </Menu>
 
-                            <Button ml={3} onClick={handleSubmitStation} colorScheme='green' isLoading={loading} isDisabled={!selectedStation}>
+                            <Button
+                                ml={3}
+                                onClick={handleSubmitStation}
+                                bgGradient="linear(to-r, #6366f1, #ec4899)"
+                                color="white"
+                                _hover={{
+                                    bgGradient: "linear(to-r, #6366f1, #ec4899)",
+                                    transform: "scale(1.05)",
+                                    boxShadow: "lg",
+                                }}
+                                _active={{
+                                    bgGradient: "linear(to-r, #6366f1, #ec4899)",
+                                    transform: "scale(0.95)",
+                                }}
+                                isLoading={loading}
+                                isDisabled={!selectedStation}
+                            >
                                 Search
                             </Button>
                         </TabPanel>
@@ -162,8 +208,18 @@ const Dashboard = () => {
                                     maxW="200px"
                                 />
                                 <Button
-                                    colorScheme="green"
                                     onClick={handleSubmitDate}
+                                    bgGradient="linear(to-r, #6366f1, #ec4899)"
+                                    color="white"
+                                    _hover={{
+                                        bgGradient: "linear(to-r, #6366f1, #ec4899)",
+                                        transform: "scale(1.05)",
+                                        boxShadow: "lg",
+                                    }}
+                                    _active={{
+                                        bgGradient: "linear(to-r, #6366f1, #ec4899)",
+                                        transform: "scale(0.95)",
+                                    }}
                                     isLoading={loading}
                                 >
                                     Search
@@ -188,7 +244,7 @@ const Dashboard = () => {
                                     <Th>Station</Th>
                                     <Th>Date</Th>
                                     <Th cursor="pointer" onClick={sortDataAvg}>
-                                        Avg Temp (°C) 
+                                        Avg Temp (°C)
                                         {sortOrderAvg === 'asc' ? ' ↑' : ' ↓'}
                                     </Th>
                                     <Th cursor="pointer" onClick={sortDataFD}>
@@ -198,19 +254,19 @@ const Dashboard = () => {
                                 </Tr>
                             </Thead>
                             <Tbody>
-                            {data.map((record) => {
-                                const stationInfo = stationList.find(s => s.code === record.Station);
-                                return (
-                                    <Tr key={record._id}>
-                                        <Td>
-                                            {stationInfo ? `${stationInfo.name} (${record.Station})` : record.Station}
-                                        </Td>
-                                        <Td>{record.Date}</Td>
-                                        <Td fontWeight="bold">{record.Avg}</Td>
-                                        <Td fontWeight="bold">{record.FDAvg}</Td>
-                                    </Tr>
-                                );
-                            })}
+                                {data.map((record) => {
+                                    const stationInfo = stationList.find(s => s.code === record.Station);
+                                    return (
+                                        <Tr key={record._id}>
+                                            <Td>
+                                                {stationInfo ? `${stationInfo.name} (${record.Station})` : record.Station}
+                                            </Td>
+                                            <Td>{record.Date}</Td>
+                                            <Td fontWeight="bold">{record.Avg}</Td>
+                                            <Td fontWeight="bold">{record.FDAvg}</Td>
+                                        </Tr>
+                                    );
+                                })}
                             </Tbody>
                         </Table>
                     </TableContainer>
