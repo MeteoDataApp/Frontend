@@ -1,5 +1,5 @@
 ## About
-This is a website for meteorology enthusiast monitoring & comparing daily average & seasonal changing! 
+This is a website for meteorology enthusiasts to monitor & compare daily average & seasonal changes!
 
 ## How to deploy
 Prerequisite: python3.10, pip, git. Tested on Windows 11.
@@ -19,9 +19,15 @@ Check `localhost:5000` to see the website.
 ## `integrate` branch
 Application runs on Vite-based React Frontend and Flask Backend.
 
-Run the Frontend Server: `npm run dev`
+### Run the Frontend Server
+1.) `npm i`
+
+2.) `npm run dev`
+
+---
 
 Frontend URL: `localhost:5173`
+
 Backend URL: `localhost:5000`
 
 ### API Documentation
@@ -73,6 +79,11 @@ The application includes three main endpoints:
 - **station** (required)
   - **Type:** Integer (passed as a string in the query and then converted to an integer)
   - **Description:** The unique identifier for the station. This parameter is used to filter the records in the database.
+
+#### Error Handling
+`400 Bad Request`: If the `station` argument was not received, the server responds with `400 Bad Request`.
+`405 Method Not Allowed`: If the server receives an unrecognised HTTP/S Method, it responds with `405 Method Not Allowed`
+`500 Internal Server Error`: If the server fails to construct the JSON Response, the server responds with `500 Internal Server Error`
 
 #### Behavior
 - The endpoint queries the MongoDB collection for documents where the `"Station"` field matches the provided value.
@@ -129,6 +140,11 @@ Retrieves all records for a given date from the database, filtering only those r
   - **Format:** `"YYYY-MM-DD"`
   - **Description:** The date for which records should be retrieved. The endpoint extracts records where the `"Date"` field matches the requested date.
 
+#### Error Handling
+`400 Bad Request`: If the `date` argument was not received, the server responds with `400 Bad Request`.
+`405 Method Not Allowed`: If the server receives an unrecognised HTTP/S Method, it responds with `405 Method Not Allowed`
+`500 Internal Server Error`: If the server fails to construct the JSON Response, the server responds with `500 Internal Server Error`
+
 #### Behavior
 - The endpoint parses the provided date string into a datetime object.
 - The MongoDB query filters documents where:
@@ -177,6 +193,6 @@ Retrieves all records for a given date from the database, filtering only those r
 ]
 ```
 
-**Documented by [Joshua](https://github.com/Sadliquid) and [Lincoln](https://github.com/lincoln0623)**
+**Documentation written by [Joshua](https://github.com/Sadliquid) and [Lincoln](https://github.com/lincoln0623)**
 
-**API Documentation and Database Schema Last Updated on `14 March 2025 11:54AM`**
+**API Documentation and Database Schema Last Updated on `14 March 2025 3:37PM`**
