@@ -3,8 +3,8 @@ import { motion } from 'framer-motion';
 import { Heading, Button, Tabs, TabList, TabPanels, Tab, TabPanel, Menu, MenuButton, MenuList, MenuItem, Flex, Input, Table, Thead, Tbody, Tr, Th, Td, TableContainer, Box, Text } from '@chakra-ui/react';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { useState } from 'react';
-import server from "../../networking";
 import { useShowToast } from '../extensions/useShowToast';
+import server from "../../networking";
 
 const Dashboard = () => {
     const MotionBox = motion.div;
@@ -86,129 +86,100 @@ const Dashboard = () => {
 
     return (
         <MotionBox
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8 }}
-            bgGradient="linear(to-br, #f0f4ff 0%, #f8fafc 100%)"
+            display="flex"
+            flexDirection="column"
             minH="100vh"
+            bgGradient="linear(to-br, #f0f4ff 0%, #f8fafc 100%)"
             py={16}
             px={4}
         >
-            <MotionBox
-                textAlign="center"
-                mb={16}
-                initial={{ y: 20 }}
-                animate={{ y: 0 }}
-                transition={{ duration: 0.5 }}
-            >
-                <Heading
-                    bgGradient="linear(to-r, #6366f1, #ec4899)"
-                    bgClip="text"
-                    fontSize={{ base: '3xl', md: '4xl' }}
-                    mb={3}
-                    mt={24}
+            <Box flex="1">
+                <MotionBox
+                    textAlign="center"
+                    mb={16}
+                    initial={{ y: 20 }}
+                    animate={{ y: 0 }}
+                    transition={{ duration: 0.5 }}
                 >
-                    Weather Dashboard
-                </Heading>
-            </MotionBox>
+                    <Heading
+                        bgGradient="linear(to-r, #6366f1, #ec4899)"
+                        bgClip="text"
+                        fontSize={{ base: '3xl', md: '4xl' }}
+                        mb={3}
+                        mt={24}
+                    >
+                        Weather Dashboard
+                    </Heading>
+                </MotionBox>
 
-            <MotionBox
-                display="flex"
-                justifyContent={"center"}
-                mx="auto"
-                mb={20}
-            >
-                <Tabs variant='soft-rounded' colorScheme='green'>
-                    <TabList display="flex" justifyContent="center" mt={10} mb={5}>
-                        <Tab
-                            _selected={{
-                                bgGradient: "linear(to-r, #6366f1, #ec4899)",
-                                color: "white",
-                                boxShadow: "md",
-                            }}
-                            _hover={{ transform: "scale(1.05)" }}
-                            _active={{ transform: "scale(0.95)" }}
-                            mx={2}
-                            px={6}
-                            py={2}
-                            borderRadius="full"
-                            transition="all 0.2s"
-                        >
-                            Search By Station
-                        </Tab>
-                        <Tab
-                            _selected={{
-                                bgGradient: "linear(to-r, #6366f1, #ec4899)",
-                                color: "white",
-                                boxShadow: "md",
-                            }}
-                            _hover={{ transform: "scale(1.05)" }}
-                            _active={{ transform: "scale(0.95)" }}
-                            mx={2}
-                            px={6}
-                            py={2}
-                            borderRadius="full"
-                            transition="all 0.2s"
-                        >
-                            Search By Date
-                        </Tab>
-                    </TabList>
-                    <TabPanels>
-                        <TabPanel>
-                            <Menu>
-                                <MenuButton
-                                    as={Button}
-                                    rightIcon={<ChevronDownIcon />}
-                                >
-                                    {selectedStation ?
-                                        `${stationList.find(s => s.code === selectedStation).name} (${selectedStation})` :
-                                        'Select Station'
-                                    }
-                                </MenuButton>
-                                <MenuList maxH="300px" overflowY="auto">
-                                    {stationList.map((station) => (
-                                        <MenuItem
-                                            key={station.code}
-                                            onClick={() => setSelectedStation(station.code)}
-                                        >
-                                            {`${station.name} (${station.code})`}
-                                        </MenuItem>
-                                    ))}
-                                </MenuList>
-                            </Menu>
-
-                            <Button
-                                ml={3}
-                                onClick={handleSubmitStation}
-                                bgGradient="linear(to-r, #6366f1, #ec4899)"
-                                color="white"
-                                _hover={{
+                <MotionBox
+                    display="flex"
+                    justifyContent="center"
+                    mx="auto"
+                    mb={20}
+                >
+                    <Tabs variant='soft-rounded' colorScheme='green'>
+                        <TabList display="flex" justifyContent="center" mt={10} mb={5}>
+                            <Tab
+                                _selected={{
                                     bgGradient: "linear(to-r, #6366f1, #ec4899)",
-                                    transform: "scale(1.05)",
-                                    boxShadow: "lg",
+                                    color: "white",
+                                    boxShadow: "md",
                                 }}
-                                _active={{
-                                    bgGradient: "linear(to-r, #6366f1, #ec4899)",
-                                    transform: "scale(0.95)",
-                                }}
-                                isLoading={loading}
-                                isDisabled={!selectedStation}
+                                _hover={{ transform: "scale(1.05)" }}
+                                _active={{ transform: "scale(0.95)" }}
+                                mx={2}
+                                px={6}
+                                py={2}
+                                borderRadius="full"
+                                transition="all 0.2s"
                             >
-                                Search
-                            </Button>
-                        </TabPanel>
-                        <TabPanel>
-                            <Flex gap={3} align="center" justifyContent={"center"}>
-                                <Input
-                                    type="date"
-                                    value={selectedDate}
-                                    onChange={(e) => setSelectedDate(e.target.value)}
-                                    size="md"
-                                    borderRadius="md"
-                                    maxW="200px"
-                                />
+                                Search By Station
+                            </Tab>
+                            <Tab
+                                _selected={{
+                                    bgGradient: "linear(to-r, #6366f1, #ec4899)",
+                                    color: "white",
+                                    boxShadow: "md",
+                                }}
+                                _hover={{ transform: "scale(1.05)" }}
+                                _active={{ transform: "scale(0.95)" }}
+                                mx={2}
+                                px={6}
+                                py={2}
+                                borderRadius="full"
+                                transition="all 0.2s"
+                            >
+                                Search By Date
+                            </Tab>
+                        </TabList>
+                        <TabPanels>
+                            <TabPanel>
+                                <Menu>
+                                    <MenuButton
+                                        as={Button}
+                                        rightIcon={<ChevronDownIcon />}
+                                    >
+                                        {selectedStation ?
+                                            `${stationList.find(s => s.code === selectedStation).name} (${selectedStation})` :
+                                            'Select Station'
+                                        }
+                                    </MenuButton>
+                                    <MenuList maxH="300px" overflowY="auto">
+                                        {stationList.map((station) => (
+                                            <MenuItem
+                                                key={station.code}
+                                                onClick={() => setSelectedStation(station.code)}
+                                            >
+                                                {`${station.name} (${station.code})`}
+                                            </MenuItem>
+                                        ))}
+                                    </MenuList>
+                                </Menu>
+
                                 <Button
-                                    onClick={handleSubmitDate}
+                                    ml={3}
+                                    onClick={handleSubmitStation}
                                     bgGradient="linear(to-r, #6366f1, #ec4899)"
                                     color="white"
                                     _hover={{
@@ -221,61 +192,103 @@ const Dashboard = () => {
                                         transform: "scale(0.95)",
                                     }}
                                     isLoading={loading}
+                                    isDisabled={!selectedStation}
                                 >
                                     Search
                                 </Button>
-                            </Flex>
-                        </TabPanel>
-                    </TabPanels>
-                </Tabs>
-            </MotionBox>
-
-            {data.length > 0 && (
-                <MotionBox
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    mx="auto"
-                    maxW="1200px"
-                >
-                    <TableContainer bg="white" borderRadius="xl" boxShadow="xl">
-                        <Table variant="striped">
-                            <Thead>
-                                <Tr>
-                                    <Th>Station</Th>
-                                    <Th>Date</Th>
-                                    <Th cursor="pointer" onClick={sortDataAvg}>
-                                        Avg Temp (°C)
-                                        {sortOrderAvg === 'asc' ? ' ↑' : ' ↓'}
-                                    </Th>
-                                    <Th cursor="pointer" onClick={sortDataFD}>
-                                        5-day Avg Temp (°C)
-                                        {sortOrderFD === 'asc' ? ' ↑' : ' ↓'}
-                                    </Th>
-                                </Tr>
-                            </Thead>
-                            <Tbody>
-                                {data.map((record) => {
-                                    const stationInfo = stationList.find(s => s.code === record.Station);
-                                    return (
-                                        <Tr key={record._id}>
-                                            <Td>
-                                                {stationInfo ? `${stationInfo.name} (${record.Station})` : record.Station}
-                                            </Td>
-                                            <Td>{record.Date}</Td>
-                                            <Td fontWeight="bold">{record.Avg}</Td>
-                                            <Td fontWeight="bold">{record.FDAvg}</Td>
-                                        </Tr>
-                                    );
-                                })}
-                            </Tbody>
-                        </Table>
-                    </TableContainer>
+                            </TabPanel>
+                            <TabPanel>
+                                <Flex gap={3} align="center" justifyContent="center">
+                                    <Input
+                                        type="date"
+                                        value={selectedDate}
+                                        onChange={(e) => setSelectedDate(e.target.value)}
+                                        size="md"
+                                        borderRadius="md"
+                                        maxW="200px"
+                                    />
+                                    <Button
+                                        onClick={handleSubmitDate}
+                                        bgGradient="linear(to-r, #6366f1, #ec4899)"
+                                        color="white"
+                                        _hover={{
+                                            bgGradient: "linear(to-r, #6366f1, #ec4899)",
+                                            transform: "scale(1.05)",
+                                            boxShadow: "lg",
+                                        }}
+                                        _active={{
+                                            bgGradient: "linear(to-r, #6366f1, #ec4899)",
+                                            transform: "scale(0.95)",
+                                        }}
+                                        isLoading={loading}
+                                    >
+                                        Search
+                                    </Button>
+                                </Flex>
+                            </TabPanel>
+                        </TabPanels>
+                    </Tabs>
                 </MotionBox>
-            )}
 
-            <Box position="fixed" bottom="10px" left="15px" fontSize="sm" color="gray.500">
-                <Text>
-                    Data is only available until the 9th of March 2025
+                {data.length > 0 && (
+                    <MotionBox
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        mx="auto"
+                        maxW="1200px"
+                    >
+                        <TableContainer bg="white" borderRadius="xl" boxShadow="xl">
+                            <Table variant="striped">
+                                <Thead>
+                                    <Tr>
+                                        <Th>Station</Th>
+                                        <Th>Date</Th>
+                                        <Th cursor="pointer" onClick={sortDataAvg}>
+                                            Avg Temp (°C)
+                                            {sortOrderAvg === 'asc' ? ' ↑' : ' ↓'}
+                                        </Th>
+                                        <Th cursor="pointer" onClick={sortDataFD}>
+                                            5-day Avg Temp (°C)
+                                            {sortOrderFD === 'asc' ? ' ↑' : ' ↓'}
+                                        </Th>
+                                    </Tr>
+                                </Thead>
+                                <Tbody>
+                                    {data.map((record) => {
+                                        const stationInfo = stationList.find(s => s.code === record.Station);
+                                        return (
+                                            <Tr key={record._id}>
+                                                <Td>
+                                                    {stationInfo ? `${stationInfo.name} (${record.Station})` : record.Station}
+                                                </Td>
+                                                <Td>{record.Date}</Td>
+                                                <Td fontWeight="bold">{record.Avg}</Td>
+                                                <Td fontWeight="bold">{record.FDAvg}</Td>
+                                            </Tr>
+                                        );
+                                    })}
+                                </Tbody>
+                            </Table>
+                        </TableContainer>
+                    </MotionBox>
+                )}
+            </Box>
+
+            <Box 
+                as="footer"
+                position="fixed"
+                bottom="0"
+                left="0"
+                width="100%"
+                bg="white"
+                textAlign="center" 
+                py={4} 
+                borderTop="1px solid" 
+                borderColor="gray.200"
+                zIndex="docked"
+            >
+                <Text fontSize="sm" color="gray.600">
+                    Data is only available until 9 March 2025.
                 </Text>
             </Box>
         </MotionBox>
