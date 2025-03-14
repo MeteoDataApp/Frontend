@@ -39,12 +39,11 @@ export default function HomePage() {
             flexDirection="column"
             alignItems="center"
             justifyContent="space-evenly"
-            minH="80vh"
-            maxH="100%"
+            height="100vh"
+            bgGradient="linear(to-br, #f0f4ff 0%, #f8fafc 100%)"
         >
             <MotionBox
                 textAlign="center"
-                mb={16}
                 initial={{ y: 20 }}
                 animate={{ y: 0 }}
                 transition={{ duration: 0.5 }}

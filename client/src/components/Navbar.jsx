@@ -16,13 +16,14 @@ const Navbar = () => {
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.5 }}
             w="100%"
-            position="sticky"
+            position="fixed"
             top={0}
             bg="whiteAlpha.800"
             backdropFilter="blur(10px)"
             borderBottom="1px solid #e2e8f0"
             borderColor="purple.100"
             as={"nav"}
+            zIndex={999}
         >
             <MotionFlex
                 maxW="1200px"
