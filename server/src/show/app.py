@@ -38,10 +38,7 @@ def by_station():
             return json.jsonify({"error": "Station parameter is required"}), 400
 
         try:
-            data = list(test_collection.find({"Station": int(selected_station)})
-                .sort("Date", -1)
-                .limit(50)
-            )
+            data = list(test_collection.find({"Station": int(selected_station)}).sort("Date", -1))
             data.reverse()
             return json.jsonify([{
                 "Avg": doc["Avg"],
