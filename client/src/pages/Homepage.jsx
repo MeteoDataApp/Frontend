@@ -40,6 +40,7 @@ export default function HomePage() {
             alignItems="center"
             justifyContent="space-evenly"
             height="100vh"
+            overflow="hidden"
             bgGradient="linear(to-br, #f0f4ff 0%, #f8fafc 100%)"
         >
             <MotionBox
