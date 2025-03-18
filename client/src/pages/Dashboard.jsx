@@ -634,7 +634,7 @@ const Dashboard = () => {
                                                                 fontSize="2xl"
                                                                 fontWeight="bold"
                                                                 gap={1}
-                                                                color={record.FDAvg > record.Avg ? 'blue.600' : record.FDAvg === record.Avg ? "green.600" : 'red.600'}
+                                                                color={record.FDAvg > record.Avg ? 'red.600' : record.FDAvg === record.Avg ? "green.600" : 'blue.600'}
                                                             >
                                                                 {record.FDAvg}°C
                                                                 <Box as="span" display="inline-block" mt="2px">
