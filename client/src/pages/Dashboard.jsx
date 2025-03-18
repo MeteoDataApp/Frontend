@@ -29,6 +29,7 @@ const Dashboard = () => {
 
     const handleSubmitStation = async () => {
         if (!selectedStation) return;
+        setCurrentPage(1);
         setLoading(true);
         try {
             let query = `station=${selectedStation}`;
@@ -51,6 +52,7 @@ const Dashboard = () => {
 
     const handleSubmitDate = async () => {
         if (!selectedDate) return;
+        setCurrentPage(1);
         setLoading(true);
         try {
             const response = await server.get(`/by_date?date=${selectedDate}`);
@@ -426,8 +428,8 @@ const Dashboard = () => {
                 bg="white"
                 textAlign="left"
                 py={4}
-                borderTop="1px solid"
-                borderColor="gray.200"
+                borderTop="1px solid #e2e8f0"
+                borderColor="purple.100"
                 zIndex="docked"
                 display="flex"
                 justifyContent="space-between"
@@ -439,12 +441,13 @@ const Dashboard = () => {
                 {data.length > 0 && (
                     <Flex align="center">
                         <Text fontSize="sm" color="gray.600">
-                            Showing {((currentPage - 1) * recordsPerPage) + 1} - {Math.min(currentPage * recordsPerPage, data.length)} of {data.length} records
+                            Showing {((currentPage - 1) * recordsPerPage) + 1} - {Math.min(currentPage * recordsPerPage, data.length)} of {data.length} {data.length === 1 ? "record" : "records"}
                         </Text>
 
                         <IconButton
                             padding={0}
                             variant={'ghost'}
+                            color={currentPage === 1 ? 'gray.400' : '#4F46E5'}
                             _hover={{ bg: 'none' }}
                             icon={<ChevronLeftIcon />}
                             onClick={handlePrevPage}
@@ -457,6 +460,7 @@ const Dashboard = () => {
                         <IconButton
                             padding={0}
                             variant={'ghost'}
+                            color={currentPage === totalPages ? 'gray.400' : '#4F46E5'}
                             _hover={{ bg: 'none' }}
                             icon={<ChevronRightIcon />}
                             onClick={handleNextPage}
