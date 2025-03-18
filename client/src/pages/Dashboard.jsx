@@ -1,11 +1,12 @@
 /* eslint-disable react/prop-types */
 import { motion } from 'framer-motion';
-import { Heading, Button, Tabs, TabList, TabPanels, Tab, TabPanel, Menu, MenuButton, MenuList, MenuItem, Flex, Input, Table, Thead, Tbody, Tr, Th, Td, TableContainer, Box, Text, IconButton, Checkbox } from '@chakra-ui/react';
+import { Heading, Button, Tabs, TabList, TabPanels, Tab, TabPanel, Menu, MenuButton, MenuList, MenuItem, Flex, Input, Table, Thead, Tbody, Tr, Th, Td, TableContainer, Box, Text, IconButton, Checkbox, SimpleGrid, VStack, HStack, Icon } from '@chakra-ui/react';
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { useState } from 'react';
 import { useShowToast } from '../extensions/useShowToast';
 import server from "../../networking";
 import ByStationLineChart from '../components/ByStationLineChart';
+import { FiArrowDown, FiArrowLeft, FiArrowUp } from 'react-icons/fi';
 
 const Dashboard = () => {
     const MotionBox = motion.div;
@@ -13,6 +14,7 @@ const Dashboard = () => {
     const showToast = useShowToast();
 
     const [selectedStation, setSelectedStation] = useState(null);
+    const [selectedStationName, setSelectedStationName] = useState("");
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
@@ -26,12 +28,13 @@ const Dashboard = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [activeTab, setActiveTab] = useState("station");
     const [advancedAnalysisList, setAdvancedAnalysisList] = useState([]);
-    const recordsPerPage = 7;
+    const recordsPerPage = activeTab === "station" ? 9 : 7;
 
     const handleSubmitStation = async () => {
         if (!selectedStation) return;
         setCurrentPage(1);
         setLoading(true);
+        setSelectedStationName(stationList.find(s => s.code === selectedStation).name);
         try {
             let query = `station=${selectedStation}`;
             if (startDate) query += `&start=${startDate}`;
@@ -82,6 +85,8 @@ const Dashboard = () => {
         });
         setData(sorted);
         setSortOrderDate(sortOrderDate === 'asc' ? 'desc' : 'asc');
+        setSortOrderAvg('desc');
+        setSortOrderFD('desc');
     };
 
     const sortDataAvg = () => {
@@ -90,6 +95,8 @@ const Dashboard = () => {
         );
         setData(sorted);
         setSortOrderAvg(sortOrderAvg === 'asc' ? 'desc' : 'asc');
+        setSortOrderDate('desc');
+        setSortOrderFD('desc');
     };
 
     const sortDataFD = () => {
@@ -98,6 +105,8 @@ const Dashboard = () => {
         );
         setData(sorted);
         setSortOrderFD(sortOrderFD === 'asc' ? 'desc' : 'asc');
+        setSortOrderDate('desc');
+        setSortOrderAvg('desc');
     };
 
     const handleCheckboxChange = (e, stationCode) => {
@@ -231,7 +240,7 @@ const Dashboard = () => {
                                 Search By Date
                             </Tab>
                         </TabList>
-                        <TabPanels>
+                        <TabPanels mb={4}>
                             <TabPanel>
                                 <Flex gap={3} align="center" justifyContent="center">
                                     {/* Station Selection Dropdown */}
@@ -353,7 +362,7 @@ const Dashboard = () => {
                     </Tabs>
                 </MotionBox>
 
-                {displayedData.length > 0 && (
+                {displayedData.length > 0 && activeTab === "date" && (
                     <MotionBox
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -419,8 +428,240 @@ const Dashboard = () => {
                                 </Tbody>
                             </Table>
                         </TableContainer>
+                    </MotionBox>
+                )}
 
-                        {activeTab === "station" && displayedData.length > 0 && (
+                {displayedData.length > 0 && activeTab === "station" && (
+                    <MotionBox
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        mx="auto"
+                    >
+                        {/* Hero Section */}
+                        <Box
+                            alignItems="center"
+                            w="90%"
+                            margin="auto"
+                            minH="52rem"
+                            position="relative"
+                            overflow="hidden"
+                            sx={{
+                                perspective: '1000px',
+                                transformStyle: 'preserve-3d',
+                            }}
+                            borderRadius={50}
+                        >
+                            {/* Enhanced Background */}
+                            <Box
+                                position="fixed"
+                                top={0}
+                                left={0}
+                                w="100%"
+                                h="100%"
+                                backgroundImage="Suzhou.jpg"
+                                backgroundSize="cover"
+                                backgroundPosition="center"
+                                transform="translateZ(-1px) scale(1.2)"
+                                filter="auto blur(3px) brightness(0.5)"
+                                sx={{
+                                    willChange: 'transform',
+                                    '&::after': {
+                                        content: '""',
+                                        position: 'absolute',
+                                        inset: 0,
+                                        background: 'linear-gradient(45deg, rgba(16, 185, 129, 0.2) 0%, rgba(99, 102, 241, 0.3) 100%)',
+                                    }
+                                }}
+                            />
+
+                            {/* Chinese Calligraphy Title */}
+                            <Box
+                                initial={{ y: 50, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                textAlign="center"
+                                position="relative"
+                                zIndex={1}
+                                mb={4}
+                                mt={2}
+                            >
+                                <Text
+                                    fontSize={{ base: '6xl', md: '8xl' }}
+                                    fontWeight="black"
+                                    sx={{
+                                        fontFamily: 'var(--font-calligraphy)',
+                                        background: 'linear-gradient(45deg, #fff 20%, #a5f3fc 80%)',
+                                        WebkitBackgroundClip: 'text',
+                                        WebkitTextFillColor: 'transparent',
+                                        textShadow: '4px 4px 8px rgba(0,0,0,0.3)',
+                                        letterSpacing: 'tighter',
+                                    }}
+                                >
+                                    {selectedStationName ? selectedStationName : "Station"}
+                                </Text>
+                            </Box>
+
+                            {/* Sorting Controls */}
+                            <MotionBox
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                maxW="1400px"
+                                mx="auto"
+                                mt={8}
+                                px={4}
+                                display="flex"
+                                gap={4}
+                                justifyContent="center"
+                            >
+                                {['date', 'avg', 'FD'].map((sortType) => {
+                                    const sortOrder = {
+                                        date: sortOrderDate,
+                                        avg: sortOrderAvg,
+                                        FD: sortOrderFD
+                                    }[sortType];
+
+                                    return (
+                                        <Button
+                                            key={sortType}
+                                            rightIcon={sortOrder === 'asc' ? <FiArrowUp /> : <FiArrowDown />}
+                                            onClick={
+                                                sortType === 'date' ? sortDataDate :
+                                                    sortType === 'avg' ? sortDataAvg :
+                                                        sortDataFD
+                                            }
+                                            variant="solid"
+                                            bgGradient={sortOrder === 'asc'
+                                                ? "linear(to-r, #6366f1, #ec4899)"
+                                                : "linear(to-r, #ec4899, #6366f1)"}
+                                            color="white"
+                                            _hover={{
+                                                bgGradient: sortOrder === 'asc'
+                                                    ? "linear(to-r, #4f46e5, #db2777)"
+                                                    : "linear(to-r, #db2777, #4f46e5)",
+                                                transform: "scale(1.05)"
+                                            }}
+                                            _active={{ transform: "scale(0.95)" }}
+                                            px={6}
+                                            borderRadius={10}
+                                            mx={2}
+                                            boxShadow="xl"
+                                        >
+                                            {`Sort by ${{
+                                                date: 'Date',
+                                                avg: 'Temperature',
+                                                FD: '5-Day Avg'
+                                            }[sortType]}`}
+                                        </Button>
+                                    )
+                                })}
+                            </MotionBox>
+
+                            {/* Enhanced Weather Cards */}
+                            <SimpleGrid
+                                columns={{ base: 1, md: 3 }}
+                                spacing={6}
+                                maxW="1400px"
+                                mx="auto"
+                                mt={12}
+                                px={4}
+                                position="relative"
+                                zIndex={1}
+                            >
+                                {displayedData.map((record) => (
+                                    <MotionBox
+                                        key={record._id}
+                                        initial={{ scale: 0.9, opacity: 0 }}
+                                        animate={{ scale: 1, opacity: 1 }}
+                                        whileHover={{ y: -10 }}
+                                        transition={{ type: 'spring', stiffness: 200 }}
+                                        position="relative"
+                                    >
+                                        <Box
+                                            bg="rgba(255, 255, 255, 0.8)"
+                                            border="1px solid"
+                                            borderColor="whiteAlpha.700"
+                                            borderRadius="2xl"
+                                            p={6}
+                                            boxShadow="0 25px 50px -12px rgba(0, 0, 0, 0.3)"
+                                            position="relative"
+                                            overflow="hidden"
+                                            _before={{
+                                                content: '""',
+                                                position: 'absolute',
+                                                top: '-50%',
+                                                left: '-50%',
+                                                w: '200%',
+                                                h: '200%',
+                                                bg: 'linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent)',
+                                                transform: 'rotate(45deg)',
+                                                animation: 'shine 6s infinite',
+                                            }}
+                                        >
+                                            <VStack spacing={4} align="stretch">
+                                                {/* Date Header */}
+                                                <Flex justify="space-between" align="center">
+                                                    <Box
+                                                        bgGradient="linear(to-r, #6366f1, #ec4899)"
+                                                        px={4}
+                                                        py={1}
+                                                        borderRadius={10}
+                                                    >
+                                                        <Text fontSize="sm" fontWeight="bold" color="white">
+                                                            {record.Date}
+                                                        </Text>
+                                                    </Box>
+                                                </Flex>
+
+                                                {/* Temperature Section */}
+                                                <Box position="relative" >
+                                                    <Flex align="center" justify="space-between">
+                                                        <Box>
+                                                            <Text
+                                                                fontSize="4xl"
+                                                                fontWeight="black"
+                                                                color="gray.800"
+                                                                lineHeight="1"
+                                                            >
+                                                                {record.Avg}°C
+                                                            </Text>
+                                                            <Text fontSize="sm" color="gray.600" mt={1}>
+                                                                Average Temperature
+                                                            </Text>
+                                                        </Box>
+                                                        <Box textAlign="right">
+                                                            <Text
+                                                                display="inline-flex"
+                                                                alignItems="center"
+                                                                fontSize="2xl"
+                                                                fontWeight="bold"
+                                                                gap={1}
+                                                                color={record.FDAvg > record.Avg ? 'blue.600' : record.FDAvg === record.Avg ? "green.600" : 'red.600'}
+                                                            >
+                                                                {record.FDAvg}°C
+                                                                <Box as="span" display="inline-block" mt="2px">
+                                                                    {record.FDAvg > record.Avg ? (
+                                                                        <FiArrowUp />
+                                                                    ) : record.FDAvg === record.Avg ? (
+                                                                        <FiArrowLeft />
+                                                                    ) : (
+                                                                        <FiArrowDown />
+                                                                    )}
+                                                                </Box>
+                                                            </Text>
+                                                            <Text fontSize="sm" color="gray.600">
+                                                                5-Day Average
+                                                            </Text>
+                                                        </Box>
+                                                    </Flex>
+                                                </Box>
+                                            </VStack>
+                                        </Box>
+                                    </MotionBox>
+                                ))}
+                            </SimpleGrid>
+                        </Box>
+
+                        {/* Weather Data Trend Chart */}
+                        {data.length > 0 && (
                             <MotionBox
                                 initial={{ y: 20 }}
                                 animate={{ y: 0 }}
@@ -436,7 +677,7 @@ const Dashboard = () => {
                                 transition={{ duration: 0.5 }}
                             >
                                 <Heading size="md" mb={4} bgGradient="linear(to-r, #6366f1, #ec4899)" bgClip="text" fontSize={{ base: '3xl', md: '4xl' }} mt={24}>
-                                    Weather Data Trend
+                                    Weather Data Trend in {selectedStationName ? selectedStationName : "Station"}
                                 </Heading>
                                 <Box h="50vh" mb={32}>
                                     <ByStationLineChart
