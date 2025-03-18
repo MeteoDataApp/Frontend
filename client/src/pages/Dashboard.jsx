@@ -15,6 +15,7 @@ const Dashboard = () => {
     const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
     const [loading, setLoading] = useState(false);
     const [advancedLoading, setAdvancedLoading] = useState(false);
+    const [advancedRenderReady, setAdvancedRenderReady] = useState(false);
     const [data, setData] = useState([]);
     const [sortOrderAvg, setSortOrderAvg] = useState('desc');
     const [sortOrderFD, setSortOrderFD] = useState('desc');
@@ -46,6 +47,7 @@ const Dashboard = () => {
         try {
             const response = await server.get(`/by_date?date=${selectedDate}`);
             setData(response.data);
+            setAdvancedRenderReady(true);
             if (response.data.length === 0) {
                 showToast("error", "No data found", "Please try another date");
             }
@@ -163,6 +165,8 @@ const Dashboard = () => {
                                 onClick={() => {
                                     setCurrentPage(1);
                                     setActiveTab("station");
+                                    setData([]);
+                                    setAdvancedRenderReady(false);
                                 }}
                                 _selected={{
                                     bgGradient: "linear(to-r, #6366f1, #ec4899)",
@@ -183,6 +187,7 @@ const Dashboard = () => {
                                 onClick={() => {
                                     setCurrentPage(1);
                                     setActiveTab("date");
+                                    setData([]);
                                 }}
                                 _selected={{
                                     bgGradient: "linear(to-r, #6366f1, #ec4899)",
@@ -273,24 +278,26 @@ const Dashboard = () => {
                                         Search
                                     </Button>
 
-                                    <Button
-                                        onClick={handleAdvancedAnalysis}
-                                        bgGradient="linear(to-r, #6366f1, #ec4899)"
-                                        color="white"
-                                        _hover={advancedAnalysisList.length >= 2 && advancedAnalysisList.length < 3 && {
-                                            bgGradient: "linear(to-r, #6366f1, #ec4899)",
-                                            transform: "scale(1.05)",
-                                            boxShadow: "lg",
-                                        }}
-                                        _active={advancedAnalysisList.length >= 2 && advancedAnalysisList.length < 3 && {
-                                            bgGradient: "linear(to-r, #6366f1, #ec4899)",
-                                            transform: "scale(0.95)",
-                                        }}
-                                        isLoading={advancedLoading}
-                                        isDisabled={advancedAnalysisList.length < 2}
-                                    >
-                                        Advanced Analysis
-                                    </Button>
+                                    {data.length > 0 && advancedRenderReady === true && (
+                                        <Button
+                                            onClick={handleAdvancedAnalysis}
+                                            bgGradient="linear(to-r, #6366f1, #ec4899)"
+                                            color="white"
+                                            _hover={advancedAnalysisList.length >= 2 && advancedAnalysisList.length < 3 && {
+                                                bgGradient: "linear(to-r, #6366f1, #ec4899)",
+                                                transform: "scale(1.05)",
+                                                boxShadow: "lg",
+                                            }}
+                                            _active={advancedAnalysisList.length >= 2 && advancedAnalysisList.length < 3 && {
+                                                bgGradient: "linear(to-r, #6366f1, #ec4899)",
+                                                transform: "scale(0.95)",
+                                            }}
+                                            isLoading={advancedLoading}
+                                            isDisabled={advancedAnalysisList.length < 2}
+                                        >
+                                            Advanced Analysis
+                                        </Button>
+                                    )}
                                 </Flex>
                             </TabPanel>
                         </TabPanels>
