@@ -183,6 +183,8 @@ const Dashboard = () => {
                                 onClick={() => {
                                     setCurrentPage(1);
                                     setActiveTab("station");
+                                    setStartDate(startDate);
+                                    setEndDate(endDate);
                                     setData([]);
                                     setAdvancedRenderReady(false);
                                 }}
