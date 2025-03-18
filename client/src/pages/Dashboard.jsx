@@ -5,6 +5,7 @@ import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/i
 import { useState } from 'react';
 import { useShowToast } from '../extensions/useShowToast';
 import server from "../../networking";
+import ByStationLineChart from '../components/ByStationLineChart';
 
 const Dashboard = () => {
     const MotionBox = motion.div;
@@ -12,8 +13,8 @@ const Dashboard = () => {
     const showToast = useShowToast();
 
     const [selectedStation, setSelectedStation] = useState(null);
-    const [startDate, setStartDate] = useState(""); 
-    const [endDate, setEndDate] = useState(""); 
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
     const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
     const [loading, setLoading] = useState(false);
     const [advancedLoading, setAdvancedLoading] = useState(false);
@@ -145,6 +146,9 @@ const Dashboard = () => {
         if (currentPage > 1) setCurrentPage(currentPage - 1);
     };
 
+    const currentStartDate = displayedData[0]?.Date;
+    const currentEndDate = displayedData[displayedData.length - 1]?.Date;
+
     return (
         <MotionBox
             display="flex"
@@ -228,7 +232,7 @@ const Dashboard = () => {
                             </Tab>
                         </TabList>
                         <TabPanels>
-                        <TabPanel>
+                            <TabPanel>
                                 <Flex gap={3} align="center" justifyContent="center">
                                     {/* Station Selection Dropdown */}
                                     <Menu>
@@ -415,6 +419,36 @@ const Dashboard = () => {
                                 </Tbody>
                             </Table>
                         </TableContainer>
+
+                        {activeTab === "station" && displayedData.length > 0 && (
+                            <MotionBox
+                                initial={{ y: 20 }}
+                                animate={{ y: 0 }}
+                                mx="auto"
+                                maxW="1200px"
+                                mt={8}
+                                bg="white"
+                                borderRadius="xl"
+                                boxShadow="xl"
+                                p={6}
+                                textAlign="center"
+                                mb={16}
+                                transition={{ duration: 0.5 }}
+                            >
+                                <Heading size="md" mb={4} bgGradient="linear(to-r, #6366f1, #ec4899)" bgClip="text" fontSize={{ base: '3xl', md: '4xl' }} mt={24}>
+                                    Weather Data Trend
+                                </Heading>
+                                <Box h="50vh" mb={32}>
+                                    <ByStationLineChart
+                                        data={data}
+                                        xAxisKey="Date"
+                                        yAxisKeys={["Avg", "FDAvg"]}
+                                        currentStartDate={currentStartDate}
+                                        currentEndDate={currentEndDate}
+                                    />
+                                </Box>
+                            </MotionBox>
+                        )}
                     </MotionBox>
                 )}
             </Box>
