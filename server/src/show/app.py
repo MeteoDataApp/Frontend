@@ -34,8 +34,8 @@ def server():
 def by_station():
     if request.method == "GET":
         selected_station = request.args.get("station")
-        start_date = request.args.get("start_date")
-        end_date = request.args.get("end_date")
+        start_date = request.args.get("start")
+        end_date = request.args.get("end")
 
         if not selected_station:
             return jsonify({"error": "Station parameter is required"}), 400
@@ -46,11 +46,17 @@ def by_station():
             query = {"Station": selected_station}
 
             # Add date range filter if both start_date and end_date are provided
-            if start_date and end_date:
+            if start_date or end_date:
                 try:
-                    start_date = datetime.datetime.strptime(start_date, "%Y-%m-%d")
-                    end_date = datetime.datetime.strptime(end_date, "%Y-%m-%d")
-                    query["Date"] = {"$gte": start_date, "$lte": end_date}
+                    if start_date:
+                        start_date = datetime.datetime.strptime(start_date, "%Y-%m-%d")
+                        query["Date"] = {"$gte": start_date}
+                    if end_date:
+                        end_date = datetime.datetime.strptime(end_date, "%Y-%m-%d")
+                        if "Date" in query:
+                            query["Date"]["$lte"] = end_date
+                        else:
+                            query["Date"] = {"$lte": end_date}
                 except ValueError as e:
                     return json.jsonify({"error": "Invalid date format. Use YYYY-MM-DD"}), 400
 
@@ -65,6 +71,9 @@ def by_station():
                 if key not in seen:
                     seen.add(key)
                     unique_data.append(doc)
+
+            if not unique_data:
+                return json.jsonify({"error": "No data found for the provided date range"}), 404
 
             # Prepare the response
             response = [{
