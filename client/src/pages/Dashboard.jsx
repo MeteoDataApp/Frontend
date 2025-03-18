@@ -19,6 +19,7 @@ const Dashboard = () => {
     const [advancedLoading, setAdvancedLoading] = useState(false);
     const [advancedRenderReady, setAdvancedRenderReady] = useState(false);
     const [data, setData] = useState([]);
+    const [sortOrderDate, setSortOrderDate] = useState('desc');
     const [sortOrderAvg, setSortOrderAvg] = useState('desc');
     const [sortOrderFD, setSortOrderFD] = useState('desc');
     const [currentPage, setCurrentPage] = useState(1);
@@ -68,6 +69,16 @@ const Dashboard = () => {
 
     const handleAdvancedAnalysis = async () => {
         console.log("Selected station codes for advanced analysis:", advancedAnalysisList);
+    };
+
+    const sortDataDate = () => {
+        const sorted = [...data].sort((a, b) => {
+            const dateA = new Date(a.Date);
+            const dateB = new Date(b.Date);
+            return sortOrderDate === 'asc' ? dateA - dateB : dateB - dateA;
+        });
+        setData(sorted);
+        setSortOrderDate(sortOrderDate === 'asc' ? 'desc' : 'asc');
     };
 
     const sortDataAvg = () => {
@@ -347,7 +358,18 @@ const Dashboard = () => {
                                     <Tr>
 
                                         <Th>Station</Th>
-                                        <Th>Date</Th>
+                                        <Th>
+                                            {activeTab === "station" && (
+                                                <Box
+                                                    as="span"
+                                                    cursor="pointer"
+                                                    onClick={sortDataDate}
+                                                >
+                                                    Date {sortOrderDate === 'asc' ? ' ↑' : ' ↓'}
+                                                </Box>
+                                            )}
+                                            {activeTab !== "station" && "Date"}
+                                        </Th>
                                         <Th cursor="pointer" onClick={sortDataAvg}>
                                             Avg Temp (°C)
                                             {sortOrderAvg === 'asc' ? ' ↑' : ' ↓'}
