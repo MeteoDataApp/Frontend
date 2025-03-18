@@ -32,9 +32,8 @@ const Dashboard = () => {
         setLoading(true);
         try {
             let query = `station=${selectedStation}`;
-            if (startDate && endDate) {
-                query += `&start_date=${startDate}&end_date=${endDate}`;
-            }
+            if (startDate) query += `&start=${startDate}`;
+            if (endDate) query += `&end=${endDate}`;
 
             const response = await server.get(`/by_station?${query}`);
             setData(response.data);
@@ -436,7 +435,7 @@ const Dashboard = () => {
                 <Text fontSize="sm" color="gray.600" alignContent={{ base: 'center', md: 'left' }} p={3}>
                     Data is only available until 9 March 2025.
                 </Text>
-                {activeTab === "date" && data.length > 0 && (
+                {data.length > 0 && (
                     <Flex align="center">
                         <Text fontSize="sm" color="gray.600">
                             Showing {((currentPage - 1) * recordsPerPage) + 1} - {Math.min(currentPage * recordsPerPage, data.length)} of {data.length} records

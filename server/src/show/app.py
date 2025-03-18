@@ -41,10 +41,8 @@ def by_station():
             return jsonify({"error": "Station parameter is required"}), 400
 
         try:
-            # Convert the selected_station to an integer
             selected_station = int(selected_station)
 
-            # Prepare the query with the station filter
             query = {"Station": selected_station}
 
             # Add date range filter if both start_date and end_date are provided
@@ -56,9 +54,17 @@ def by_station():
                 except ValueError as e:
                     return json.jsonify({"error": "Invalid date format. Use YYYY-MM-DD"}), 400
 
-            # Fetch data from the collection
             data = list(test_collection.find(query).sort("Date", -1))
             data.reverse()
+
+            # Remove redundant results based on Station and Date
+            unique_data = []
+            seen = set()
+            for doc in data:
+                key = (doc["Station"], doc["Date"].strftime("%Y-%m-%d")) 
+                if key not in seen:
+                    seen.add(key)
+                    unique_data.append(doc)
 
             # Prepare the response
             response = [{
@@ -67,7 +73,7 @@ def by_station():
                 "FDAvg": doc["FDAvg"],
                 "Station": doc["Station"],
                 "_id": str(doc["_id"]),
-            } for doc in data]
+            } for doc in unique_data]
 
             return json.jsonify(response)
 
