@@ -38,10 +38,11 @@ const Dashboard = () => {
             const response = await server.get(`/by_station?${query}`);
             setData(response.data);
             if (response.data.length === 0) {
-                showToast("error", "No data found", "Please try another station or date range");
+                showToast("error", "", "Please try another station or date range");
             }
         } catch (error) {
             console.error("Error fetching data:", error);
+            showToast("error", "", error.response.data.error);
             setData([]);
         } finally {
             setLoading(false);
@@ -433,7 +434,7 @@ const Dashboard = () => {
                 px={4}
             >
                 <Text fontSize="sm" color="gray.600" alignContent={{ base: 'center', md: 'left' }} p={3}>
-                    Data is only available until 9 March 2025.
+                    Data is only available from 1 January 2018 until 9 March 2025.
                 </Text>
                 {data.length > 0 && (
                     <Flex align="center">
