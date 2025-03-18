@@ -379,7 +379,7 @@ const Dashboard = () => {
                 justifyContent="space-between"
                 px={4}
             >
-                <Text fontSize="sm" color="gray.600" mt={activeTab === "date" ? 2 : 0}>
+                <Text fontSize="sm" color="gray.600" alignContent={{ base: 'center', md: 'left' }} p={3}>
                     Data is only available until 9 March 2025.
                 </Text>
                 {activeTab === "date" && data.length > 0 && (
