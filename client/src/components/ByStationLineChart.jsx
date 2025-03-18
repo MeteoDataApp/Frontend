@@ -60,7 +60,7 @@ const ByStationLineChart = ({ data, xAxisKey, yAxisKeys, currentStartDate, curre
                             color: "#6b7280",
                             font: {
                                 family: "Inter, sans-serif",
-                                size: 14,
+                                size: 20,
                                 weight: "600",
                             },
                             padding: { top: 10, bottom: 10 },
@@ -73,7 +73,7 @@ const ByStationLineChart = ({ data, xAxisKey, yAxisKeys, currentStartDate, curre
                             color: "#6b7280",
                             font: {
                                 family: "Inter, sans-serif",
-                                size: 12,
+                                size: 14,
                                 weight: "500",
                             },
                             padding: 10,
@@ -88,7 +88,7 @@ const ByStationLineChart = ({ data, xAxisKey, yAxisKeys, currentStartDate, curre
                             color: "#6b7280",
                             font: {
                                 family: "Inter, sans-serif",
-                                size: 14,
+                                size: 20,
                                 weight: "600",
                             },
                             padding: { top: 10, bottom: 10 },
@@ -101,7 +101,7 @@ const ByStationLineChart = ({ data, xAxisKey, yAxisKeys, currentStartDate, curre
                             color: "#6b7280",
                             font: {
                                 family: "Inter, sans-serif",
-                                size: 12,
+                                size: 14,
                                 weight: "500",
                             },
                             padding: 10,

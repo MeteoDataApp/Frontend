@@ -676,10 +676,10 @@ const Dashboard = () => {
                                 mb={16}
                                 transition={{ duration: 0.5 }}
                             >
-                                <Heading size="md" mb={4} bgGradient="linear(to-r, #6366f1, #ec4899)" bgClip="text" fontSize={{ base: '3xl', md: '4xl' }} mt={24}>
+                                <Heading size="md" mb={4} bgGradient="linear(to-r, #6366f1, #ec4899)" bgClip="text" fontSize={{ base: '3xl', md: '4xl' }} mt={20}>
                                     Weather Data Trend in {selectedStationName ? selectedStationName : "Station"}
                                 </Heading>
-                                <Box h="50vh" mb={32}>
+                                <Box h="50vh" w="90vw" mb={32} alignItems="center" justifyContent="center" mx="auto">
                                     <ByStationLineChart
                                         data={data}
                                         xAxisKey="Date"
