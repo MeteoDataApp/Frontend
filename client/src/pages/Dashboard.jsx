@@ -12,6 +12,8 @@ const Dashboard = () => {
     const showToast = useShowToast();
 
     const [selectedStation, setSelectedStation] = useState(null);
+    const [startDate, setStartDate] = useState(""); 
+    const [endDate, setEndDate] = useState(""); 
     const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
     const [loading, setLoading] = useState(false);
     const [advancedLoading, setAdvancedLoading] = useState(false);
@@ -28,10 +30,15 @@ const Dashboard = () => {
         if (!selectedStation) return;
         setLoading(true);
         try {
-            const response = await server.get(`/by_station?station=${selectedStation}`);
+            let query = `station=${selectedStation}`;
+            if (startDate && endDate) {
+                query += `&start_date=${startDate}&end_date=${endDate}`;
+            }
+
+            const response = await server.get(`/by_station?${query}`);
             setData(response.data);
             if (response.data.length === 0) {
-                showToast("error", "No data found", "Please try another station");
+                showToast("error", "No data found", "Please try another station or date range");
             }
         } catch (error) {
             console.error("Error fetching data:", error);
@@ -206,48 +213,71 @@ const Dashboard = () => {
                             </Tab>
                         </TabList>
                         <TabPanels>
-                            <TabPanel>
-                                <Menu>
-                                    <MenuButton
-                                        as={Button}
-                                        rightIcon={<ChevronDownIcon />}
-                                    >
-                                        {selectedStation ?
-                                            `${stationList.find(s => s.code === selectedStation).name} (${selectedStation})` :
-                                            'Select Station'
-                                        }
-                                    </MenuButton>
-                                    <MenuList maxH="300px" overflowY="auto">
-                                        {stationList.map((station) => (
-                                            <MenuItem
-                                                key={station.code}
-                                                onClick={() => setSelectedStation(station.code)}
-                                            >
-                                                {`${station.name} (${station.code})`}
-                                            </MenuItem>
-                                        ))}
-                                    </MenuList>
-                                </Menu>
+                        <TabPanel>
+                                <Flex gap={3} align="center" justifyContent="center">
+                                    {/* Station Selection Dropdown */}
+                                    <Menu>
+                                        <MenuButton
+                                            as={Button}
+                                            rightIcon={<ChevronDownIcon />}
+                                        >
+                                            {selectedStation ?
+                                                `${stationList.find(s => s.code === selectedStation).name} (${selectedStation})` :
+                                                'Select Station'
+                                            }
+                                        </MenuButton>
+                                        <MenuList maxH="300px" overflowY="auto">
+                                            {stationList.map((station) => (
+                                                <MenuItem
+                                                    key={station.code}
+                                                    onClick={() => setSelectedStation(station.code)}
+                                                >
+                                                    {`${station.name} (${station.code})`}
+                                                </MenuItem>
+                                            ))}
+                                        </MenuList>
+                                    </Menu>
 
-                                <Button
-                                    ml={3}
-                                    onClick={handleSubmitStation}
-                                    bgGradient="linear(to-r, #6366f1, #ec4899)"
-                                    color="white"
-                                    _hover={selectedStation && {
-                                        bgGradient: "linear(to-r, #6366f1, #ec4899)",
-                                        transform: "scale(1.05)",
-                                        boxShadow: "lg",
-                                    }}
-                                    _active={selectedStation && {
-                                        bgGradient: "linear(to-r, #6366f1, #ec4899)",
-                                        transform: "scale(0.95)",
-                                    }}
-                                    isLoading={loading}
-                                    isDisabled={!selectedStation}
-                                >
-                                    Search
-                                </Button>
+                                    {/* Start Date Input Field */}
+                                    <Input
+                                        type="date"
+                                        value={startDate}
+                                        onChange={(e) => setStartDate(e.target.value)}
+                                        size="md"
+                                        borderRadius="md"
+                                        maxW="200px"
+                                    />
+
+                                    {/* End Date Input Field */}
+                                    <Input
+                                        type="date"
+                                        value={endDate}
+                                        onChange={(e) => setEndDate(e.target.value)}
+                                        size="md"
+                                        borderRadius="md"
+                                        maxW="200px"
+                                    />
+
+                                    {/* Search Button */}
+                                    <Button
+                                        onClick={handleSubmitStation}
+                                        bgGradient="linear(to-r, #6366f1, #ec4899)"
+                                        color="white"
+                                        _hover={selectedStation && {
+                                            bgGradient: "linear(to-r, #6366f1, #ec4899)",
+                                            transform: "scale(1.05)",
+                                            boxShadow: "lg",
+                                        }}
+                                        _active={selectedStation && {
+                                            bgGradient: "linear(to-r, #6366f1, #ec4899)",
+                                            transform: "scale(0.95)",
+                                        }}
+                                        isLoading={loading}
+                                        isDisabled={!selectedStation}
+                                    >
+                                        Search
+                                    </Button>
+                                </Flex>
                             </TabPanel>
                             <TabPanel>
                                 <Flex gap={3} align="center" justifyContent="center">
@@ -399,7 +429,7 @@ const Dashboard = () => {
                             mx={2}
                             fontSize="2xl"
                         />
-        
+
                         <IconButton
                             padding={0}
                             variant={'ghost'}

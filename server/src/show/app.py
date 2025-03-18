@@ -34,19 +34,43 @@ def server():
 def by_station():
     if request.method == "GET":
         selected_station = request.args.get("station")
+        start_date = request.args.get("start_date")
+        end_date = request.args.get("end_date")
+
         if not selected_station:
-            return json.jsonify({"error": "Station parameter is required"}), 400
+            return jsonify({"error": "Station parameter is required"}), 400
 
         try:
-            data = list(test_collection.find({"Station": int(selected_station)}).sort("Date", -1))
+            # Convert the selected_station to an integer
+            selected_station = int(selected_station)
+
+            # Prepare the query with the station filter
+            query = {"Station": selected_station}
+
+            # Add date range filter if both start_date and end_date are provided
+            if start_date and end_date:
+                try:
+                    start_date = datetime.datetime.strptime(start_date, "%Y-%m-%d")
+                    end_date = datetime.datetime.strptime(end_date, "%Y-%m-%d")
+                    query["Date"] = {"$gte": start_date, "$lte": end_date}
+                except ValueError as e:
+                    return json.jsonify({"error": "Invalid date format. Use YYYY-MM-DD"}), 400
+
+            # Fetch data from the collection
+            data = list(test_collection.find(query).sort("Date", -1))
             data.reverse()
-            return json.jsonify([{
+
+            # Prepare the response
+            response = [{
                 "Avg": doc["Avg"],
                 "Date": doc["Date"].strftime("%Y-%m-%d"),
                 "FDAvg": doc["FDAvg"],
                 "Station": doc["Station"],
                 "_id": str(doc["_id"]),
-            } for doc in data])
+            } for doc in data]
+
+            return json.jsonify(response)
+
         except Exception as e:
             return json.jsonify({"error": str(e)}), 500
     else:
