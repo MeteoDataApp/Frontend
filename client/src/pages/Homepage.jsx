@@ -64,21 +64,21 @@ export default function HomePage() {
     }
 
     useEffect(() => {
-        if (requestReceived) return;
-        if ("geolocation" in navigator) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const { latitude, longitude } = position.coords;
-                    fetchRealtimeWeatherData(latitude, longitude);
-                }, (error) => {
-                    setRequestReceived(true);
-                    console.error("Error obtaining location:", error);
-                    showToast("error", "An error occurred while fetching location data", "See console for more details");
-                }
-            );
-        } else {
-            showToast("error", "Geolocation is not supported by your browser");
-            setRequestReceived(true);
+        if (requestReceived === false) {
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const { latitude, longitude } = position.coords;
+                        fetchRealtimeWeatherData(latitude, longitude);
+                    }, (error) => {
+                        setRequestReceived(true);
+                        showToast("error", "An error occurred while fetching location data", error.message);
+                    }
+                );
+            } else {
+                showToast("error", "Geolocation is not supported by your browser");
+                setRequestReceived(true);
+            }
         }
     }, [requestReceived]);
 
