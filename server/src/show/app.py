@@ -1,4 +1,4 @@
-from flask import Flask, json, render_template, request
+from flask import Flask, json, render_template, request, json
 from flask_cors import CORS
 from pymongo import MongoClient
 import datetime
@@ -26,6 +26,13 @@ client = MongoClient(MONGO_CONNECTION_STRING)
 db = client["meteo"]
 test_collection = db["test"]
 
+def handle_api_error(e, message="Internal server error"):
+    app.logger.error(f"Error: {str(e)}")
+    return json.jsonify({
+        "success": False,
+        "error": message
+    }), 500
+
 @app.route("/", methods=["GET"])
 def server():
     return render_template("server.html")
@@ -38,7 +45,7 @@ def by_station():
         end_date = request.args.get("end")
 
         if not selected_station:
-            return jsonify({"error": "Station parameter is required"}), 400
+            return json.jsonify({"success": False, "error": "Station parameter is required"}), 400
 
         try:
             selected_station = int(selected_station)
@@ -58,7 +65,7 @@ def by_station():
                         else:
                             query["Date"] = {"$lte": end_date}
                 except ValueError as e:
-                    return json.jsonify({"error": "Invalid date format. Use YYYY-MM-DD"}), 400
+                    return json.jsonify({"success": False, "error": "Invalid date format. Use YYYY-MM-DD"}), 400
 
             data = list(test_collection.find(query).sort("Date", -1))
             data.reverse()
@@ -73,7 +80,7 @@ def by_station():
                     unique_data.append(doc)
 
             if not unique_data:
-                return json.jsonify({"error": "No data found for the provided date range"}), 404
+                return json.jsonify({"success": False, "error": "No data found for the provided date range"}), 404
 
             # Prepare the response
             response = [{
@@ -84,39 +91,147 @@ def by_station():
                 "_id": str(doc["_id"]),
             } for doc in unique_data]
 
-            return json.jsonify(response)
+            return json.jsonify({"success": True, "data": response})
 
         except Exception as e:
-            return json.jsonify({"error": str(e)}), 500
+            return json.jsonify({"success": False, "error": str(e)}), 500
     else:
-        return json.jsonify({"error": "Invalid request method"}), 405
+        return json.jsonify({"success": False, "error": "Invalid request method"}), 405
 
 @app.route("/by_date", methods=["GET"])
 def by_date():
     if request.method == "GET":
-        date_str = request.args.get("date")
-        if not date_str:
-            return json.jsonify({"error": "Date parameter is required"}), 400
-
         try:
-            chosen_date = datetime.datetime.strptime(date_str, "%Y-%m-%d")
-            next_day = chosen_date + datetime.timedelta(days=1)
+            date_str = request.args.get("date")
+            if not date_str:
+                return json.jsonify({
+                    "success": False,
+                    "error": "Date parameter is required"
+                }), 400
+
+            try:
+                chosen_date = datetime.datetime.strptime(date_str, "%Y-%m-%d")
+                next_day = chosen_date + datetime.timedelta(days=1)
+            except ValueError:
+                return json.jsonify({
+                    "success": False,
+                    "error": "Invalid date format (YYYY-MM-DD required)"
+                }), 400
+
             data = list(test_collection.find({
                 "Date": {"$gte": chosen_date, "$lt": next_day},
                 "Station": {"$in": station_list}
             }))
-            
-            return json.jsonify([{
-                "Avg": doc["Avg"],
-                "Date": doc["Date"].strftime("%Y-%m-%d"),
-                "FDAvg": doc["FDAvg"],
-                "Station": doc["Station"],
-                "_id": str(doc["_id"]),
-            } for doc in data])
+
+            if not data:
+                return json.jsonify({
+                    "success": False,
+                    "error": "No data found for this date"
+                }), 404
+
+            return json.jsonify({
+                "success": True,
+                "data": [{
+                    "Avg": doc["Avg"],
+                    "Date": doc["Date"].strftime("%Y-%m-%d"),
+                    "FDAvg": doc["FDAvg"],
+                    "Station": doc["Station"],
+                    "_id": str(doc["_id"]),
+                } for doc in data]
+            })
+
         except Exception as e:
-            return json.jsonify({"error": str(e)}), 500
+            return handle_api_error(e)
     else:
-        return json.jsonify({"error": "Invalid request method"}), 405
+        return json.jsonify({
+            "success": False,
+            "error": "Invalid request method"
+        }), 405
+
+@app.route("/advancedAnalysis", methods=["POST"])
+def advanced_analysis():
+    if request.method == "POST":
+        try:
+            data = request.get_json()
+            if not data:
+                return json.jsonify({
+                    "success": False,
+                    "error": "Invalid request body"
+                }), 400
+
+            stations = data.get('stations')
+            date_str = data.get('date')
+
+            if not stations or not isinstance(stations, list):
+                return json.jsonify({
+                    "success": False,
+                    "error": "Invalid or missing stations list"
+                }), 400
+
+            if len(stations) < 1 or len(stations) > 3:
+                return json.jsonify({
+                    "success": False,
+                    "error": "Please select 1-3 stations"
+                }), 400
+
+            if not date_str:
+                return json.jsonify({
+                    "success": False,
+                    "error": "Date parameter is required"
+                }), 400
+
+            try:
+                target_date = datetime.datetime.strptime(date_str, "%Y-%m-%d")
+                next_day = target_date + datetime.timedelta(days=1)
+            except ValueError:
+                return json.jsonify({
+                    "success": False,
+                    "error": "Invalid date format (YYYY-MM-DD required)"
+                }), 400
+
+            try:
+                station_codes = [int(code) for code in stations]
+                invalid_stations = [code for code in station_codes if code not in station_list]
+                if invalid_stations:
+                    return json.jsonify({
+                        "success": False,
+                        "error": f"Invalid station codes: {invalid_stations}"
+                    }), 400
+            except ValueError:
+                return json.jsonify({
+                    "success": False,
+                    "error": "Invalid station code format"
+                }), 400
+
+            query = {
+                "Station": {"$in": station_codes},
+                "Date": {"$gte": target_date, "$lt": next_day}
+            }
+
+            data = list(test_collection.find(query))
+
+            if not data:
+                return json.jsonify({
+                    "success": False,
+                    "error": "No data found for selected stations on this date"
+                }), 404
+
+            return json.jsonify({
+                "success": True,
+                "data": [{
+                    "Avg": doc["Avg"],
+                    "Station": doc["Station"],
+                    "Date": doc["Date"].strftime("%Y-%m-%d")
+                } for doc in data]
+            })
+
+        except Exception as e:
+            return handle_api_error(e)
+    else:
+        return json.jsonify({
+            "success": False,
+            "error": "Invalid request method"
+        }), 405
 
 if __name__ == "__main__":
     app.run(debug=True)
