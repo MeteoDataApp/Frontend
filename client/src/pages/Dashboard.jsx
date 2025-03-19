@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { motion } from 'framer-motion';
-import { Heading, Button, Tabs, TabList, TabPanels, Tab, TabPanel, Menu, MenuButton, MenuList, MenuItem, Flex, Input, Table, Thead, Tbody, Tr, Th, Td, TableContainer, Box, Text, IconButton, Checkbox, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Stack, Tag, TagLabel, TagLeftIcon, SimpleGrid, VStack, useDisclosure, useColorModeValue } from '@chakra-ui/react';
+import { Heading, Button, Tabs, TabList, TabPanels, Tab, TabPanel, Menu, MenuButton, MenuList, MenuItem, Flex, Input, Table, Thead, Tbody, Tr, Th, Td, TableContainer, Box, Text, IconButton, Checkbox, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Stack, Tag, TagLabel, TagLeftIcon, SimpleGrid, VStack, useDisclosure, useColorModeValue, HStack } from '@chakra-ui/react';
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
@@ -34,6 +34,9 @@ const Dashboard = () => {
     const [advancedData, setAdvancedData] = useState([]);
     const [selectedAnalysisDate, setSelectedAnalysisDate] = useState('');
     const [chartModalOpen, setChartModalOpen] = useState(false);
+    const [isSorting, setIsSorting] = useState(false);
+    const [chartKey, setChartKey] = useState(0);
+
     const recordsPerPage = activeTab === "station" ? 9 : 7;
 
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -137,10 +140,11 @@ const Dashboard = () => {
         } catch (error) {
             setData([]);
             if (error.response.data.success === false) {
-                showToast("error", error.response.data  .error);
+                showToast("error", error.response.data.error);
             }
         } finally {
             setLoading(false);
+            setIsSorting(false);
         }
     };
 
@@ -274,6 +278,12 @@ const Dashboard = () => {
 
     const currentStartDate = displayedData[0]?.Date;
     const currentEndDate = displayedData[displayedData.length - 1]?.Date;
+
+    const handleSort = (sortFunction) => {
+        setIsSorting(true);
+        sortFunction();
+        setChartKey((prevKey) => prevKey + 1);
+    };
 
     return (
         <>
@@ -428,57 +438,57 @@ const Dashboard = () => {
                                     </Flex>
                                 </TabPanel>
                                 <TabPanel>
-                                        <Flex gap={3} align="center" justifyContent="center">
-                                            <Input
-                                                type="date"
-                                                value={selectedDate}
-                                                onChange={(e) => setSelectedDate(e.target.value)}
-                                                size="md"
-                                                borderRadius="md"
-                                                maxW="200px"
-                                                max="2025-03-09"
-                                            />
+                                    <Flex gap={3} align="center" justifyContent="center">
+                                        <Input
+                                            type="date"
+                                            value={selectedDate}
+                                            onChange={(e) => setSelectedDate(e.target.value)}
+                                            size="md"
+                                            borderRadius="md"
+                                            maxW="200px"
+                                            max="2025-03-09"
+                                        />
 
+                                        <Button
+                                            onClick={handleSubmitDate}
+                                            bgGradient="linear(to-r, #6366f1, #ec4899)"
+                                            color="white"
+                                            _hover={{
+                                                bgGradient: "linear(to-r, #6366f1, #ec4899)",
+                                                transform: "scale(1.05)",
+                                                boxShadow: "lg",
+                                            }}
+                                            _active={{
+                                                bgGradient: "linear(to-r, #6366f1, #ec4899)",
+                                                transform: "scale(0.95)",
+                                            }}
+                                            isLoading={loading}
+                                        >
+                                            Search
+                                        </Button>
+
+                                        {data.length > 0 && advancedRenderReady === true && (
                                             <Button
-                                                onClick={handleSubmitDate}
+                                                onClick={openAdvancedAnalysisModal}
                                                 bgGradient="linear(to-r, #6366f1, #ec4899)"
                                                 color="white"
-                                                _hover={{
+                                                _hover={advancedAnalysisList.length >= 2 && advancedAnalysisList.length <= 3 && {
                                                     bgGradient: "linear(to-r, #6366f1, #ec4899)",
                                                     transform: "scale(1.05)",
                                                     boxShadow: "lg",
                                                 }}
-                                                _active={{
+                                                _active={advancedAnalysisList.length >= 2 && advancedAnalysisList.length <= 3 && {
                                                     bgGradient: "linear(to-r, #6366f1, #ec4899)",
                                                     transform: "scale(0.95)",
                                                 }}
-                                                isLoading={loading}
+                                                isLoading={advancedLoading}
+                                                isDisabled={advancedAnalysisList.length < 2}
                                             >
-                                                Search
+                                                Advanced Analysis
                                             </Button>
-
-                                            {data.length > 0 && advancedRenderReady === true && (
-                                                <Button
-                                                    onClick={openAdvancedAnalysisModal}
-                                                    bgGradient="linear(to-r, #6366f1, #ec4899)"
-                                                    color="white"
-                                                    _hover={advancedAnalysisList.length >= 2 && advancedAnalysisList.length <= 3 && {
-                                                        bgGradient: "linear(to-r, #6366f1, #ec4899)",
-                                                        transform: "scale(1.05)",
-                                                        boxShadow: "lg",
-                                                    }}
-                                                    _active={advancedAnalysisList.length >= 2 && advancedAnalysisList.length <= 3 && {
-                                                        bgGradient: "linear(to-r, #6366f1, #ec4899)",
-                                                        transform: "scale(0.95)",
-                                                    }}
-                                                    isLoading={advancedLoading}
-                                                    isDisabled={advancedAnalysisList.length < 2}
-                                                >
-                                                    Advanced Analysis
-                                                </Button>
-                                            )}
-                                        </Flex>
-                                    </TabPanel>
+                                        )}
+                                    </Flex>
+                                </TabPanel>
                             </TabPanels>
                         </Tabs>
                     </MotionBox>
@@ -637,15 +647,17 @@ const Dashboard = () => {
                                             FD: sortOrderFD
                                         }[sortType];
 
+                                        const sortFunction = {
+                                            date: sortDataDate,
+                                            avg: sortDataAvg,
+                                            FD: sortDataFD
+                                        }[sortType];
+
                                         return (
                                             <Button
                                                 key={sortType}
                                                 rightIcon={sortOrder === 'asc' ? <FiArrowUp /> : <FiArrowDown />}
-                                                onClick={
-                                                    sortType === 'date' ? sortDataDate :
-                                                        sortType === 'avg' ? sortDataAvg :
-                                                            sortDataFD
-                                                }
+                                                onClick={() => handleSort(sortFunction)}
                                                 variant="solid"
                                                 bgGradient={sortOrder === 'asc'
                                                     ? "linear(to-r, #6366f1, #ec4899)"
@@ -798,14 +810,53 @@ const Dashboard = () => {
                                         Weather Data Trend in {selectedStationName ? selectedStationName : "Station"}
                                     </Heading>
                                     <Box h="50vh" w="90vw" mb={32} alignItems="center" justifyContent="center" mx="auto">
-                                        <ByStationLineChart
-                                            data={data}
-                                            xAxisKey="Date"
-                                            yAxisKeys={["Avg", "FDAvg"]}
-                                            currentStartDate={currentStartDate}
-                                            currentEndDate={currentEndDate}
-                                            selectedStationName={selectedStationName}
-                                        />
+                                        {!isSorting ? (
+                                            <ByStationLineChart
+                                                key={chartKey}
+                                                data={data}
+                                                xAxisKey="Date"
+                                                yAxisKeys={["Avg", "FDAvg"]}
+                                                currentStartDate={currentStartDate}
+                                                currentEndDate={currentEndDate}
+                                                selectedStationName={selectedStationName}
+                                            />
+                                        ) : (
+                                            <VStack spacing={4} align="center" justify="center">
+                                                <Text fontSize="xl" fontWeight="bold" color="gray.500" textAlign="center">
+                                                    Weather Data Trend is not available when sorting data.
+                                                </Text>
+                                                <HStack spacing={2}>
+                                                    <Text fontSize="xl" fontWeight="bold" color="gray.500">
+                                                        Click
+                                                    </Text>
+                                                    <Button
+                                                        onClick={handleSubmitStation} // Same function as the search button
+                                                        bgGradient="linear(to-r, #6366f1, #ec4899)"
+                                                        color="white"
+                                                        _hover={{
+                                                            bgGradient: "linear(to-r, #6366f1, #ec4899)",
+                                                            transform: "scale(1.05)",
+                                                            boxShadow: "lg",
+                                                        }}
+                                                        _active={{
+                                                            bgGradient: "linear(to-r, #6366f1, #ec4899)",
+                                                            transform: "scale(0.95)",
+                                                        }}
+                                                        isLoading={loading}
+                                                        isDisabled={!selectedStation}
+                                                        size="md"
+                                                        px={4}
+                                                        borderRadius={8}
+                                                    >
+                                                        Here
+                                                    </Button>
+                                                    <Text fontSize="xl" fontWeight="bold" color="gray.500">
+                                                        to view it again.
+                                                    </Text>
+                                                </HStack>
+                                            </VStack>
+
+                                        )}
                                     </Box>
                                 </MotionBox>
                             )}
