@@ -276,6 +276,7 @@ const Dashboard = () => {
                                         size="md"
                                         borderRadius="md"
                                         maxW="200px"
+                                        max="2025-03-09"
                                     />
 
                                     {/* End Date Input Field */}
@@ -286,6 +287,7 @@ const Dashboard = () => {
                                         size="md"
                                         borderRadius="md"
                                         maxW="200px"
+                                        max="2025-03-09"
                                     />
 
                                     {/* Search Button */}
