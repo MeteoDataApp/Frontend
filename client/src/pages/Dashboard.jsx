@@ -443,7 +443,7 @@ const Dashboard = () => {
                     >
                         <Box
                             alignItems="center"
-                            w="90%"
+                            w="95%"
                             margin="auto"
                             minH="52rem"
                             position="relative"
