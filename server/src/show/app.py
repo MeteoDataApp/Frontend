@@ -33,6 +33,10 @@ def handle_api_error(e, message="Internal server error"):
         "error": message
     }), 500
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
 @app.route("/", methods=["GET"])
 def server():
     return render_template("server.html")
