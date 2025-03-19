@@ -118,5 +118,9 @@ def by_date():
     else:
         return json.jsonify({"error": "Invalid request method"}), 405
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
 if __name__ == "__main__":
     app.run(debug=True)
