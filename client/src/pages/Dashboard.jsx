@@ -14,6 +14,7 @@ const Dashboard = () => {
     const showToast = useShowToast();
 
     const [selectedStation, setSelectedStation] = useState(null);
+    const [searchedStationCode, setSearchedStationCode] = useState(null);
     const [selectedStationName, setSelectedStationName] = useState("");
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
@@ -35,6 +36,7 @@ const Dashboard = () => {
         setCurrentPage(1);
         setLoading(true);
         setSelectedStationName(stationList.find(s => s.code === selectedStation).name);
+        setSearchedStationCode(selectedStation);
         try {
             let query = `station=${selectedStation}`;
             if (startDate) query += `&start=${startDate}`;
@@ -123,19 +125,19 @@ const Dashboard = () => {
     };
 
     const stationList = [
-        { code: 58349, name: "苏州" },
-        { code: 58238, name: "南京" },
-        { code: 58354, name: "无锡" },
-        { code: 58343, name: "常州" },
-        { code: 58252, name: "镇江" },
-        { code: 58259, name: "南通" },
-        { code: 58246, name: "泰州" },
-        { code: 58245, name: "扬州" },
-        { code: 58027, name: "徐州" },
-        { code: 58044, name: "连云港" },
-        { code: 58141, name: "淮安" },
-        { code: 58154, name: "盐城" },
-        { code: 58131, name: "宿迁" },
+        { code: 58349, name: "苏州", image: "Suzhou.jpg" },
+        { code: 58238, name: "南京", image: "Nanjing.jpg" },
+        { code: 58354, name: "无锡", image: "Wuxi.jpg" },
+        { code: 58343, name: "常州", image: "Changzhou.jpg" },
+        { code: 58252, name: "镇江", image: "Zhenjiang.jpg" },
+        { code: 58259, name: "南通", image: "Nantong.jpg" },
+        { code: 58246, name: "泰州", image: "Taizhou.jpg" },
+        { code: 58245, name: "扬州", image: "Yangzhou.jpg" },
+        { code: 58027, name: "徐州", image: "Xuzhou.jpg" },
+        { code: 58044, name: "连云港", image: "Lianyungang.jpg" },
+        { code: 58141, name: "淮安", image: "Huaian.jpg" },
+        { code: 58154, name: "盐城", image: "Yancheng.jpg" },
+        { code: 58131, name: "宿迁", image: "Suqian.jpg" },
     ];
 
     const paginateData = (data) => {
@@ -458,7 +460,7 @@ const Dashboard = () => {
                                 left={0}
                                 w="100%"
                                 h="100%"
-                                backgroundImage="Suzhou.jpg"
+                                backgroundImage={stationList.find(s => s.code === searchedStationCode)?.image}
                                 backgroundSize="cover"
                                 backgroundPosition="center"
                                 transform="translateZ(-1px) scale(1.2)"
@@ -489,11 +491,10 @@ const Dashboard = () => {
                                     fontWeight="black"
                                     sx={{
                                         fontFamily: 'var(--font-calligraphy)',
-                                        background: 'linear-gradient(45deg, #fff 20%, #a5f3fc 80%)',
+                                        background: 'linear-gradient(45deg, #fff 20%,white 80%)',
                                         WebkitBackgroundClip: 'text',
                                         WebkitTextFillColor: 'transparent',
-                                        textShadow: '4px 4px 8px rgba(0,0,0,0.3)',
-                                        letterSpacing: 'tighter',
+                                        textShadow: '4px 4px 8px rgba(0,0,0,0.1)',
                                     }}
                                 >
                                     {selectedStationName ? selectedStationName : "Station"}
@@ -676,7 +677,7 @@ const Dashboard = () => {
                                 mb={16}
                                 transition={{ duration: 0.5 }}
                             >
-                                <Heading size="md" mb={4} bgGradient="linear(to-r, #6366f1, #ec4899)" bgClip="text" fontSize={{ base: '3xl', md: '4xl' }} mt={20}>
+                                <Heading size="md" mb={4} bgGradient="linear(to-r, #6366f1, #ec4899)" bgClip="text" fontSize={{ base: '3xl', md: '4xl' }} mt={14}>
                                     Weather Data Trend in {selectedStationName ? selectedStationName : "Station"}
                                 </Heading>
                                 <Box h="50vh" w="90vw" mb={32} alignItems="center" justifyContent="center" mx="auto">
@@ -686,6 +687,7 @@ const Dashboard = () => {
                                         yAxisKeys={["Avg", "FDAvg"]}
                                         currentStartDate={currentStartDate}
                                         currentEndDate={currentEndDate}
+                                        selectedStationName={selectedStationName}
                                     />
                                 </Box>
                             </MotionBox>

@@ -4,7 +4,7 @@ import zoomPlugin from "chartjs-plugin-zoom";
 import "chartjs-adapter-date-fns";
 Chart.register(...registerables, zoomPlugin);
 
-const ByStationLineChart = ({ data, xAxisKey, yAxisKeys, currentStartDate, currentEndDate }) => {
+const ByStationLineChart = ({ data, xAxisKey, yAxisKeys, currentStartDate, currentEndDate, selectedStationName }) => {
     const chartRef = useRef(null);
     const chartInstance = useRef(null);
 
@@ -134,17 +134,17 @@ const ByStationLineChart = ({ data, xAxisKey, yAxisKeys, currentStartDate, curre
                             label: (context) => {
                                 const label = context.dataset.label || "";
                                 const value = context.raw || 0;
-                                return `${label}: ${value} °C`;
+                                return ` ${selectedStationName} ${label}: ${value} °C`;
                             },
                         },
                         titleFont: {
                             family: "Inter, sans-serif",
-                            size: 14,
+                            size: 16,
                             weight: "600",
                         },
                         bodyFont: {
                             family: "Inter, sans-serif",
-                            size: 12,
+                            size: 14,
                             weight: "500",
                         },
                     },
