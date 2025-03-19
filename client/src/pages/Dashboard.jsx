@@ -609,9 +609,8 @@ const Dashboard = () => {
                                         fontWeight="black"
                                         sx={{
                                             fontFamily: 'var(--font-calligraphy)',
-                                            background: 'linear-gradient(45deg, #fff 20%,white 80%)',
-                                            WebkitBackgroundClip: 'text',
-                                            WebkitTextFillColor: 'transparent',
+                                            position: 'relative',
+                                            color: 'white',
                                             textShadow: '4px 4px 8px rgba(0,0,0,0.1)',
                                         }}
                                     >
