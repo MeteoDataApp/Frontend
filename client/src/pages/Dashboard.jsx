@@ -439,7 +439,6 @@ const Dashboard = () => {
                         animate={{ opacity: 1 }}
                         mx="auto"
                     >
-                        {/* Hero Section */}
                         <Box
                             alignItems="center"
                             w="90%"
@@ -453,7 +452,7 @@ const Dashboard = () => {
                             }}
                             borderRadius={50}
                         >
-                            {/* Enhanced Background */}
+                            {/* Background */}
                             <Box
                                 position="fixed"
                                 top={0}
@@ -476,7 +475,7 @@ const Dashboard = () => {
                                 }}
                             />
 
-                            {/* Chinese Calligraphy Title */}
+                            {/* Title */}
                             <Box
                                 initial={{ y: 50, opacity: 0 }}
                                 animate={{ y: 0, opacity: 1 }}
@@ -556,7 +555,7 @@ const Dashboard = () => {
                                 })}
                             </MotionBox>
 
-                            {/* Enhanced Weather Cards */}
+                            {/* Weather Cards */}
                             <SimpleGrid
                                 columns={{ base: 1, md: 3 }}
                                 spacing={6}

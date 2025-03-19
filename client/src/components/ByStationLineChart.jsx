@@ -198,7 +198,7 @@ const ByStationLineChart = ({ data, xAxisKey, yAxisKeys, currentStartDate, curre
         };
     }, [data, xAxisKey, yAxisKeys]);
 
-    // Update zoom when current page changes
+    // Update zoom when page changes
     useEffect(() => {
         if (chartInstance.current && currentStartDate && currentEndDate) {
             chartInstance.current.options.scales.x.min = currentStartDate;
