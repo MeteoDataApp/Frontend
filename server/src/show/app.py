@@ -34,19 +34,58 @@ def server():
 def by_station():
     if request.method == "GET":
         selected_station = request.args.get("station")
+        start_date = request.args.get("start")
+        end_date = request.args.get("end")
+
         if not selected_station:
-            return json.jsonify({"error": "Station parameter is required"}), 400
+            return jsonify({"error": "Station parameter is required"}), 400
 
         try:
-            data = list(test_collection.find({"Station": int(selected_station)}).sort("Date", -1))
+            selected_station = int(selected_station)
+
+            query = {"Station": selected_station}
+
+            # Add date range filter if both start_date and end_date are provided
+            if start_date or end_date:
+                try:
+                    if start_date:
+                        start_date = datetime.datetime.strptime(start_date, "%Y-%m-%d")
+                        query["Date"] = {"$gte": start_date}
+                    if end_date:
+                        end_date = datetime.datetime.strptime(end_date, "%Y-%m-%d")
+                        if "Date" in query:
+                            query["Date"]["$lte"] = end_date
+                        else:
+                            query["Date"] = {"$lte": end_date}
+                except ValueError as e:
+                    return json.jsonify({"error": "Invalid date format. Use YYYY-MM-DD"}), 400
+
+            data = list(test_collection.find(query).sort("Date", -1))
             data.reverse()
-            return json.jsonify([{
+
+            # Remove redundant results based on Station and Date
+            unique_data = []
+            seen = set()
+            for doc in data:
+                key = (doc["Station"], doc["Date"].strftime("%Y-%m-%d")) 
+                if key not in seen:
+                    seen.add(key)
+                    unique_data.append(doc)
+
+            if not unique_data:
+                return json.jsonify({"error": "No data found for the provided date range"}), 404
+
+            # Prepare the response
+            response = [{
                 "Avg": doc["Avg"],
                 "Date": doc["Date"].strftime("%Y-%m-%d"),
                 "FDAvg": doc["FDAvg"],
                 "Station": doc["Station"],
                 "_id": str(doc["_id"]),
-            } for doc in data])
+            } for doc in unique_data]
+
+            return json.jsonify(response)
+
         except Exception as e:
             return json.jsonify({"error": str(e)}), 500
     else:
