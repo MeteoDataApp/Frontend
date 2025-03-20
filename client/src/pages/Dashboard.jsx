@@ -9,6 +9,7 @@ import { useShowToast } from '../extensions/useShowToast';
 import server from "../../networking";
 import ByStationLineChart from '../components/ByStationLineChart';
 import { FiArrowDown, FiArrowLeft, FiArrowUp, FiCalendar, FiMapPin } from 'react-icons/fi';
+import { UseLanguage } from '../contexts/LanguageContext';
 
 const Dashboard = () => {
     const MotionBox = motion.div;
@@ -41,6 +42,8 @@ const Dashboard = () => {
 
     const { isOpen, onOpen, onClose } = useDisclosure();
 
+    const { isChinese } = UseLanguage();
+
     const [screenIsNarrowerThan800px] = useMediaQuery("(max-width: 800px)");
     const [screenIsNarrowerThan700px] = useMediaQuery("(max-width: 700px)");
     const [screenIsNarrowerThan610px] = useMediaQuery("(max-width: 610px)");
@@ -58,7 +61,7 @@ const Dashboard = () => {
 
     const TemperatureComparisonChart = ({ data, date }) => {
         const chartData = {
-            labels: data.map(entry => entry.name),
+            labels: data.map(entry => isChinese ? entry.name : stationList.find(s => s.code === entry.Station)?.enName),
             datasets: [{
                 label: `Average Temperature (°C) - ${date}`,
                 data: data.map(entry => entry.Avg),
@@ -397,9 +400,7 @@ const Dashboard = () => {
                                                     w={{ base: "100%", sm: "auto" }}
                                                     mt={{ base: 0, sm: 0, md: 7 }}
                                                 >
-                                                    {selectedStation
-                                                        ? `${stationList.find(s => s.code === selectedStation).name} (${selectedStation})`
-                                                        : "Select Station"}
+                                                    {selectedStation ? isChinese ? `${stationList.find(s => s.code === selectedStation).name} (${selectedStation})` : `${stationList.find(s => s.code === selectedStation).enName} (${selectedStation})` : "Select Station"}
                                                 </MenuButton>
                                                 <MenuList maxH="300px" overflowY="auto">
                                                     {stationList.map(station => (
@@ -407,7 +408,7 @@ const Dashboard = () => {
                                                             key={station.code}
                                                             onClick={() => setSelectedStation(station.code)}
                                                         >
-                                                            {`${station.name} (${station.code})`}
+                                                            {isChinese ? station.name : station.enName} ({station.code})
                                                         </MenuItem>
                                                     ))}
                                                 </MenuList>
@@ -606,8 +607,7 @@ const Dashboard = () => {
                                                                         borderColor={"gray.400"}
                                                                     />
                                                                 )}
-
-                                                                {screenIsNarrowerThan700px ? stationInfo.name : `${stationInfo.name} (${record.Station})`}
+                                                                {screenIsNarrowerThan700px ? (isChinese ? stationInfo.name : stationInfo.enName) : isChinese ? `${stationInfo.name} (${record.Station})` : `${stationInfo.enName} (${record.Station})`}
                                                             </Box>
                                                         </Td>
                                                         <Td>{record.Date}</Td>
@@ -689,7 +689,7 @@ const Dashboard = () => {
                                             textShadow: '4px 4px 8px rgba(0,0,0,0.1)',
                                         }}
                                     >
-                                        {selectedStationName ? selectedStationName : "Station"}
+                                        {selectedStationName ? (isChinese ? selectedStationName : stationList.find(s => s.code === searchedStationCode)?.enName) : "Station"}
                                     </Text>
                                 </Box>
 
@@ -879,7 +879,7 @@ const Dashboard = () => {
                                     transition={{ duration: 0.5 }}
                                 >
                                     <Heading size="md" mb={4} bgGradient="linear(to-r, #6366f1, #ec4899)" bgClip="text" fontSize={{ base: '3xl', md: '4xl' }} mt={14}>
-                                        Weather Data Trend in {selectedStationName ? selectedStationName : "Station"}
+                                        Weather Data Trend in {selectedStationName ? (isChinese ? selectedStationName : stationList.find(s => s.code === searchedStationCode)?.enName) : "Station"}
                                     </Heading>
                                     <Box h={{ base: '40vh', md: '50vh' }} w="90vw" mb={32} alignItems="center" justifyContent="center" mx="auto" position="relative">
                                         {!isSorting ? (
@@ -1034,7 +1034,7 @@ const Dashboard = () => {
                                                 >
                                                     <TagLeftIcon as={FiMapPin} />
                                                     <TagLabel>
-                                                        {stationList.find(s => s.code === code)?.name} ({code})
+                                                        {isChinese ? stationList.find(s => s.code === code)?.name : stationList.find(s => s.code === code)?.enName} ({code})
                                                     </TagLabel>
                                                 </Tag>
                                             </MotionBox>
