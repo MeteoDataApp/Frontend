@@ -42,6 +42,7 @@ const Dashboard = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const [screenIsNarrowerThan700px] = useMediaQuery("(max-width: 700px)");
+    const [screenIsNarrowerThan610px] = useMediaQuery("(max-width: 610px)");
 
     ChartJS.register(
         CategoryScale,
@@ -323,7 +324,7 @@ const Dashboard = () => {
                         display="flex"
                         justifyContent="center"
                         mx="auto"
-                        mb={20}
+                        mb={15}
                     >
                         <Tabs variant='soft-rounded' colorScheme='green'>
                             <TabList display="flex" justifyContent="center" mt={10} mb={5}>
@@ -443,40 +444,60 @@ const Dashboard = () => {
                                     </Flex>
                                 </TabPanel>
                                 <TabPanel>
-                                    <Flex gap={3} align="center" justifyContent="center">
-                                        <Input
-                                            type="date"
-                                            value={selectedDate}
-                                            onChange={(e) => setSelectedDate(e.target.value)}
-                                            size="md"
-                                            borderRadius="md"
-                                            maxW="200px"
-                                            max="2025-03-09"
-                                        />
-
-                                        <Button
-                                            onClick={handleSubmitDate}
-                                            bgGradient="linear(to-r, #6366f1, #ec4899)"
-                                            color="white"
-                                            _hover={{
-                                                bgGradient: "linear(to-r, #6366f1, #ec4899)",
-                                                transform: "scale(1.05)",
-                                                boxShadow: "lg",
-                                            }}
-                                            _active={{
-                                                bgGradient: "linear(to-r, #6366f1, #ec4899)",
-                                                transform: "scale(0.95)",
-                                            }}
-                                            isLoading={loading}
+                                    <Flex
+                                        direction={{ base: "column", md: "row" }}
+                                        gap={3}
+                                        align="center"
+                                        justify="center"
+                                    >
+                                        {/* First Row - Input & Search Button */}
+                                        <Flex
+                                            gap={3}
+                                            w={{ base: "100%", md: "auto" }}
+                                            direction={{ base: "column", sm: "row" }}
+                                            align="center"
+                                            justifyContent={"center"}
                                         >
-                                            Search
-                                        </Button>
+                                            <Input
+                                                type="date"
+                                                value={selectedDate}
+                                                onChange={(e) => setSelectedDate(e.target.value)}
+                                                size="md"
+                                                borderRadius="md"
+                                                w={{ base: "100%", sm: "200px" }}
+                                                max="2025-03-09"
+                                                display={"flex"}
+                                                justifyContent={{ base: "center", sm: "flex-start" }}
+                                            />
 
+
+                                            <Button
+                                                onClick={handleSubmitDate}
+                                                bgGradient="linear(to-r, #6366f1, #ec4899)"
+                                                color="white"
+                                                w={{ base: "100%", sm: "auto" }}
+                                                _hover={{
+                                                    bgGradient: "linear(to-r, #6366f1, #ec4899)",
+                                                    transform: "scale(1.05)",
+                                                    boxShadow: "lg",
+                                                }}
+                                                _active={{
+                                                    bgGradient: "linear(to-r, #6366f1, #ec4899)",
+                                                    transform: "scale(0.95)",
+                                                }}
+                                                isLoading={loading}
+                                            >
+                                                Search
+                                            </Button>
+                                        </Flex>
+
+                                        {/* Second Row - Advanced Analysis Button */}
                                         {data.length > 0 && advancedRenderReady === true && (
                                             <Button
                                                 onClick={openAdvancedAnalysisModal}
                                                 bgGradient="linear(to-r, #6366f1, #ec4899)"
                                                 color="white"
+                                                w={{ base: "100%", sm: "auto" }}
                                                 _hover={advancedAnalysisList.length >= 2 && advancedAnalysisList.length <= 3 && {
                                                     bgGradient: "linear(to-r, #6366f1, #ec4899)",
                                                     transform: "scale(1.05)",
@@ -499,72 +520,78 @@ const Dashboard = () => {
                     </MotionBox>
 
                     {displayedData.length > 0 && activeTab === "date" && (
-                        <MotionBox
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            mx="auto"
-                            maxW="1200px"
-                        >
-                            <TableContainer bg="white" borderRadius="xl" boxShadow="xl">
-                                <Table variant="striped">
-                                    <Thead>
-                                        <Tr>
+                        !screenIsNarrowerThan610px ? (
+                            <MotionBox
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                mx="auto"
+                                maxW="1200px"
+                            >
+                                <TableContainer bg="white" borderRadius="xl" boxShadow="xl">
+                                    <Table variant="striped">
+                                        <Thead>
+                                            <Tr>
 
-                                            <Th>Station</Th>
-                                            <Th>
-                                                {activeTab === "station" && (
-                                                    <Box
-                                                        as="span"
-                                                        cursor="pointer"
-                                                        onClick={sortDataDate}
-                                                    >
-                                                        Date {sortOrderDate === 'asc' ? ' ↑' : ' ↓'}
-                                                    </Box>
-                                                )}
-                                                {activeTab !== "station" && "Date"}
-                                            </Th>
-                                            <Th cursor="pointer" onClick={sortDataAvg}>
-                                                Avg Temp (°C)
-                                                {sortOrderAvg === 'asc' ? ' ↑' : ' ↓'}
-                                            </Th>
-                                            <Th cursor="pointer" onClick={sortDataFD}>
-                                                5-day Avg Temp (°C)
-                                                {sortOrderFD === 'asc' ? ' ↑' : ' ↓'}
-                                            </Th>
-                                        </Tr>
-                                    </Thead>
-                                    <Tbody>
-                                        {displayedData.map((record) => {
-                                            const stationInfo = stationList.find(s => s.code === record.Station);
-                                            return (
-                                                <Tr key={record._id}>
-                                                    <Td>
-                                                        <Box display="flex" gap={3}>
-                                                            {activeTab === "date" && (
-                                                                <Checkbox
-                                                                    isChecked={advancedAnalysisList.includes(record.Station)}
-                                                                    isDisabled={
-                                                                        !advancedAnalysisList.includes(record.Station) &&
-                                                                        advancedAnalysisList.length >= 3
-                                                                    }
-                                                                    onChange={(e) => handleCheckboxChange(e, record.Station)}
-                                                                    borderColor={"gray.400"}
-                                                                />
-                                                            )}
-
-                                                            {screenIsNarrowerThan700px ? stationInfo.name : `${stationInfo.name} (${record.Station})`}
+                                                <Th>Station</Th>
+                                                <Th>
+                                                    {activeTab === "station" && (
+                                                        <Box
+                                                            as="span"
+                                                            cursor="pointer"
+                                                            onClick={sortDataDate}
+                                                        >
+                                                            Date {sortOrderDate === 'asc' ? ' ↑' : ' ↓'}
                                                         </Box>
-                                                    </Td>
-                                                    <Td>{record.Date}</Td>
-                                                    <Td fontWeight="bold">{record.Avg}</Td>
-                                                    <Td fontWeight="bold">{record.FDAvg}</Td>
-                                                </Tr>
-                                            );
-                                        })}
-                                    </Tbody>
-                                </Table>
-                            </TableContainer>
-                        </MotionBox>
+                                                    )}
+                                                    {activeTab !== "station" && "Date"}
+                                                </Th>
+                                                <Th cursor="pointer" onClick={sortDataAvg}>
+                                                    Avg Temp (°C)
+                                                    {sortOrderAvg === 'asc' ? ' ↑' : ' ↓'}
+                                                </Th>
+                                                <Th cursor="pointer" onClick={sortDataFD}>
+                                                    5-day Avg Temp (°C)
+                                                    {sortOrderFD === 'asc' ? ' ↑' : ' ↓'}
+                                                </Th>
+                                            </Tr>
+                                        </Thead>
+                                        <Tbody>
+                                            {displayedData.map((record) => {
+                                                const stationInfo = stationList.find(s => s.code === record.Station);
+                                                return (
+                                                    <Tr key={record._id}>
+                                                        <Td>
+                                                            <Box display="flex" gap={3}>
+                                                                {activeTab === "date" && (
+                                                                    <Checkbox
+                                                                        isChecked={advancedAnalysisList.includes(record.Station)}
+                                                                        isDisabled={
+                                                                            !advancedAnalysisList.includes(record.Station) &&
+                                                                            advancedAnalysisList.length >= 3
+                                                                        }
+                                                                        onChange={(e) => handleCheckboxChange(e, record.Station)}
+                                                                        borderColor={"gray.400"}
+                                                                    />
+                                                                )}
+
+                                                                {screenIsNarrowerThan700px ? stationInfo.name : `${stationInfo.name} (${record.Station})`}
+                                                            </Box>
+                                                        </Td>
+                                                        <Td>{record.Date}</Td>
+                                                        <Td fontWeight="bold">{record.Avg}</Td>
+                                                        <Td fontWeight="bold">{record.FDAvg}</Td>
+                                                    </Tr>
+                                                );
+                                            })}
+                                        </Tbody>
+                                    </Table>
+                                </TableContainer>
+                            </MotionBox>
+                        ) : (
+                            <Text textAlign="center" fontSize="xl" fontWeight="bold" color="gray.500" p={10}>
+                                Please switch to landscape mode or view on a larger screen for a better experience.
+                            </Text>
+                        )
                     )}
 
                     {displayedData.length > 0 && activeTab === "station" && (
