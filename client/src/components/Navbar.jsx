@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Flex, Heading, Text, HStack, Link, IconButton, Drawer, DrawerOverlay, DrawerContent, DrawerBody, VStack, CloseButton, Spacer, Divider } from '@chakra-ui/react';
+import { Box, Flex, Heading, Text, HStack, Link, IconButton, Drawer, DrawerOverlay, DrawerContent, DrawerBody, VStack, CloseButton } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { FaDatabase, FaHome, FaInfoCircle } from 'react-icons/fa';
 import { HamburgerIcon } from '@chakra-ui/icons';
