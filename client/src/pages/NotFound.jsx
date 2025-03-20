@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom';
 
 const NotFound = () => {
     const navigate = useNavigate();
-    const MotionBox = motion(Box);
-    const MotionButton = motion(Button);
+    const MotionBox = motion.create(Box);
+    const MotionButton = motion.create(Button);
 
     return (
         <MotionBox

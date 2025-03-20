@@ -9,8 +9,8 @@ import { useEffect, useState } from "react";
 
 export default function HomePage() {
     const navigate = useNavigate();
-    const MotionBox = motion(Box);
-    const MotionButton = motion(Button);
+    const MotionBox = motion.create(Box);
+    const MotionButton = motion.create(Button);
 
     const showToast = useShowToast();
 

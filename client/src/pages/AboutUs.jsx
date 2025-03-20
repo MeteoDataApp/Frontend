@@ -7,8 +7,8 @@ import { useNavigate } from 'react-router-dom';
 const AboutUs = () => {
     const navigate = useNavigate();
 
-    const MotionBox = motion(Box);
-    const MotionButton = motion(Button);
+    const MotionBox = motion.create(Box);
+    const MotionButton = motion.create(Button);
 
     const gridColumns = useBreakpointValue({ base: 1, md: 2, lg: 3 });
 
