@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { motion } from 'framer-motion';
-import { Heading, Button, Tabs, TabList, TabPanels, Tab, TabPanel, Menu, MenuButton, MenuList, MenuItem, Flex, Input, Table, Thead, Tbody, Tr, Th, Td, TableContainer, Box, Text, IconButton, Checkbox, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Stack, Tag, TagLabel, TagLeftIcon, SimpleGrid, VStack, useDisclosure, useColorModeValue, HStack, useMediaQuery } from '@chakra-ui/react';
+import { Heading, Button, Tabs, TabList, TabPanels, Tab, TabPanel, Menu, MenuButton, MenuList, MenuItem, Flex, Input, Table, Thead, Tbody, Tr, Th, Td, TableContainer, Box, Text, IconButton, Checkbox, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Stack, Tag, TagLabel, TagLeftIcon, SimpleGrid, VStack, useDisclosure, useColorModeValue, HStack, useMediaQuery, FormControl, FormLabel } from '@chakra-ui/react';
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
@@ -376,71 +376,101 @@ const Dashboard = () => {
                             </TabList>
                             <TabPanels mb={4}>
                                 <TabPanel>
-                                    <Flex gap={3} align="center" justifyContent="center">
-                                        {/* Station Selection Dropdown */}
-                                        <Menu>
-                                            <MenuButton
-                                                as={Button}
-                                                rightIcon={<ChevronDownIcon />}
-                                            >
-                                                {selectedStation ?
-                                                    `${stationList.find(s => s.code === selectedStation).name} (${selectedStation})` :
-                                                    'Select Station'
-                                                }
-                                            </MenuButton>
-                                            <MenuList maxH="300px" overflowY="auto">
-                                                {stationList.map((station) => (
-                                                    <MenuItem
-                                                        key={station.code}
-                                                        onClick={() => setSelectedStation(station.code)}
-                                                    >
-                                                        {`${station.name} (${station.code})`}
-                                                    </MenuItem>
-                                                ))}
-                                            </MenuList>
-                                        </Menu>
-
-                                        {/* Start Date Input Field */}
-                                        <Input
-                                            type="date"
-                                            value={startDate}
-                                            onChange={(e) => setStartDate(e.target.value)}
-                                            size="md"
-                                            borderRadius="md"
-                                            maxW="200px"
-                                            max="2025-03-09"
-                                        />
-
-                                        {/* End Date Input Field */}
-                                        <Input
-                                            type="date"
-                                            value={endDate}
-                                            onChange={(e) => setEndDate(e.target.value)}
-                                            size="md"
-                                            borderRadius="md"
-                                            maxW="200px"
-                                            max="2025-03-09"
-                                        />
-
-                                        {/* Search Button */}
-                                        <Button
-                                            onClick={handleSubmitStation}
-                                            bgGradient="linear(to-r, #6366f1, #ec4899)"
-                                            color="white"
-                                            _hover={selectedStation && {
-                                                bgGradient: "linear(to-r, #6366f1, #ec4899)",
-                                                transform: "scale(1.05)",
-                                                boxShadow: "lg",
-                                            }}
-                                            _active={selectedStation && {
-                                                bgGradient: "linear(to-r, #6366f1, #ec4899)",
-                                                transform: "scale(0.95)",
-                                            }}
-                                            isLoading={loading}
-                                            isDisabled={!selectedStation}
+                                    <Flex
+                                        direction={{ base: "column", md: "row" }}
+                                        gap={3}
+                                        align="center"
+                                        justify="center"
+                                    >
+                                        {/* First Row - Station Selection */}
+                                        <Flex 
+                                            width={{ base: "100%", sm: "auto" }}
+                                            justifyContent="center"
                                         >
-                                            Search
-                                        </Button>
+                                            <Menu>
+                                                <MenuButton
+                                                    as={Button}
+                                                    rightIcon={<ChevronDownIcon />}
+                                                    w={{ base: "100%", sm: "auto" }}
+                                                    mt={{ base: 0, sm: 0, md: 7 }}
+                                                >
+                                                    {selectedStation
+                                                        ? `${stationList.find(s => s.code === selectedStation).name} (${selectedStation})`
+                                                        : "Select Station"}
+                                                </MenuButton>
+                                                <MenuList maxH="300px" overflowY="auto">
+                                                    {stationList.map(station => (
+                                                        <MenuItem
+                                                            key={station.code}
+                                                            onClick={() => setSelectedStation(station.code)}
+                                                        >
+                                                            {`${station.name} (${station.code})`}
+                                                        </MenuItem>
+                                                    ))}
+                                                </MenuList>
+                                            </Menu>
+                                        </Flex>
+
+                                        {/* Second Row - Start & End Date Inputs */}
+                                        <Flex 
+                                            gap={3} 
+                                            justifyContent="center" 
+                                            direction={{ base: "column", sm: "row" }}
+                                            width={{ base: "100%", sm: "auto" }}
+                                        >
+                                            <FormControl w={{ base: "100%", sm: "200px" }}>
+                                                <FormLabel fontSize="sm" color="gray.300">Start Date</FormLabel>
+                                                <Input
+                                                    type="date"
+                                                    value={startDate}
+                                                    onChange={e => setStartDate(e.target.value)}
+                                                    size="md"
+                                                    borderRadius="md"
+                                                    w="100%"
+                                                    max="2025-03-09"
+                                                />
+                                            </FormControl>
+
+                                            <FormControl w={{ base: "100%", sm: "200px" }}>
+                                                <FormLabel fontSize="sm" color="gray.300">End Date</FormLabel>
+                                                <Input
+                                                    type="date"
+                                                    value={endDate}
+                                                    onChange={e => setEndDate(e.target.value)}
+                                                    size="md"
+                                                    borderRadius="md"
+                                                    w="100%"
+                                                    max="2025-03-09"
+                                                />
+                                            </FormControl>
+                                        </Flex>
+
+                                        {/* Third Row - Search Button */}
+                                        <Flex 
+                                            justifyContent="center"
+                                            mt={{ base: 0, sm: 0, md: 7 }}
+                                            width={{ base: "100%", sm: "auto" }}
+                                        >
+                                            <Button
+                                                onClick={handleSubmitStation}
+                                                bgGradient="linear(to-r, #6366f1, #ec4899)"
+                                                color="white"
+                                                w={{ base: "100%", sm: "auto" }}
+                                                _hover={selectedStation && {
+                                                    bgGradient: "linear(to-r, #6366f1, #ec4899)",
+                                                    transform: "scale(1.05)",
+                                                    boxShadow: "lg",
+                                                }}
+                                                _active={selectedStation && {
+                                                    bgGradient: "linear(to-r, #6366f1, #ec4899)",
+                                                    transform: "scale(0.95)",
+                                                }}
+                                                isLoading={loading}
+                                                isDisabled={!selectedStation}
+                                            >
+                                                Search
+                                            </Button>
+                                        </Flex>
                                     </Flex>
                                 </TabPanel>
                                 <TabPanel>
