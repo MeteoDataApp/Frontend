@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { motion } from "framer-motion";
-import { Heading, Text, Box, Button, Flex, Grid, Icon, Stack, Spinner } from "@chakra-ui/react";
+import { Heading, Text, Box, Button, Flex, Grid, Icon, Stack, Spinner, useBreakpointValue } from "@chakra-ui/react";
 import { FiArrowRight, FiDroplet, FiMapPin, FiRefreshCw, FiThermometer, FiWind } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { useShowToast } from "../extensions/useShowToast";
@@ -14,6 +14,9 @@ export default function HomePage() {
 
     const showToast = useShowToast();
 
+    const gridColumns = useBreakpointValue({ base: 1, md: 2, lg: 4 });
+    const headingSize = useBreakpointValue({ base: '3xl', md: '4xl', lg: '5xl' });
+    const buttonSize = useBreakpointValue({ base: 'md', md: 'lg' });
     const [requestReceived, setRequestReceived] = useState(false);
     const [weatherData, setWeatherData] = useState(null);
     const [locationData, setLocationData] = useState(null);
@@ -83,9 +86,9 @@ export default function HomePage() {
     }, [requestReceived]);
 
     if (!requestReceived) return (
-        <Box display={"flex"} flexDir={"column"} justifyContent={"center"} alignItems={"center"} minH={"100vh"}>
-            <Spinner color='#4f46e5' />
-        </Box>
+        <Flex minH="100vh" align="center" justify="center">
+            <Spinner size="xl" color='#4f46e5' thickness='4px' />
+        </Flex>
     );
 
     if (requestReceived) return (
@@ -95,36 +98,39 @@ export default function HomePage() {
             transition={{ duration: 0.5 }}
             minH="100vh"
             bgGradient="linear(to-br, #f0f4ff 0%, #f8fafc 50%, #e0e7ff 100%)"
-            p={8}
             position="relative"
             overflow="hidden"
         >
             <Flex
                 direction="column"
-                maxW="6xl"
+                maxW="1200px"
                 mx="auto"
                 align="center"
                 justify="center"
                 minH="90vh"
                 position="relative"
+                px={{ base: 2, md: 4 }}
+                mt={{ base: 24, md: 16 }}
             >
-                <Stack spacing={6} textAlign="center" maxW="2xl" mb={10}>
+                <Stack spacing={6} textAlign="center" maxW="5xl" mb={{ base: 6, md: 10 }}>
                     <Heading
-                        fontSize={["3xl", "4xl", "5xl"]}
+                        fontSize={headingSize}
                         fontWeight="extrabold"
                         bgGradient="linear(to-r, #4f46e5, #ec4899)"
                         bgClip="text"
                         lineHeight="1.2"
+                        px={{ base: 2, md: 0 }}
+                        py={{ base: 4, md: 6 }}
                     >
                         Unlock Advanced Weather Insights
                     </Heading>
 
-                    <Text fontSize="lg" color="gray.600" mb={4}>
+                    <Text fontSize={{ base: 'md', md: 'lg' }} color="gray.600" mb={4}>
                         Dive deeper into hyper-local forecasts, historical trends, and real-time climate analytics
                     </Text>
 
                     <MotionButton
-                        size="lg"
+                        size={buttonSize}
                         colorScheme="blue"
                         bgGradient="linear(to-r, #6366f1, #ec4899)"
                         _hover={{ bgGradient: "linear(to-r, #818cf8, #f472b6)" }}
@@ -132,8 +138,8 @@ export default function HomePage() {
                         onClick={() => navigate("/dashboard")}
                         rightIcon={<FiArrowRight />}
                         alignSelf="center"
-                        px={12}
-                        py={7}
+                        px={{ base: 8, md: 12 }}
+                        py={{ base: 5, md: 7 }}
                         borderRadius="xl"
                         fontSize="lg"
                         fontWeight="bold"
@@ -148,165 +154,108 @@ export default function HomePage() {
                 {weatherData !== null && locationData !== null && (
                     <>
                         <Grid
-                            templateColumns={["1fr", "1fr", "repeat(2, 1fr)", "repeat(4, 1fr)"]}
-                            gap={6}
+                            templateColumns={`repeat(${gridColumns}, 1fr)`}
+                            gap={{ base: 4, md: 6 }}
                             w="100%"
+                            mb={{ base: 6, md: 10 }}
+                            justifyItems={{ base: 'center', md: 'stretch' }}
                         >
-                            <MotionBox
-                                bg="white"
-                                p={5}
-                                borderRadius="xl"
-                                boxShadow="lg"
-                                whileHover={{ y: -2, scale: 1.02 }}
-                                transition={{ duration: 0.2 }}
-                            >
-                                <Box display="flex">
-                                    <Box
-                                        bg="blue.50"
-                                        p={4}
-                                        borderRadius="full"
-                                        mr={4}
-                                        display="flex"
-                                        alignItems="center"
-                                        justifyContent="center"
-                                    >
-                                        <Icon as={FiThermometer} boxSize={6} color="blue.600" />
+                            {[
+                                { icon: FiThermometer, title: "Temperature", value: `${weatherData.temp}°C` },
+                                { icon: FiThermometer, title: "Feels Like", value: `${weatherData.feels_like}°C` },
+                                { icon: FiDroplet, title: "Humidity", value: `${weatherData.humidity}%` },
+                                { icon: FiWind, title: "Wind Speed", value: `${weatherData.wind_speed} km/h` },
+                            ].map((card, index) => (
+                                <MotionBox
+                                    key={index}
+                                    bg="white"
+                                    p={{ base: 3, md: 5 }}
+                                    borderRadius="xl"
+                                    boxShadow={{ base: 'md', md: 'lg' }}
+                                    whileHover={{ y: -2, scale: 1.02 }}
+                                    transition={{ duration: 0.2 }}
+                                    display="flex"  
+                                    flexDirection="column" 
+                                    alignItems={{ base: 'center', md: 'flex-start' }}
+                                    justifyContent={{ base: 'center', md: 'space-between' }}
+                                    textAlign={{ base: 'center', md: 'left' }}
+                                    w={{ base: '160px', md: 'full' }}
+                                >
+                                    <Box display="flex" alignItems="center" flexDirection={{ base: 'column', md: 'row' }} gap={{ base: 2, md: 0 }}>
+                                        <Box
+                                            bg="blue.50"
+                                            p={{ base: 3, md: 4 }}
+                                            borderRadius="full"
+                                            display="flex" 
+                                            alignItems="center" 
+                                            justifyContent="center" 
+                                            w={{ base: 10, md: 12 }}  
+                                            h={{ base: 10, md: 12 }}
+                                            mr={{ base: 3, md: 4 }}
+                                            mb={{ base: 1, md: 0 }}
+                                        >
+                                            <Icon 
+                                                as={card.icon} 
+                                                boxSize={{ base: 5, md: 6 }} 
+                                                color="blue.600" 
+                                            />
+                                        </Box>
+                                        <Box>
+                                            <Text 
+                                                fontSize={{ base: '2xs', md: 'sm' }}
+                                                color="gray.500" 
+                                                fontWeight="medium"
+                                                mb={{ base: 0.5, md: 0 }}
+                                            >
+                                                {card.title}
+                                            </Text>
+                                            <Text 
+                                                fontSize={{ base: 'lg', md: '2xl' }}
+                                                fontWeight="bold" 
+                                                color="gray.800"
+                                            >
+                                                {card.value}
+                                            </Text>
+                                        </Box>
                                     </Box>
-                                    <Box display="flex" flexDirection="column">
-                                        <Text fontSize="sm" color="gray.500" fontWeight="medium" textAlign={"left"}>
-                                            Temperature
-                                        </Text>
-                                        <Text fontSize="2xl" fontWeight="bold" color="gray.800" textAlign={"left"}>
-                                            {`${weatherData.temp} °C`}
-                                        </Text>
-                                    </Box>
-                                </Box>
-                            </MotionBox>
-
-                            <MotionBox
-                                bg="white"
-                                p={5}
-                                borderRadius="xl"
-                                boxShadow="lg"
-                                whileHover={{ y: -2, scale: 1.02 }}
-                                transition={{ duration: 0.2 }}
-                            >
-                                <Box display="flex">
-                                    <Box
-                                        bg="blue.50"
-                                        p={4}
-                                        borderRadius="full"
-                                        mr={4}
-                                        display="flex"
-                                        alignItems="center"
-                                        justifyContent="center"
-                                    >
-                                        <Icon as={FiThermometer} boxSize={6} color="blue.600" />
-                                    </Box>
-                                    <Box display="flex" flexDirection="column">
-                                        <Text fontSize="sm" color="gray.500" fontWeight="medium" textAlign={"left"}>
-                                            Feels-like
-                                        </Text>
-                                        <Text fontSize="2xl" fontWeight="bold" color="gray.800" textAlign={"left"}>
-                                            {`${weatherData.feels_like} °C`}
-                                        </Text>
-                                    </Box>
-                                </Box>
-                            </MotionBox>
-
-                            <MotionBox
-                                bg="white"
-                                p={5}
-                                borderRadius="xl"
-                                boxShadow="lg"
-                                whileHover={{ y: -2, scale: 1.02 }}
-                                transition={{ duration: 0.2 }}
-                            >
-                                <Box display="flex">
-                                    <Box
-                                        bg="blue.50"
-                                        p={4}
-                                        borderRadius="full"
-                                        mr={4}
-                                        display="flex"
-                                        alignItems="center"
-                                        justifyContent="center"
-                                    >
-                                        <Icon as={FiDroplet} boxSize={6} color="blue.600" />
-                                    </Box>
-                                    <Box display="flex" flexDirection="column">
-                                        <Text fontSize="sm" color="gray.500" fontWeight="medium" textAlign={"left"}>
-                                            Humidity
-                                        </Text>
-                                        <Text fontSize="2xl" fontWeight="bold" color="gray.800" textAlign={"left"}>
-                                            {`${weatherData.humidity} %`}
-                                        </Text>
-                                    </Box>
-                                </Box>
-                            </MotionBox>
-
-                            <MotionBox
-                                bg="white"
-                                p={5}
-                                borderRadius="xl"
-                                boxShadow="lg"
-                                whileHover={{ y: -2, scale: 1.02 }}
-                                transition={{ duration: 0.2 }}
-                            >
-                                <Box display="flex">
-                                    <Box
-                                        bg="blue.50"
-                                        p={4}
-                                        borderRadius="full"
-                                        mr={4}
-                                        display="flex"
-                                        alignItems="center"
-                                        justifyContent="center"
-                                    >
-                                        <Icon as={FiWind} boxSize={6} color="blue.600" />
-                                    </Box>
-                                    <Box display="flex" flexDirection="column">
-                                        <Text fontSize="sm" color="gray.500" fontWeight="medium" textAlign={"left"}>
-                                            Wind Speed
-                                        </Text>
-                                        <Text fontSize="2xl" fontWeight="bold" color="gray.800" textAlign={"left"}>
-                                            {`${weatherData.wind_speed.toFixed(1)} km/h`}
-                                        </Text>
-                                    </Box>
-                                </Box>
-                            </MotionBox>
+                                </MotionBox>
+                            ))}
                         </Grid>
 
                         <motion.div
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.4, delay: 0.2 }}
+                            style={{ width: '100%' }}
                         >
                             <Flex
+                                direction={{ base: 'column', md: 'row' }}
                                 align="center"
                                 justify="center"
                                 bg="whiteAlpha.600"
                                 backdropFilter="blur(4px)"
-                                px={6}
-                                py={3}
-                                mt={10}
+                                px={{ base: 4, md: 6 }}
+                                py={{ base: 2, md: 3 }}
+                                mt={{ base: 4, md: 10 }}
                                 borderRadius="full"
                                 boxShadow="sm"
                                 gap={2}
+                                w={{ base: '90%', md: '80%' }}
+                                mx="auto"
                                 transition="all 0.2s ease"
                             >
                                 <Icon 
                                     as={FiMapPin} 
-                                    boxSize={5} 
+                                    boxSize={{ base: 4, md: 5 }}
                                     color="blue.500" 
                                     style={{ filter: "drop-shadow(0 2px 2px rgba(0, 0, 0, 0.1))" }}
                                 />
                                 <Text
-                                    fontSize="lg"
+                                    fontSize={{ base: 'md', md: 'lg' }}
                                     fontWeight="medium"
                                     bgGradient="linear(to-r, blue.600, purple.500)"
                                     bgClip="text"
-                                    letterSpacing="wide"
+                                    textAlign="center"
                                 >
                                     Current Location:{" "}
                                     <Text as="span" fontWeight="semibold" color="gray.700">
@@ -321,7 +270,7 @@ export default function HomePage() {
                                 transition={{ duration: 0.3 }}
                             >
                                 <Flex
-                                    justifyContent={"center"}
+                                    justifyContent="center"
                                     align="center"
                                     gap={2}
                                     cursor="pointer"
@@ -329,10 +278,10 @@ export default function HomePage() {
                                     color="gray.600"
                                     _hover={{ color: "blue.600" }}
                                     transition="color 0.2s ease"
-                                    mt={4}
+                                    mt={{ base: 3, md: 4 }}
                                 >
-                                    <Icon as={FiRefreshCw} boxSize={4} />
-                                    <Text fontSize="sm" fontWeight="medium">
+                                    <Icon as={FiRefreshCw} boxSize={{ base: 3, md: 4 }} />
+                                    <Text fontSize={{ base: 'sm', md: 'md' }} fontWeight="medium">
                                         Refresh Data
                                     </Text>
                                 </Flex>
