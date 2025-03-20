@@ -13,6 +13,14 @@ const ByStationLineChart = ({ data, xAxisKey, yAxisKeys, currentStartDate, curre
 
         const ctx = chartRef.current.getContext("2d");
 
+        const getFontSize = (chartWidth) => {
+            return chartWidth < 600 ? 12 : 14; 
+        };
+
+        const getTitleFontSize = (chartWidth) => {
+            return chartWidth < 600 ? 16 : 20;
+        };
+
         // Destroy previous chart instance
         if (chartInstance.current) {
             chartInstance.current.destroy();
@@ -60,7 +68,7 @@ const ByStationLineChart = ({ data, xAxisKey, yAxisKeys, currentStartDate, curre
                             color: "#6b7280",
                             font: {
                                 family: "Inter, sans-serif",
-                                size: 20,
+                                size: (context) => getTitleFontSize(context.chart.width),
                                 weight: "600",
                             },
                             padding: { top: 10, bottom: 10 },
@@ -73,7 +81,7 @@ const ByStationLineChart = ({ data, xAxisKey, yAxisKeys, currentStartDate, curre
                             color: "#6b7280",
                             font: {
                                 family: "Inter, sans-serif",
-                                size: 14,
+                                size: (context) => getFontSize(context.chart.width),
                                 weight: "500",
                             },
                             padding: 10,
@@ -88,7 +96,7 @@ const ByStationLineChart = ({ data, xAxisKey, yAxisKeys, currentStartDate, curre
                             color: "#6b7280",
                             font: {
                                 family: "Inter, sans-serif",
-                                size: 20,
+                                size: (context) => getTitleFontSize(context.chart.width),
                                 weight: "600",
                             },
                             padding: { top: 10, bottom: 10 },
@@ -101,7 +109,7 @@ const ByStationLineChart = ({ data, xAxisKey, yAxisKeys, currentStartDate, curre
                             color: "#6b7280",
                             font: {
                                 family: "Inter, sans-serif",
-                                size: 14,
+                                size: (context) => getFontSize(context.chart.width),
                                 weight: "500",
                             },
                             padding: 10,
@@ -139,12 +147,12 @@ const ByStationLineChart = ({ data, xAxisKey, yAxisKeys, currentStartDate, curre
                         },
                         titleFont: {
                             family: "Inter, sans-serif",
-                            size: 16,
+                            size: (context) => getFontSize(context.chart.width) + 2,
                             weight: "600",
                         },
                         bodyFont: {
                             family: "Inter, sans-serif",
-                            size: 14,
+                            size: (context) => getFontSize(context.chart.width),
                             weight: "500",
                         },
                     },
@@ -156,10 +164,10 @@ const ByStationLineChart = ({ data, xAxisKey, yAxisKeys, currentStartDate, curre
                             color: "#6b7280",
                             font: {
                                 family: "Inter, sans-serif",
-                                size: 14,
+                                size: (context) => getFontSize(context.chart.width),
                                 weight: "600",
                             },
-                            padding: 20,
+                            padding: 10,
                             boxWidth: 20,
                             boxHeight: 20,
                             usePointStyle: true,
@@ -169,7 +177,7 @@ const ByStationLineChart = ({ data, xAxisKey, yAxisKeys, currentStartDate, curre
                 },
                 layout: {
                     padding: {
-                        top: 20,
+                        top: 10,
                         right: 20,
                         bottom: 20,
                         left: 20,
@@ -180,8 +188,8 @@ const ByStationLineChart = ({ data, xAxisKey, yAxisKeys, currentStartDate, curre
                         borderWidth: 3,
                     },
                     point: {
-                        hoverRadius: 8,
-                        radius: 5,
+                        hoverRadius: (context) => context.chart.width < 600 ? 5 : 8,
+                        radius: (context) => context.chart.width < 600 ? 3 : 5,
                         backgroundColor: "#fff",
                         borderWidth: 2,
                     },

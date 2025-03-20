@@ -279,6 +279,7 @@ export default function HomePage() {
                                     _hover={{ color: "blue.600" }}
                                     transition="color 0.2s ease"
                                     mt={{ base: 3, md: 4 }}
+                                    mb={{ base: 6, md: 10 }}
                                 >
                                     <Icon as={FiRefreshCw} boxSize={{ base: 3, md: 4 }} />
                                     <Text fontSize={{ base: 'sm', md: 'md' }} fontWeight="medium">

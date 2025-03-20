@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { motion } from 'framer-motion';
-import { Heading, Button, Tabs, TabList, TabPanels, Tab, TabPanel, Menu, MenuButton, MenuList, MenuItem, Flex, Input, Table, Thead, Tbody, Tr, Th, Td, TableContainer, Box, Text, IconButton, Checkbox, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Stack, Tag, TagLabel, TagLeftIcon, SimpleGrid, VStack, useDisclosure, useColorModeValue, HStack, useMediaQuery, FormControl, FormLabel } from '@chakra-ui/react';
+import { Heading, Button, Tabs, TabList, TabPanels, Tab, TabPanel, Menu, MenuButton, MenuList, MenuItem, Flex, Input, Table, Thead, Tbody, Tr, Th, Td, TableContainer, Box, Text, IconButton, Checkbox, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Stack, Tag, TagLabel, TagLeftIcon, SimpleGrid, VStack, useDisclosure, useColorModeValue, HStack, useMediaQuery, FormControl, FormLabel, useBreakpointValue } from '@chakra-ui/react';
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
@@ -44,6 +44,8 @@ const Dashboard = () => {
     const [screenIsNarrowerThan800px] = useMediaQuery("(max-width: 800px)");
     const [screenIsNarrowerThan700px] = useMediaQuery("(max-width: 700px)");
     const [screenIsNarrowerThan610px] = useMediaQuery("(max-width: 610px)");
+    const avgTempLabel = useBreakpointValue({ base: "Avg.", md: "Average Temp.", lg: "Average Temperature" });
+    const fdAvgTempLabel = useBreakpointValue({ base: "FDAvg.", md: "5-day Avg. Temp.", lg: "5-day Average Temperature" });
 
     ChartJS.register(
         CategoryScale,
@@ -678,7 +680,7 @@ const Dashboard = () => {
                                     mt={2}
                                 >
                                     <Text
-                                        fontSize={{ base: '6xl', md: '8xl' }}
+                                        fontSize={{ base: '4xl', md: '8xl' }}
                                         fontWeight="black"
                                         sx={{
                                             fontFamily: 'var(--font-calligraphy)',
@@ -700,8 +702,10 @@ const Dashboard = () => {
                                     mt={8}
                                     px={4}
                                     display="flex"
+                                    flexDirection={{ base: 'column', md: 'row' }}
                                     gap={4}
                                     justifyContent="center"
+                                    alignItems="center"
                                 >
                                     {['date', 'avg', 'FD'].map((sortType) => {
                                         const sortOrder = {
@@ -733,9 +737,11 @@ const Dashboard = () => {
                                                     transform: "scale(1.05)"
                                                 }}
                                                 _active={{ transform: "scale(0.95)" }}
-                                                px={6}
+                                                px={{ base: 4, md: 6 }} 
                                                 borderRadius={10}
                                                 mx={2}
+                                                w={{ base: '80%', md: 'auto' }}
+                                                mb={{ base: 4, md: 0 }} 
                                                 boxShadow="xl"
                                             >
                                                 {`Sort by ${{
@@ -754,8 +760,9 @@ const Dashboard = () => {
                                     spacing={6}
                                     maxW="1400px"
                                     mx="auto"
-                                    mt={12}
-                                    px={4}
+                                    mt={4}
+                                    px={8}
+                                    py={8}
                                     position="relative"
                                     zIndex={1}
                                 >
@@ -773,10 +780,13 @@ const Dashboard = () => {
                                                 border="1px solid"
                                                 borderColor="whiteAlpha.700"
                                                 borderRadius="2xl"
-                                                p={6}
+                                                p={{ base: 4, md: 6 }}
                                                 boxShadow="0 25px 50px -12px rgba(0, 0, 0, 0.3)"
                                                 position="relative"
                                                 overflow="hidden"
+                                                h={{ base: "140px", md: "160px" }}
+                                                display="flex"
+                                                flexDirection="column"
                                                 _before={{
                                                     content: '""',
                                                     position: 'absolute',
@@ -784,12 +794,10 @@ const Dashboard = () => {
                                                     left: '-50%',
                                                     w: '200%',
                                                     h: '200%',
-                                                    bg: 'linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent)',
-                                                    transform: 'rotate(45deg)',
-                                                    animation: 'shine 6s infinite',
+                                                    bg: 'linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent)'
                                                 }}
                                             >
-                                                <VStack spacing={4} align="stretch">
+                                                <VStack spacing={4} align="stretch" flex={1} justifyContent="space-between">
                                                     {/* Date Header */}
                                                     <Flex justify="space-between" align="center">
                                                         <Box
@@ -805,31 +813,32 @@ const Dashboard = () => {
                                                     </Flex>
 
                                                     {/* Temperature Section */}
-                                                    <Box position="relative" >
-                                                        <Flex align="center" justify="space-between">
+                                                    <Box position="relative" flexGrow={1} display="flex" flexDirection="column" justifyContent="center">
+                                                        <Flex align="center" justify="space-between" flex={1}>
                                                             <Box>
                                                                 <Text
-                                                                    fontSize="4xl"
+                                                                    fontSize={{ base: '2xl', md: '3xl', lg: '4xl' }}
                                                                     fontWeight="black"
                                                                     color="gray.800"
                                                                     lineHeight="1"
                                                                 >
                                                                     {record.Avg}°C
                                                                 </Text>
-                                                                <Text fontSize="sm" color="gray.600" mt={1}>
-                                                                    Average Temperature
+                                                                <Text fontSize={{ md: 'xs', lg: 'sm' }} color="gray.600" mt={1}>
+                                                                    {avgTempLabel}
                                                                 </Text>
                                                             </Box>
                                                             <Box textAlign="right">
                                                                 <Text
                                                                     display="inline-flex"
                                                                     alignItems="center"
-                                                                    fontSize="2xl"
+                                                                    lineHeight="2"
+                                                                    fontSize={{ base: 'md', md: 'lg', lg:"xl" }}
                                                                     fontWeight="bold"
                                                                     gap={1}
                                                                     color={record.FDAvg > record.Avg ? 'red.600' : record.FDAvg === record.Avg ? "green.600" : 'blue.600'}
                                                                 >
-                                                                    {record.FDAvg}°C
+                                                                    {record.FDAvg.toFixed(1)}°C
                                                                     <Box as="span" display="inline-block" mt="2px">
                                                                         {record.FDAvg > record.Avg ? (
                                                                             <FiArrowUp />
@@ -840,8 +849,8 @@ const Dashboard = () => {
                                                                         )}
                                                                     </Box>
                                                                 </Text>
-                                                                <Text fontSize="sm" color="gray.600">
-                                                                    5-Day Average
+                                                                <Text fontSize={{ md: 'xs', lg: 'sm' }} color="gray.600">
+                                                                    {fdAvgTempLabel}
                                                                 </Text>
                                                             </Box>
                                                         </Flex>
@@ -864,7 +873,7 @@ const Dashboard = () => {
                                     bg="white"
                                     borderRadius="xl"
                                     boxShadow="xl"
-                                    p={6}
+                                    p={{ base: 4, md: 6 }}
                                     textAlign="center"
                                     mb={16}
                                     transition={{ duration: 0.5 }}
@@ -872,7 +881,7 @@ const Dashboard = () => {
                                     <Heading size="md" mb={4} bgGradient="linear(to-r, #6366f1, #ec4899)" bgClip="text" fontSize={{ base: '3xl', md: '4xl' }} mt={14}>
                                         Weather Data Trend in {selectedStationName ? selectedStationName : "Station"}
                                     </Heading>
-                                    <Box h="50vh" w="90vw" mb={32} alignItems="center" justifyContent="center" mx="auto">
+                                    <Box h={{ base: '40vh', md: '50vh' }} w="90vw" mb={32} alignItems="center" justifyContent="center" mx="auto" position="relative">
                                         {!isSorting ? (
                                             <ByStationLineChart
                                                 key={chartKey}
