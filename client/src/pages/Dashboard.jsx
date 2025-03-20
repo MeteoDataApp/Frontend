@@ -41,6 +41,7 @@ const Dashboard = () => {
 
     const { isOpen, onOpen, onClose } = useDisclosure();
 
+    const [screenIsNarrowerThan800px] = useMediaQuery("(max-width: 800px)");
     const [screenIsNarrowerThan700px] = useMediaQuery("(max-width: 700px)");
     const [screenIsNarrowerThan610px] = useMediaQuery("(max-width: 610px)");
 
@@ -912,9 +913,12 @@ const Dashboard = () => {
                     justifyContent="space-between"
                     px={4}
                 >
-                    <Text fontSize="sm" color="gray.600" alignContent={{ base: 'center', md: 'left' }} p={3}>
-                        Data is only available from 1 January 2018 until 9 March 2025.
-                    </Text>
+                    {(!screenIsNarrowerThan800px || data.length === 0) && (
+                        <Text fontSize="sm" color="gray.600" alignContent={{ base: 'center', md: 'left' }} p={3}>
+                            Data is only available from 1 January 2018 until 9 March 2025.
+                        </Text>
+                    )}
+
                     {data.length > 0 && (
                         <Flex align="center">
                             <Text fontSize="sm" color="gray.600">
