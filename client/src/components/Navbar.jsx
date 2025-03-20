@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Box, Flex, Heading, Text, HStack, Link, IconButton, Drawer, DrawerOverlay, DrawerContent, DrawerBody, VStack, CloseButton } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
-import { FaDatabase, FaHome, FaInfoCircle } from 'react-icons/fa';
+import { FaDatabase, FaHome, FaInfoCircle, FaTimes } from 'react-icons/fa';
 import { HamburgerIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
 
@@ -58,7 +58,6 @@ const Navbar = () => {
                     {links.map((link) => (
                         <MotionBox key={link.name}>
                             <Link
-                                as="button"
                                 fontSize="lg"
                                 color="gray.600"
                                 _hover={{
@@ -109,7 +108,7 @@ const Navbar = () => {
                                 <Flex justify="flex-end" mb={8}>
                                     <IconButton
                                         aria-label="Close menu"
-                                        icon={<CloseButton />}
+                                        icon={<FaTimes />}
                                         onClick={() => setIsOpen(false)}
                                         variant="ghost"
                                         borderRadius="full"
