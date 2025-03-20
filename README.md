@@ -8,11 +8,12 @@ Recommended to have conda installed, for easier environment management.
 git clone https://github.com/lucky0218/meteo.git
 git checkout -b your_branch
 pip install uv
-uv venv venv
-venv\Scripts\activate
+cd server
+uv sync
+.venv\Scripts\activate
 uv pip install .
 cd src
-python -m show.app
+uv run server
 ```
 Check `localhost:5000` to see the website.
 

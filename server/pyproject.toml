@@ -9,9 +9,13 @@ dependencies = [
     "flask",
     "pymongo",
     "python-dotenv",
-    "requests"
+    "requests",
+    "flask_cors"
 ]
 
 [tool.setuptools]
 package-dir = { "" = "src" }
 packages = { find = { where = ["src"] } }
+
+[project.scripts]
+server = "show.app:main"
