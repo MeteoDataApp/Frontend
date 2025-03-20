@@ -37,7 +37,7 @@ const Dashboard = () => {
     const [isSorting, setIsSorting] = useState(false);
     const [chartKey, setChartKey] = useState(0);
 
-    const recordsPerPage = activeTab === "station" ? 9 : 5;
+    const recordsPerPage = activeTab === "station" ? 9 : 7;
 
     const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -560,7 +560,7 @@ const Dashboard = () => {
                                 mx="auto"
                                 maxW="1200px"
                             >
-                                <TableContainer bg="white" borderRadius="xl" boxShadow="xl">
+                                <TableContainer bg="white" borderRadius="xl" boxShadow="xl" mb="8rem">
                                     <Table variant="striped">
                                         <Thead>
                                             <Tr>
