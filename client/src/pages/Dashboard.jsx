@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { motion } from 'framer-motion';
-import { Heading, Button, Tabs, TabList, TabPanels, Tab, TabPanel, Menu, MenuButton, MenuList, MenuItem, Flex, Input, Table, Thead, Tbody, Tr, Th, Td, TableContainer, Box, Text, IconButton, Checkbox, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Stack, Tag, TagLabel, TagLeftIcon, SimpleGrid, VStack, useDisclosure, useColorModeValue, HStack } from '@chakra-ui/react';
+import { Heading, Button, Tabs, TabList, TabPanels, Tab, TabPanel, Menu, MenuButton, MenuList, MenuItem, Flex, Input, Table, Thead, Tbody, Tr, Th, Td, TableContainer, Box, Text, IconButton, Checkbox, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Stack, Tag, TagLabel, TagLeftIcon, SimpleGrid, VStack, useDisclosure, useColorModeValue, HStack, useMediaQuery } from '@chakra-ui/react';
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
@@ -40,6 +40,8 @@ const Dashboard = () => {
     const recordsPerPage = activeTab === "station" ? 9 : 7;
 
     const { isOpen, onOpen, onClose } = useDisclosure();
+
+    const [screenIsNarrowerThan700px] = useMediaQuery("(max-width: 700px)");
 
     ChartJS.register(
         CategoryScale,
@@ -550,7 +552,7 @@ const Dashboard = () => {
                                                                 />
                                                             )}
 
-                                                            {stationInfo ? `${stationInfo.name} (${record.Station})` : record.Station}
+                                                            {screenIsNarrowerThan700px ? stationInfo.name : `${stationInfo.name} (${record.Station})`}
                                                         </Box>
                                                     </Td>
                                                     <Td>{record.Date}</Td>
