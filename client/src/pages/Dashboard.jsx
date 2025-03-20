@@ -935,13 +935,13 @@ const Dashboard = () => {
                     width="100%"
                     bg="white"
                     textAlign="left"
-                    py={4}
+                    py={2}
                     borderTop="1px solid #e2e8f0"
                     borderColor="purple.100"
                     zIndex="docked"
                     display="flex"
                     justifyContent="space-between"
-                    px={4}
+                    px={2}
                 >
                     {(!screenIsNarrowerThan800px || data.length === 0) && (
                         <Text fontSize="sm" color="gray.600" alignContent={{ base: 'center', md: 'left' }} p={3}>
