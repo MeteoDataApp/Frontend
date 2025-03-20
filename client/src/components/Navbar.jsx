@@ -16,9 +16,9 @@ const Navbar = () => {
     const { isChinese, toggleLanguage } = UseLanguage();
 
     const links = [
-        { name: 'Home', path: '/', icon: FaHome },
-        { name: 'Dashboard', path: '/dashboard', icon: FaDatabase },
-        { name: 'About Us', path: '/about', icon: FaInfoCircle },
+        { name: 'Home', path: '/', icon: FaHome, cn: '主页' },
+        { name: 'Dashboard', path: '/dashboard', icon: FaDatabase, cn: '仪表盘' },
+        { name: 'About Us', path: '/about', icon: FaInfoCircle, cn: '关于我们' },
     ];
 
     return (
@@ -58,7 +58,7 @@ const Navbar = () => {
                 </MotionBox>
 
                 <HStack spacing={8} display={{ base: 'none', md: 'flex' }}>
-                <IconButton
+                    <IconButton
                         aria-label="Toggle language"
                         icon={<Text>{isChinese ? '中文' : 'EN'}</Text>}
                         onClick={toggleLanguage}
@@ -90,7 +90,7 @@ const Navbar = () => {
                             >
                                 <HStack>
                                     <Box as={link.icon} />
-                                    <Text>{link.name}</Text>
+                                    <Text>{isChinese ? link.cn : link.name}</Text>
                                 </HStack>
                             </Link>
                         </MotionBox>
@@ -196,7 +196,7 @@ const Navbar = () => {
                                                             color: '#4F46E5'
                                                         }}
                                                     >
-                                                        {link.name}
+                                                        {isChinese ? link.cn : link.name}
                                                     </Text>
                                                 </HStack>
                                             </Link>

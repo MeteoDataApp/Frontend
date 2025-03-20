@@ -3,10 +3,18 @@ import { Chart, registerables } from "chart.js";
 import zoomPlugin from "chartjs-plugin-zoom";
 import "chartjs-adapter-date-fns";
 Chart.register(...registerables, zoomPlugin);
+import { UseLanguage } from "../contexts/LanguageContext";
 
 const ByStationLineChart = ({ data, xAxisKey, yAxisKeys, currentStartDate, currentEndDate, selectedStationName }) => {
     const chartRef = useRef(null);
     const chartInstance = useRef(null);
+
+    const { isChinese } = UseLanguage();
+
+    const monthsInChinese = [
+        "一月", "二月", "三月", "四月", "五月", "六月", 
+        "七月", "八月", "九月", "十月", "十一月", "十二月"
+    ];
 
     useEffect(() => {
         if (!data || data.length === 0) return;
@@ -32,7 +40,7 @@ const ByStationLineChart = ({ data, xAxisKey, yAxisKeys, currentStartDate, curre
             data: {
                 labels: data.map((item) => item[xAxisKey]),
                 datasets: yAxisKeys.map((key, index) => ({
-                    label: key === "Avg" ? "Avg Temp (°C)" : "5-day Avg Temp (°C)",
+                    label: key === "Avg" ? (isChinese ? "平均温度 (°C)" : "Avg Temp (°C)") : (isChinese ? "5天平均温度 (°C)" : "5-day Avg Temp (°C)"),
                     data: data.map((item) => item[key]),
                     borderColor: index === 0 ? "#6366f1" : "#ec4899",
                     backgroundColor: index === 0 ? "#6366f199" : "#ec489999",
@@ -55,16 +63,13 @@ const ByStationLineChart = ({ data, xAxisKey, yAxisKeys, currentStartDate, curre
                         type: "time",
                         time: {
                             unit: "day",
-                            tooltipFormat: "MMM dd, yyyy",
-                            displayFormats: {
-                                day: "MMM dd yyyy",
-                            },
+                            tooltipFormat: isChinese ? "M月d日yyyy年" : "dd MMM yyyy",
                         },
                         min: currentStartDate,
                         max: currentEndDate,
                         title: {
                             display: true,
-                            text: "Date",
+                            text: isChinese ? "日期" : "Date",
                             color: "#6b7280",
                             font: {
                                 family: "Inter, sans-serif",
@@ -87,12 +92,20 @@ const ByStationLineChart = ({ data, xAxisKey, yAxisKeys, currentStartDate, curre
                             padding: 10,
                             maxRotation: 0,
                             autoSkip: true,
+                            callback: (value) => {
+                                const date = new Date(value);
+                                const formattedDate = isChinese
+                                    ? `${date.getDate()} ${monthsInChinese[date.getMonth()]} ${date.getFullYear()}`
+                                    : `${date.getDate()} ${date.toLocaleString("en-US", { month: "short" })} ${date.getFullYear()}`;
+                
+                                return formattedDate;
+                            },
                         },
                     },
                     y: {
                         title: {
                             display: true,
-                            text: "Temperature (°C)",
+                            text: isChinese ? "温度 (°C)" : "Temperature (°C)",
                             color: "#6b7280",
                             font: {
                                 family: "Inter, sans-serif",

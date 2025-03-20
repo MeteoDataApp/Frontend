@@ -5,7 +5,7 @@ import { createContext, useContext, useState } from "react";
 const LanguageContext = createContext();
 
 export const LanguageProvider = ({ children }) => {
-    const [isChinese, setIsChinese] = useState(true);
+    const [isChinese, setIsChinese] = useState(false);
 
     const toggleLanguage = () => {
         setIsChinese(!isChinese);

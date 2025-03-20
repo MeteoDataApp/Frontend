@@ -6,6 +6,7 @@ import { FiArrowRight, FiDroplet, FiMapPin, FiRefreshCw, FiThermometer, FiWind }
 import { useNavigate } from "react-router-dom";
 import { useShowToast } from "../extensions/useShowToast";
 import { useEffect, useState } from "react";
+import { UseLanguage } from '../contexts/LanguageContext';
 
 export default function HomePage() {
     const navigate = useNavigate();
@@ -13,6 +14,8 @@ export default function HomePage() {
     const MotionButton = motion.create(Button);
 
     const showToast = useShowToast();
+
+    const { isChinese } = UseLanguage();
 
     const gridColumns = useBreakpointValue({ base: 1, md: 2, lg: 4 });
     const headingSize = useBreakpointValue({ base: '3xl', md: '4xl', lg: '5xl' });
@@ -25,6 +28,45 @@ export default function HomePage() {
         setWeatherData(null);
         setLocationData(null);
         setRequestReceived(false);
+    };
+
+    const translations = {
+        heading: {
+            en: "Unlock Advanced Weather Insights",
+            zh: "解锁高级天气洞察数据",
+        },
+        description: {
+            en: "Dive deeper into hyper-local forecasts, historical trends, and real-time climate analytics",
+            zh: "深入了解本地预报、历史趋势和实时气候分析",
+        },
+        button: {
+            en: "Launch Weather Dashboard",
+            zh: "启动天气仪表板",
+        },
+        temperature: {
+            en: "Temperature",
+            zh: "温度",
+        },
+        feelsLike: {
+            en: "Feels Like",
+            zh: "体感温度",
+        },
+        humidity: {
+            en: "Humidity",
+            zh: "湿度",
+        },
+        windSpeed: {
+            en: "Wind Speed",
+            zh: "风速",
+        },
+        currentLocation: {
+            en: "Current Location:",
+            zh: "当前位置：",
+        },
+        refreshData: {
+            en: "Refresh Data",
+            zh: "刷新数据",
+        },
     };
 
     const fetchRealtimeWeatherData = async (lat, lon) => {
@@ -45,7 +87,11 @@ export default function HomePage() {
             reverseGeocode(lat, lon);
         } catch (error) {
             console.error(error);
-            showToast("error", "An error occurred while fetching weather data", "See console for more details");
+            showToast(
+                "error",
+                isChinese ? "获取天气数据时发生错误" : "An error occurred while fetching weather data",
+                isChinese ? "查看控制台获取更多细节" : "See console for more details"
+            );
         }
     };
 
@@ -60,7 +106,12 @@ export default function HomePage() {
             setLocationData([data.city, data.principalSubdivision, data.countryName].filter(Boolean).join(', '));
         } catch (error) {
             console.error(error);
-            showToast("error", "An error occurred while fetching location data", "See console for more details");
+            showToast(
+                "error",
+                isChinese ? "获取位置数据时发生错误" : "An error occurred while fetching location data",
+                isChinese ? "查看控制台获取更多细节" : "See console for more details"
+            );
+    
         } finally {
             setRequestReceived(true);
         }
@@ -75,11 +126,18 @@ export default function HomePage() {
                         fetchRealtimeWeatherData(latitude, longitude);
                     }, (error) => {
                         setRequestReceived(true);
-                        showToast("error", "An error occurred while fetching location data", error.message);
+                        showToast(
+                            "error",
+                            isChinese ? "获取位置数据时发生错误" : "An error occurred while fetching location data",
+                            error.message
+                        );
                     }
                 );
             } else {
-                showToast("error", "Geolocation is not supported by your browser");
+                showToast(
+                    "error",
+                    isChinese ? "您的浏览器不支持地理位置服务" : "Geolocation is not supported by your browser"
+                );
                 setRequestReceived(true);
             }
         }
@@ -122,11 +180,11 @@ export default function HomePage() {
                         px={{ base: 2, md: 0 }}
                         py={{ base: 4, md: 6 }}
                     >
-                        Unlock Advanced Weather Insights
+                        {isChinese ? translations.heading.zh : translations.heading.en}
                     </Heading>
 
                     <Text fontSize={{ base: 'md', md: 'lg' }} color="gray.600" mb={4}>
-                        Dive deeper into hyper-local forecasts, historical trends, and real-time climate analytics
+                        {isChinese ? translations.description.zh : translations.description.en}
                     </Text>
 
                     <MotionButton
@@ -147,7 +205,7 @@ export default function HomePage() {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                     >
-                        Launch Weather Dashboard
+                        {isChinese ? translations.button.zh : translations.button.en}
                     </MotionButton>
                 </Stack>
 
@@ -161,10 +219,10 @@ export default function HomePage() {
                             justifyItems={{ base: 'center', md: 'stretch' }}
                         >
                             {[
-                                { icon: FiThermometer, title: "Temperature", value: `${weatherData.temp}°C` },
-                                { icon: FiThermometer, title: "Feels Like", value: `${weatherData.feels_like}°C` },
-                                { icon: FiDroplet, title: "Humidity", value: `${weatherData.humidity}%` },
-                                { icon: FiWind, title: "Wind Speed", value: `${weatherData.wind_speed} km/h` },
+                                { icon: FiThermometer, title: isChinese ? translations.temperature.zh : translations.temperature.en, value: `${weatherData.temp}°C` },
+                                { icon: FiThermometer, title: isChinese ? translations.feelsLike.zh : translations.feelsLike.en, value: `${weatherData.feels_like}C` },
+                                { icon: FiDroplet, title: isChinese ? translations.humidity.zh : translations.humidity.en, value: `${weatherData.humidity}%` },
+                                { icon: FiWind, title: isChinese ? translations.windSpeed.zh : translations.windSpeed.en, value: `${weatherData.wind_speed} km/h` },
                             ].map((card, index) => (
                                 <MotionBox
                                     key={index}
@@ -257,7 +315,7 @@ export default function HomePage() {
                                     bgClip="text"
                                     textAlign="center"
                                 >
-                                    Current Location:{" "}
+                                    {isChinese ? translations.currentLocation.zh : translations.currentLocation.en}{" "}
                                     <Text as="span" fontWeight="semibold" color="gray.700">
                                         {locationData}
                                     </Text>
@@ -283,7 +341,7 @@ export default function HomePage() {
                                 >
                                     <Icon as={FiRefreshCw} boxSize={{ base: 3, md: 4 }} />
                                     <Text fontSize={{ base: 'sm', md: 'md' }} fontWeight="medium">
-                                        Refresh Data
+                                        {isChinese ? translations.refreshData.zh : translations.refreshData.en}
                                     </Text>
                                 </Flex>
                             </motion.div>
