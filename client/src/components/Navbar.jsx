@@ -92,7 +92,7 @@ const Navbar = () => {
                     }}
                 />
 
-                <Drawer isOpen={isOpen} placement="right" onClose={() => setIsOpen(false)} size="md">
+                <Drawer isOpen={isOpen} placement="right" onClose={() => setIsOpen(false)} size="xs">
                     <DrawerOverlay backdropFilter="blur(3px)" />
                     <DrawerContent
                         bg="white"
