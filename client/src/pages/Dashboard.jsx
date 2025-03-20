@@ -37,7 +37,7 @@ const Dashboard = () => {
     const [isSorting, setIsSorting] = useState(false);
     const [chartKey, setChartKey] = useState(0);
 
-    const recordsPerPage = activeTab === "station" ? 9 : 7;
+    const recordsPerPage = activeTab === "station" ? 9 : 6;
 
     const { isOpen, onOpen, onClose } = useDisclosure();
 
