@@ -145,6 +145,9 @@ const Dashboard = () => {
         } finally {
             setLoading(false);
             setIsSorting(false);
+            setSortOrderDate('desc');
+            setSortOrderAvg('desc');
+            setSortOrderFD('desc');
         }
     };
 
