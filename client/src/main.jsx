@@ -17,8 +17,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 					<Route index element={<HomePage />} />
 					<Route path="dashboard" element={<Dashboard />} />
 					<Route path="about" element={<AboutUs />} />
-					<Route path="*" element={<NotFound />} />
 				</Route>
+
+				<Route path="*" element={<NotFound />} />
 			</Routes>
 		</BrowserRouter>
 	</ChakraProvider>
