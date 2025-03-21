@@ -50,8 +50,8 @@ const Dashboard = () => {
     const [screenIsNarrowerThan700px] = useMediaQuery("(max-width: 700px)");
     const [screenIsNarrowerThan610px] = useMediaQuery("(max-width: 610px)");
 
-    const sortAverageTemperature = useBreakpointValue({ md: t("mdAvgTemp"),  lg: t("avgTemp") });
-    const sort5DayAverageTemperature = useBreakpointValue({ md: t("md5-dayAvgTemp"),  lg: t("5-dayAvgTemp") });
+    const sortAverageTemperature = useBreakpointValue({ base: t("avgTemp"), md: t("mdAvgTemp"),  lg: t("avgTemp") });
+    const sort5DayAverageTemperature = useBreakpointValue({ base: t("5-dayAvgTemp"), md: t("md5-dayAvgTemp"),  lg: t("5-dayAvgTemp") });
     const avgTempLabel = useBreakpointValue({  base: t("baseAvgTemp"),  md: t("mdAvgTemp"),  lg: t("avgTemp") });
     const fdAvgTempLabel = useBreakpointValue({  base: t("base5-dayAvgTemp"),  md: t("md5-dayAvgTemp"),  lg: t("5-dayAvgTemp") });
 
