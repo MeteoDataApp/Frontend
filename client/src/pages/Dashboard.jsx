@@ -279,19 +279,19 @@ const Dashboard = () => {
     };
 
     const stationList = [
-        { code: 58349, enName: "Su Zhou", name: "苏州", image: "Suzhou.jpg" },
-        { code: 58238, enName: "Nan Jing", name: "南京", image: "Nanjing.jpg" },
-        { code: 58354, enName: "Wu Xi", name: "无锡", image: "Wuxi.jpg" },
-        { code: 58343, enName: "Chang Zhou", name: "常州", image: "Changzhou.jpg" },
-        { code: 58252, enName: "Zhen Jiang", name: "镇江", image: "Zhenjiang.jpg" },
-        { code: 58259, enName: "Nan Tong", name: "南通", image: "Nantong.jpg" },
-        { code: 58246, enName: "Tai Zhou", name: "泰州", image: "Taizhou.jpg" },
-        { code: 58245, enName: "Yang Zhou", name: "扬州", image: "Yangzhou.jpg" },
-        { code: 58027, enName: "Xu Zhou", name: "徐州", image: "Xuzhou.jpg" },
-        { code: 58044, enName: "Lian Yun Gang", name: "连云港", image: "Lianyungang.jpg" },
-        { code: 58141, enName: "Huai An", name: "淮安", image: "Huaian.jpg" },
-        { code: 58154, enName: "Yan Cheng", name: "盐城", image: "Yancheng.jpg" },
-        { code: 58131, enName: "Su Qian", name: "宿迁", image: "Suqian.jpg" },
+        { code: 58349, enName: "Suzhou", name: "苏州", image: "Suzhou.jpg" },
+        { code: 58238, enName: "Nanjing", name: "南京", image: "Nanjing.jpg" },
+        { code: 58354, enName: "Wuxi", name: "无锡", image: "Wuxi.jpg" },
+        { code: 58343, enName: "Changzhou", name: "常州", image: "Changzhou.jpg" },
+        { code: 58252, enName: "Zhenjiang", name: "镇江", image: "Zhenjiang.jpg" },
+        { code: 58259, enName: "Nantong", name: "南通", image: "Nantong.jpg" },
+        { code: 58246, enName: "Taizhou", name: "泰州", image: "Taizhou.jpg" },
+        { code: 58245, enName: "Yangzhou", name: "扬州", image: "Yangzhou.jpg" },
+        { code: 58027, enName: "Xuzhou", name: "徐州", image: "Xuzhou.jpg" },
+        { code: 58044, enName: "Lianyungang", name: "连云港", image: "Lianyungang.jpg" },
+        { code: 58141, enName: "Huai'an", name: "淮安", image: "Huaian.jpg" },
+        { code: 58154, enName: "Yancheng", name: "盐城", image: "Yancheng.jpg" },
+        { code: 58131, enName: "Suqian", name: "宿迁", image: "Suqian.jpg" },
     ];
 
     const paginateData = (data) => {
