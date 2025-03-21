@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { FaDatabase, FaHome, FaInfoCircle, FaTimes } from 'react-icons/fa';
 import { HamburgerIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
-import { UseLanguage } from '../contexts/LanguageContext';
+import useLanguage from '../hooks/useLanguage';
 
 const Navbar = () => {
     const navigate = useNavigate();
@@ -13,7 +13,7 @@ const Navbar = () => {
     const MotionBox = motion.create(Box);
     const MotionFlex = motion.create(Flex);
 
-    const { isChinese, toggleLanguage } = UseLanguage();
+    const { isChinese, toggleLanguage } = useLanguage();
 
     const links = [
         { name: 'Home', path: '/', icon: FaHome, cn: '主页' },

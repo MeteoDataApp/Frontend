@@ -6,7 +6,7 @@ import { FiArrowRight, FiDroplet, FiMapPin, FiRefreshCw, FiThermometer, FiWind }
 import { useNavigate } from "react-router-dom";
 import { useShowToast } from "../extensions/useShowToast";
 import { useEffect, useState } from "react";
-import { UseLanguage } from '../contexts/LanguageContext';
+import useLanguage from "../hooks/useLanguage";
 
 export default function HomePage() {
     const navigate = useNavigate();
@@ -15,7 +15,7 @@ export default function HomePage() {
 
     const showToast = useShowToast();
 
-    const { isChinese } = UseLanguage();
+    const { isChinese } = useLanguage();
 
     const gridColumns = useBreakpointValue({ base: 1, md: 2, lg: 4 });
     const headingSize = useBreakpointValue({ base: '3xl', md: '4xl', lg: '5xl' });

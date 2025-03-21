@@ -9,7 +9,7 @@ import { useShowToast } from '../extensions/useShowToast';
 import server from "../../networking";
 import ByStationLineChart from '../components/ByStationLineChart';
 import { FiArrowDown, FiArrowLeft, FiArrowUp, FiCalendar, FiMapPin } from 'react-icons/fi';
-import { UseLanguage } from '../contexts/LanguageContext';
+import useLanguage from '../hooks/useLanguage';
 
 const Dashboard = () => {
     const MotionBox = motion.div;
@@ -42,7 +42,7 @@ const Dashboard = () => {
 
     const { isOpen, onOpen, onClose } = useDisclosure();
 
-    const { isChinese } = UseLanguage();
+    const { isChinese } = useLanguage();
 
     const [screenIsNarrowerThan800px] = useMediaQuery("(max-width: 800px)");
     const [screenIsNarrowerThan700px] = useMediaQuery("(max-width: 700px)");

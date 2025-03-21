@@ -1,15 +1,17 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react/prop-types */
 import { useRef, useEffect } from "react";
 import { Chart, registerables } from "chart.js";
+import useLanguage from "../hooks/useLanguage";
 import zoomPlugin from "chartjs-plugin-zoom";
 import "chartjs-adapter-date-fns";
 Chart.register(...registerables, zoomPlugin);
-import { UseLanguage } from "../contexts/LanguageContext";
 
 const ByStationLineChart = ({ data, xAxisKey, yAxisKeys, currentStartDate, currentEndDate, selectedStationName }) => {
     const chartRef = useRef(null);
     const chartInstance = useRef(null);
 
-    const { isChinese } = UseLanguage();
+    const { isChinese } = useLanguage();
 
     const monthsInChinese = [
         "一月", "二月", "三月", "四月", "五月", "六月", 

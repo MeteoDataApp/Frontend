@@ -1,8 +1,8 @@
+/* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react/prop-types */
-// contexts/LanguageContext.js
-import { createContext, useContext, useState } from "react";
+import { createContext, useState } from "react";
 
-const LanguageContext = createContext();
+export const LanguageContext = createContext();
 
 export const LanguageProvider = ({ children }) => {
     const [isChinese, setIsChinese] = useState(false);
@@ -16,8 +16,4 @@ export const LanguageProvider = ({ children }) => {
             {children}
         </LanguageContext.Provider>
     );
-};
-
-export const UseLanguage = () => {
-    return useContext(LanguageContext);
 };

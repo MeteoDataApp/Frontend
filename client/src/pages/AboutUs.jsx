@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Box, Heading, Text, Icon, Grid, useBreakpointValue, Button } from '@chakra-ui/react';
 import { FiClock, FiAlertTriangle, FiUser } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
-import { UseLanguage } from '../contexts/LanguageContext';
+import useLanguage from '../hooks/useLanguage';
 
 const AboutUs = () => {
     const navigate = useNavigate();
@@ -13,7 +13,7 @@ const AboutUs = () => {
 
     const gridColumns = useBreakpointValue({ base: 1, md: 2, lg: 3 });
 
-    const { isChinese } = UseLanguage();
+    const { isChinese } = useLanguage();
 
     const features = [
         { 
