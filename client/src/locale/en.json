@@ -25,6 +25,8 @@
         "aboutMeteoData": "About Meteo Data",
         "aboutMeteoDataDescription": "Empowering your decisions with hyper-accurate weather intelligence and beautiful data visualization",
         "readyForWeatherInsights": "Ready for weather insights?",
-        "startExploringNow": "Start Exploring Now"
+        "startExploringNow": "Start Exploring Now",
+        "404Description": "Oops! The page you're looking for could not be found.",
+        "returnToHome": "Return to Home"
     }
 }

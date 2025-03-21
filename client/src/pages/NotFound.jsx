@@ -3,11 +3,14 @@ import { motion } from 'framer-motion';
 import { Box, Heading, Text, Button, Flex } from '@chakra-ui/react';
 import { FiHome } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const NotFound = () => {
     const navigate = useNavigate();
     const MotionBox = motion.create(Box);
     const MotionButton = motion.create(Button);
+
+    const { t } = useTranslation();
 
     return (
         <MotionBox
@@ -47,7 +50,7 @@ const NotFound = () => {
                         mx="auto"
                         mb={8}
                     >
-                        Oops! The page you're looking for has vanished into the digital ether.
+                        {t("404Description")}
                     </Text>
                     <MotionButton
                         size="lg"
@@ -64,7 +67,7 @@ const NotFound = () => {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                     >
-                        Return To Home
+                        {t("returnToHome")}
                     </MotionButton>
                 </MotionBox>
             </Flex>
