@@ -141,6 +141,24 @@ const Navbar = () => {
                                     />
                                 </Flex>
 
+                                {/* Language Toggle */}
+                                <Box mb={8} >
+                                    <IconButton
+                                        aria-label="Toggle language"
+                                        icon={<Text>{isChinese ? '中文' : 'EN'}</Text>}
+                                        onClick={toggleLanguage}
+                                        variant="ghost"
+                                        borderRadius="full"
+                                        size="lg"
+                                        color="gray.600"
+                                        _hover={{
+                                            bg: 'whiteAlpha.300',
+                                            color: '#4F46E5'
+                                        }}
+                                        transition="all 0.2s ease-in-out"
+                                    />
+                                </Box>
+
                                 {/* Navigation Links */}
                                 <VStack
                                     spacing={8}
