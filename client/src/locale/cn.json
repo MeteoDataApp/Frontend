@@ -15,6 +15,16 @@
         "windSpeed": "风速",
         "precipitation": "降水",
         "pressure": "气压",
-        "windDirection": "风向"
+        "windDirection": "风向",
+        "easeOfUse": "易于使用",
+        "historicalData": "历史数据",
+        "riskAnalysis": "风险分析",
+        "intuitiveWebBasedSolutionForAccurateWeatherInformation": "直观的网络解决方案，提供准确的天气信息",
+        "accessAccurateWeatherArchivesAndViewDetailedDataComparisons": "访问准确的天气数据并查看详细数据比较",
+        "advancedImpactAssessmentForBusinesses": "为企业提供高级影响评估",
+        "aboutMeteoData": "关于 Meteo Data",
+        "aboutMeteoDataDescription": "用超精准的天气情报和美观的数据赋能您的决策",
+        "readyForWeatherInsights": "准备好获取天气洞察数据了吗？",
+        "startExploringNow": "立即开始探索"
     }
 }

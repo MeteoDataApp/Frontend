@@ -15,6 +15,16 @@
         "windSpeed": "Wind Speed",
         "precipitation": "Precipitation",
         "pressure": "Pressure",
-        "windDirection": "Wind Direction"
+        "windDirection": "Wind Direction",
+        "easeOfUse": "Ease of Use",
+        "historicalData": "Historical Data",
+        "riskAnalysis": "Risk Analysis",
+        "intuitiveWebBasedSolutionForAccurateWeatherInformation": "Intuitive web-based solution for accurate weather information",
+        "accessAccurateWeatherArchivesAndViewDetailedDataComparisons": "Access accurate weather archives and view detailed data comparisons",
+        "advancedImpactAssessmentForBusinesses": "Advanced impact assessment for businesses",
+        "aboutMeteoData": "About Meteo Data",
+        "aboutMeteoDataDescription": "Empowering your decisions with hyper-accurate weather intelligence and beautiful data visualization",
+        "readyForWeatherInsights": "Ready for weather insights?",
+        "startExploringNow": "Start Exploring Now"
     }
 }

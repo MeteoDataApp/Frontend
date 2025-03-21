@@ -2,6 +2,7 @@
 import { motion } from 'framer-motion';
 import { Box, Heading, Text, Icon, Grid, useBreakpointValue, Button } from '@chakra-ui/react';
 import { FiClock, FiAlertTriangle, FiUser } from 'react-icons/fi';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 const AboutUs = () => {
@@ -10,25 +11,27 @@ const AboutUs = () => {
     const MotionBox = motion.create(Box);
     const MotionButton = motion.create(Button);
 
+    const { t } = useTranslation();
+
     const gridColumns = useBreakpointValue({ base: 1, md: 2, lg: 3 });
 
-    // const features = [
-    //     { 
-    //         icon: FiUser, 
-    //         title: isChinese ? "易于使用" : "Ease of use", 
-    //         description: isChinese ? "直观的网络解决方案，提供准确的天气信息" : "Intuitive web-based solution for accurate weather information" 
-    //     },
-    //     { 
-    //         icon: FiClock, 
-    //         title: isChinese ? "历史数据" : "Historical Data", 
-    //         description: isChinese ? "访问准确的天气数据并查看详细数据比较" : "Access accurate weather archives and view detailed data comparisons" 
-    //     },
-    //     { 
-    //         icon: FiAlertTriangle, 
-    //         title: isChinese ? "风险分析" : "Risk Analysis", 
-    //         description: isChinese ? "为企业提供高级影响评估" : "Advanced impact assessment for businesses" 
-    //     },
-    // ];
+    const features = [
+        { 
+            icon: FiUser, 
+            title: t("easeOfUse"), 
+            description: t("intuitiveWebBasedSolutionForAccurateWeatherInformation") 
+        },
+        { 
+            icon: FiClock, 
+            title: t("historicalData"), 
+            description: t("accessAccurateWeatherArchivesAndViewDetailedDataComparisons") 
+        },
+        { 
+            icon: FiAlertTriangle, 
+            title: t("riskAnalysis"), 
+            description: t("advancedImpactAssessmentForBusinesses")
+        },
+    ];
 
     return (
         <MotionBox
@@ -54,12 +57,10 @@ const AboutUs = () => {
                     mb={6}
                     mt={10}
                 >
-                    {/* {isChinese ? "关于 Meteo Data" : "About Meteo Data"} */}
+                    {t("aboutMeteoData")}
                 </Heading>
                 <Text fontSize="xl" color="gray.600" maxW="800px" mx="auto">
-                    {/* {isChinese 
-                        ? "用超精准的天气情报和美观的数据赋能您的决策"
-                        : "Empowering your decisions with hyper-accurate weather intelligence and beautiful data visualization"} */}
+                    {t("aboutMeteoDataDescription")}
                 </Text>
             </MotionBox>
 
@@ -70,7 +71,7 @@ const AboutUs = () => {
                 mx="auto"
                 mb={20}
             >
-                {/* {features.map((feature, index) => (
+                {features.map((feature, index) => (
                     <MotionBox
                         key={index}
                         p={8}
@@ -84,7 +85,7 @@ const AboutUs = () => {
                         <Heading fontSize="2xl" mb={4}>{feature.title}</Heading>
                         <Text color="gray.600">{feature.description}</Text>
                     </MotionBox>
-                ))} */}
+                ))}
             </Grid>
 
             <MotionBox
@@ -94,7 +95,7 @@ const AboutUs = () => {
                 viewport={{ once: true }}
             >
                 <Heading fontSize="3xl" mb={6}>
-                    {/* {isChinese ? "准备好获取天气洞察数据了吗？" : "Ready for Weather Insights?"} */}
+                    {t("readyForWeatherInsights")}
                 </Heading>
                 <MotionButton
                     size="lg"
@@ -106,7 +107,7 @@ const AboutUs = () => {
                     borderRadius="xl"
                     py={6}
                 >
-                    {/* {isChinese ? "立即开始探索" : "Start Exploring Now"} */}
+                    {t("startExploringNow")}
                 </MotionButton>
             </MotionBox>
         </MotionBox>
