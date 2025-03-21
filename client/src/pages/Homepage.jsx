@@ -292,7 +292,7 @@ export default function HomePage() {
                                                 justifyContent="center"
                                                 w={{ base: 10, md: 12 }}
                                                 h={{ base: 10, md: 12 }}
-                                                mr={{ base: 3, md: 4 }}
+                                                mr={{ base: 0, md: 4 }}
                                                 mb={{ base: 1, md: 0 }}
                                             >
                                                 <Icon
@@ -307,7 +307,7 @@ export default function HomePage() {
                                                     color="gray.500"
                                                     fontWeight="medium"
                                                     mb={{ base: 0.5, md: 0 }}
-                                                    textAlign={"left"}
+                                                    textAlign={{ base: 'center', md: 'left' }}
                                                 >
                                                     {isChinese ? card.title.zh : card.title.en || card.title}
                                                 </Text>
@@ -315,7 +315,7 @@ export default function HomePage() {
                                                     fontSize={{ base: 'lg', md: '2xl' }}
                                                     fontWeight="bold"
                                                     color="gray.800"
-                                                    textAlign={"left"}
+                                                    textAlign={{ base: 'center', md: 'left' }}
                                                 >
                                                     {card.value}
                                                 </Text>
