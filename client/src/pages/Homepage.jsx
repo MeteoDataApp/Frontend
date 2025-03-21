@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { motion } from "framer-motion";
 import { Heading, Text, Box, Button, Flex, Icon, Stack, Spinner, useBreakpointValue } from "@chakra-ui/react";
-import { FiArrowRight, FiDroplet, FiMapPin, FiRefreshCw, FiThermometer, FiWind, FiSun, FiCloud, FiEye, FiBarChart as FiBarometer, FiClock, FiCloudDrizzle } from "react-icons/fi";
+import { FiArrowRight, FiDroplet, FiMapPin, FiRefreshCw, FiThermometer, FiWind, FiBarChart as FiBarometer, FiCloudRain } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { useShowToast } from "../extensions/useShowToast";
 import { useEffect, useState } from "react";
@@ -66,12 +66,24 @@ export default function HomePage() {
             en: "Refresh Data",
             zh: "刷新数据",
         },
+        precipitation: {
+            en: "Precipitation",
+            zh: "降水",
+        },
+        pressure: {
+            en: "Pressure",
+            zh: "气压",
+        },
+        windDirection: {
+            en: "Wind Direction",
+            zh: "风向",
+        }
     };
 
     const fetchRealtimeWeatherData = async (lat, lon) => {
         try {
             const response = await fetch(
-                `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m`
+                `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,precipitation,surface_pressure,wind_direction_10m`
             );
 
             const data = await response.json();
@@ -80,7 +92,10 @@ export default function HomePage() {
                 temp: data.current.temperature_2m,
                 feels_like: data.current.apparent_temperature,
                 humidity: data.current.relative_humidity_2m,
-                wind_speed: data.current.wind_speed_10m
+                wind_speed: data.current.wind_speed_10m,
+                precipitation: data.current.precipitation,
+                pressure: data.current.surface_pressure,
+                wind_direction: data.current.wind_direction_10m,
             });
 
             reverseGeocode(lat, lon);
@@ -234,92 +249,80 @@ export default function HomePage() {
                                 }}
                             >
                                 {[
-                                    // Real Data Cards
+                                    { icon: FiThermometer, title: translations.temperature, value: `${weatherData.temp} °C` },
+                                    { icon: FiThermometer, title: translations.feelsLike, value: `${weatherData.feels_like} °C` },
+                                    { icon: FiDroplet, title: translations.humidity, value: `${weatherData.humidity} %` },
+                                    { icon: FiWind, title: translations.windSpeed, value: `${weatherData.wind_speed} km/h` },
+                                    { icon: FiCloudRain, title: translations.precipitation, value: `${weatherData.precipitation} mm` },
+                                    { icon: FiBarometer, title: translations.pressure, value: `${weatherData.pressure} hPa` },
+                                    { icon: FiWind, title: translations.windDirection, value: `${weatherData.wind_direction}°` }
+                                ].concat([
                                     { icon: FiThermometer, title: translations.temperature, value: `${weatherData.temp}°C` },
                                     { icon: FiThermometer, title: translations.feelsLike, value: `${weatherData.feels_like}°C` },
                                     { icon: FiDroplet, title: translations.humidity, value: `${weatherData.humidity}%` },
                                     { icon: FiWind, title: translations.windSpeed, value: `${weatherData.wind_speed} km/h` },
-
-                                    // Placeholder Demo Cards
-                                    { icon: FiSun, title: isChinese ? '紫外线指数' : 'UV Index', value: '3' },
-                                    { icon: FiCloud, title: isChinese ? '云量' : 'Cloud Cover', value: '40%' },
-                                    { icon: FiEye, title: isChinese ? '能见度' : 'Visibility', value: '10 km' },
-                                    { icon: FiBarometer, title: isChinese ? '气压' : 'Pressure', value: '1014 hPa' },
-                                    { icon: FiClock, title: isChinese ? '日出' : 'Sunrise', value: '6:24 AM' },
-                                    { icon: FiCloudDrizzle, title: isChinese ? '降水概率' : 'Precipitation', value: '15%' },
-                                ]
-                                    // Duplicate the cards to create seamless looping
-                                    .concat([
-                                        { icon: FiThermometer, title: translations.temperature, value: `${weatherData.temp}°C` },
-                                        { icon: FiThermometer, title: translations.feelsLike, value: `${weatherData.feels_like}°C` },
-                                        { icon: FiDroplet, title: translations.humidity, value: `${weatherData.humidity}%` },
-                                        { icon: FiWind, title: translations.windSpeed, value: `${weatherData.wind_speed} km/h` },
-                                        { icon: FiSun, title: isChinese ? '紫外线指数' : 'UV Index', value: '3' },
-                                        { icon: FiCloud, title: isChinese ? '云量' : 'Cloud Cover', value: '40%' },
-                                        { icon: FiEye, title: isChinese ? '能见度' : 'Visibility', value: '10 km' },
-                                        { icon: FiBarometer, title: isChinese ? '气压' : 'Pressure', value: '1014 hPa' },
-                                        { icon: FiClock, title: isChinese ? '日出' : 'Sunrise', value: '6:24 AM' },
-                                        { icon: FiCloudDrizzle, title: isChinese ? '降水概率' : 'Precipitation', value: '15%' },
-                                    ])
-                                    .map((card, index) => (
-                                        <MotionBox
-                                            key={index}
-                                            bg="white"
-                                            p={{ base: 3, md: 5 }}
-                                            borderRadius="xl"
-                                            transition={{ duration: 0.2 }}
-                                            display="flex"
-                                            flexDirection="column"
-                                            minWidth={{ base: '160px', md: '220px' }}
-                                            flex="none"
-                                            style={{
-                                                // Remove any potential gaps
-                                                marginRight: 0,
-                                                border: 'none',
-                                                outline: 'none'
-                                            }}
-                                        >
-                                            <Box display="flex" alignItems="center" flexDirection={{ base: 'column', md: 'row' }} gap={{ base: 2, md: 0 }}>
-                                                <Box
-                                                    bg="blue.50"
-                                                    p={{ base: 3, md: 4 }}
-                                                    borderRadius="full"
-                                                    display="flex"
-                                                    alignItems="center"
-                                                    justifyContent="center"
-                                                    w={{ base: 10, md: 12 }}
-                                                    h={{ base: 10, md: 12 }}
-                                                    mr={{ base: 3, md: 4 }}
-                                                    mb={{ base: 1, md: 0 }}
-                                                >
-                                                    <Icon
-                                                        as={card.icon}
-                                                        boxSize={{ base: 5, md: 6 }}
-                                                        color="blue.600"
-                                                    />
-                                                </Box>
-                                                <Box>
-                                                    <Text
-                                                        fontSize={{ base: '2xs', md: 'sm' }}
-                                                        color="gray.500"
-                                                        fontWeight="medium"
-                                                        mb={{ base: 0.5, md: 0 }}
-                                                        textAlign={"left"}
-                                                    >
-                                                        {isChinese ? card.title.zh : card.title.en || card.title}
-                                                    </Text>
-                                                    <Text
-                                                        fontSize={{ base: 'lg', md: '2xl' }}
-                                                        fontWeight="bold"
-                                                        color="gray.800"
-                                                        textAlign={"left"}
-                                                    >
-                                                        {card.value}
-                                                    </Text>
-                                                </Box>
+                                    { icon: FiCloudRain, title: translations.precipitation, value: `${weatherData.precipitation} mm` },
+                                    { icon: FiBarometer, title: translations.pressure, value: `${weatherData.pressure} hPa` },
+                                    { icon: FiWind, title: translations.windDirection, value: `${weatherData.wind_direction}°` }
+                                ]).map((card, index) => (
+                                    <MotionBox
+                                        key={index}
+                                        bg="white"
+                                        p={{ base: 3, md: 5 }}
+                                        borderRadius="xl"
+                                        transition={{ duration: 0.2 }}
+                                        display="flex"
+                                        flexDirection="column"
+                                        minWidth={{ base: '160px', md: '220px' }}
+                                        flex="none"
+                                        style={{
+                                            // Remove any potential gaps
+                                            marginRight: 0,
+                                            border: 'none',
+                                            outline: 'none'
+                                        }}
+                                    >
+                                        <Box display="flex" alignItems="center" flexDirection={{ base: 'column', md: 'row' }} gap={{ base: 2, md: 0 }}>
+                                            <Box
+                                                bg="blue.50"
+                                                p={{ base: 3, md: 4 }}
+                                                borderRadius="full"
+                                                display="flex"
+                                                alignItems="center"
+                                                justifyContent="center"
+                                                w={{ base: 10, md: 12 }}
+                                                h={{ base: 10, md: 12 }}
+                                                mr={{ base: 3, md: 4 }}
+                                                mb={{ base: 1, md: 0 }}
+                                            >
+                                                <Icon
+                                                    as={card.icon}
+                                                    boxSize={{ base: 5, md: 6 }}
+                                                    color="blue.600"
+                                                />
                                             </Box>
-                                        </MotionBox>
-                                    ))}
+                                            <Box>
+                                                <Text
+                                                    fontSize={{ base: '2xs', md: 'sm' }}
+                                                    color="gray.500"
+                                                    fontWeight="medium"
+                                                    mb={{ base: 0.5, md: 0 }}
+                                                    textAlign={"left"}
+                                                >
+                                                    {isChinese ? card.title.zh : card.title.en || card.title}
+                                                </Text>
+                                                <Text
+                                                    fontSize={{ base: 'lg', md: '2xl' }}
+                                                    fontWeight="bold"
+                                                    color="gray.800"
+                                                    textAlign={"left"}
+                                                >
+                                                    {card.value}
+                                                </Text>
+                                            </Box>
+                                        </Box>
+                                    </MotionBox>
+                                ))}
                             </motion.div>
                         </motion.div>
 
