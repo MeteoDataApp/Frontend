@@ -15,10 +15,12 @@ const Navbar = () => {
 
     const { i18n } = useTranslation();
 
+    const { t } = useTranslation();
+
     const links = [
-        { name: 'Home', path: '/', icon: FaHome, cn: '主页' },
-        { name: 'Dashboard', path: '/dashboard', icon: FaDatabase, cn: '仪表盘' },
-        { name: 'About Us', path: '/about', icon: FaInfoCircle, cn: '关于我们' },
+        { name: t("navbarHome"), path: '/', icon: FaHome },
+        { name: t("navbarDashboard"), path: '/dashboard', icon: FaDatabase },
+        { name: t("navbarAboutUs"), path: '/about', icon: FaInfoCircle },
     ];
 
     return (
@@ -67,7 +69,7 @@ const Navbar = () => {
                             px={3}
                             color="gray.600"
                         >
-                            Change Language
+                            {t("navbarChangeLanguage")}
                         </MenuButton>
                         <MenuList>
                             <MenuItem onClick={() => i18n.changeLanguage('en')}>
@@ -96,7 +98,7 @@ const Navbar = () => {
                             >
                                 <HStack>
                                     <Box as={link.icon} />
-                                    {/* <Text>{isChinese ? link.cn : link.name}</Text> */}
+                                    <Text>{link.name}</Text>
                                 </HStack>
                             </Link>
                         </MotionBox>
@@ -146,6 +148,30 @@ const Navbar = () => {
                                         transition="all 0.2s ease-in-out"
                                     />
                                 </Flex>
+
+                                {/* Language Menu */}
+                                <Box mb={8} display="flex" justifyContent="center">
+                                    <Menu>
+                                        <MenuButton
+                                            as={IconButton}
+                                            aria-label='Options'
+                                            leftIcon={<FaGlobe />}
+                                            variant='outline'
+                                            px={3}
+                                            color="gray.600"
+                                        >
+                                            {t("navbarChangeLanguage")}
+                                        </MenuButton>
+                                        <MenuList>
+                                            <MenuItem onClick={() => i18n.changeLanguage('en')}>
+                                                English (EN)
+                                            </MenuItem>
+                                            <MenuItem onClick={() => i18n.changeLanguage('cn')}>
+                                                中文 (CN)
+                                            </MenuItem>
+                                        </MenuList>
+                                    </Menu>
+                                </Box>
 
                                 {/* Navigation Links */}
                                 <VStack
@@ -202,7 +228,7 @@ const Navbar = () => {
                                                             color: '#4F46E5'
                                                         }}
                                                     >
-                                                        {/* {isChinese ? link.cn : link.name} */}
+                                                        {link.name}
                                                     </Text>
                                                 </HStack>
                                             </Link>
