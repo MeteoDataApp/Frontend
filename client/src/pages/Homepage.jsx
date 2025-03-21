@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { motion } from "framer-motion";
-import { Heading, Text, Box, Button, Flex, Grid, Icon, Stack, Spinner, useBreakpointValue } from "@chakra-ui/react";
-import { FiArrowRight, FiDroplet, FiMapPin, FiRefreshCw, FiThermometer, FiWind } from "react-icons/fi";
+import { Heading, Text, Box, Button, Flex, Icon, Stack, Spinner, useBreakpointValue } from "@chakra-ui/react";
+import { FiArrowRight, FiDroplet, FiMapPin, FiRefreshCw, FiThermometer, FiWind, FiSun, FiCloud, FiEye, FiBarChart as FiBarometer, FiClock, FiCloudDrizzle } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { useShowToast } from "../extensions/useShowToast";
 import { useEffect, useState } from "react";
@@ -17,7 +17,6 @@ export default function HomePage() {
 
     const { isChinese } = useLanguage();
 
-    const gridColumns = useBreakpointValue({ base: 1, md: 2, lg: 4 });
     const headingSize = useBreakpointValue({ base: '3xl', md: '4xl', lg: '5xl' });
     const buttonSize = useBreakpointValue({ base: 'md', md: 'lg' });
     const [requestReceived, setRequestReceived] = useState(false);
@@ -76,7 +75,7 @@ export default function HomePage() {
             );
 
             const data = await response.json();
-            
+
             setWeatherData({
                 temp: data.current.temperature_2m,
                 feels_like: data.current.apparent_temperature,
@@ -111,7 +110,7 @@ export default function HomePage() {
                 isChinese ? "获取位置数据时发生错误" : "An error occurred while fetching location data",
                 isChinese ? "查看控制台获取更多细节" : "See console for more details"
             );
-    
+
         } finally {
             setRequestReceived(true);
         }
@@ -211,74 +210,118 @@ export default function HomePage() {
 
                 {weatherData !== null && locationData !== null && (
                     <>
-                        <Grid
-                            templateColumns={`repeat(${gridColumns}, 1fr)`}
-                            gap={{ base: 4, md: 6 }}
-                            w="100%"
-                            mb={{ base: 6, md: 10 }}
-                            justifyItems={{ base: 'center', md: 'stretch' }}
+                        <motion.div
+                            style={{
+                                width: '100%',
+                                overflow: 'hidden',
+                                position: 'relative',
+                                padding: '1rem 0'
+                            }}
                         >
-                            {[
-                                { icon: FiThermometer, title: isChinese ? translations.temperature.zh : translations.temperature.en, value: `${weatherData.temp}°C` },
-                                { icon: FiThermometer, title: isChinese ? translations.feelsLike.zh : translations.feelsLike.en, value: `${weatherData.feels_like}C` },
-                                { icon: FiDroplet, title: isChinese ? translations.humidity.zh : translations.humidity.en, value: `${weatherData.humidity}%` },
-                                { icon: FiWind, title: isChinese ? translations.windSpeed.zh : translations.windSpeed.en, value: `${weatherData.wind_speed} km/h` },
-                            ].map((card, index) => (
-                                <MotionBox
-                                    key={index}
-                                    bg="white"
-                                    p={{ base: 3, md: 5 }}
-                                    borderRadius="xl"
-                                    boxShadow={{ base: 'md', md: 'lg' }}
-                                    whileHover={{ y: -2, scale: 1.02 }}
-                                    transition={{ duration: 0.2 }}
-                                    display="flex"  
-                                    flexDirection="column" 
-                                    alignItems={{ base: 'center', md: 'flex-start' }}
-                                    justifyContent={{ base: 'center', md: 'space-between' }}
-                                    textAlign={{ base: 'center', md: 'left' }}
-                                    w={{ base: '160px', md: 'full' }}
-                                >
-                                    <Box display="flex" alignItems="center" flexDirection={{ base: 'column', md: 'row' }} gap={{ base: 2, md: 0 }}>
-                                        <Box
-                                            bg="blue.50"
-                                            p={{ base: 3, md: 4 }}
-                                            borderRadius="full"
-                                            display="flex" 
-                                            alignItems="center" 
-                                            justifyContent="center" 
-                                            w={{ base: 10, md: 12 }}  
-                                            h={{ base: 10, md: 12 }}
-                                            mr={{ base: 3, md: 4 }}
-                                            mb={{ base: 1, md: 0 }}
+                            <motion.div
+                                style={{
+                                    display: 'flex',
+                                    gap: '1rem',
+                                    width: 'max-content'
+                                }}
+                                animate={{
+                                    x: ['0%', '-50%'] // Only animate halfway
+                                }}
+                                transition={{
+                                    duration: 40,
+                                    ease: 'linear',
+                                    repeat: Infinity
+                                }}
+                            >
+                                {[
+                                    // Real Data Cards
+                                    { icon: FiThermometer, title: translations.temperature, value: `${weatherData.temp}°C` },
+                                    { icon: FiThermometer, title: translations.feelsLike, value: `${weatherData.feels_like}°C` },
+                                    { icon: FiDroplet, title: translations.humidity, value: `${weatherData.humidity}%` },
+                                    { icon: FiWind, title: translations.windSpeed, value: `${weatherData.wind_speed} km/h` },
+
+                                    // Placeholder Demo Cards
+                                    { icon: FiSun, title: isChinese ? '紫外线指数' : 'UV Index', value: '3' },
+                                    { icon: FiCloud, title: isChinese ? '云量' : 'Cloud Cover', value: '40%' },
+                                    { icon: FiEye, title: isChinese ? '能见度' : 'Visibility', value: '10 km' },
+                                    { icon: FiBarometer, title: isChinese ? '气压' : 'Pressure', value: '1014 hPa' },
+                                    { icon: FiClock, title: isChinese ? '日出' : 'Sunrise', value: '6:24 AM' },
+                                    { icon: FiCloudDrizzle, title: isChinese ? '降水概率' : 'Precipitation', value: '15%' },
+                                ]
+                                    // Duplicate the cards to create seamless looping
+                                    .concat([
+                                        { icon: FiThermometer, title: translations.temperature, value: `${weatherData.temp}°C` },
+                                        { icon: FiThermometer, title: translations.feelsLike, value: `${weatherData.feels_like}°C` },
+                                        { icon: FiDroplet, title: translations.humidity, value: `${weatherData.humidity}%` },
+                                        { icon: FiWind, title: translations.windSpeed, value: `${weatherData.wind_speed} km/h` },
+                                        { icon: FiSun, title: isChinese ? '紫外线指数' : 'UV Index', value: '3' },
+                                        { icon: FiCloud, title: isChinese ? '云量' : 'Cloud Cover', value: '40%' },
+                                        { icon: FiEye, title: isChinese ? '能见度' : 'Visibility', value: '10 km' },
+                                        { icon: FiBarometer, title: isChinese ? '气压' : 'Pressure', value: '1014 hPa' },
+                                        { icon: FiClock, title: isChinese ? '日出' : 'Sunrise', value: '6:24 AM' },
+                                        { icon: FiCloudDrizzle, title: isChinese ? '降水概率' : 'Precipitation', value: '15%' },
+                                    ])
+                                    .map((card, index) => (
+                                        <MotionBox
+                                            key={index}
+                                            bg="white"
+                                            p={{ base: 3, md: 5 }}
+                                            borderRadius="xl"
+                                            transition={{ duration: 0.2 }}
+                                            display="flex"
+                                            flexDirection="column"
+                                            minWidth={{ base: '160px', md: '220px' }}
+                                            flex="none"
+                                            style={{
+                                                // Remove any potential gaps
+                                                marginRight: 0,
+                                                border: 'none',
+                                                outline: 'none'
+                                            }}
                                         >
-                                            <Icon 
-                                                as={card.icon} 
-                                                boxSize={{ base: 5, md: 6 }} 
-                                                color="blue.600" 
-                                            />
-                                        </Box>
-                                        <Box>
-                                            <Text 
-                                                fontSize={{ base: '2xs', md: 'sm' }}
-                                                color="gray.500" 
-                                                fontWeight="medium"
-                                                mb={{ base: 0.5, md: 0 }}
-                                            >
-                                                {card.title}
-                                            </Text>
-                                            <Text 
-                                                fontSize={{ base: 'lg', md: '2xl' }}
-                                                fontWeight="bold" 
-                                                color="gray.800"
-                                            >
-                                                {card.value}
-                                            </Text>
-                                        </Box>
-                                    </Box>
-                                </MotionBox>
-                            ))}
-                        </Grid>
+                                            <Box display="flex" alignItems="center" flexDirection={{ base: 'column', md: 'row' }} gap={{ base: 2, md: 0 }}>
+                                                <Box
+                                                    bg="blue.50"
+                                                    p={{ base: 3, md: 4 }}
+                                                    borderRadius="full"
+                                                    display="flex"
+                                                    alignItems="center"
+                                                    justifyContent="center"
+                                                    w={{ base: 10, md: 12 }}
+                                                    h={{ base: 10, md: 12 }}
+                                                    mr={{ base: 3, md: 4 }}
+                                                    mb={{ base: 1, md: 0 }}
+                                                >
+                                                    <Icon
+                                                        as={card.icon}
+                                                        boxSize={{ base: 5, md: 6 }}
+                                                        color="blue.600"
+                                                    />
+                                                </Box>
+                                                <Box>
+                                                    <Text
+                                                        fontSize={{ base: '2xs', md: 'sm' }}
+                                                        color="gray.500"
+                                                        fontWeight="medium"
+                                                        mb={{ base: 0.5, md: 0 }}
+                                                        textAlign={"left"}
+                                                    >
+                                                        {isChinese ? card.title.zh : card.title.en || card.title}
+                                                    </Text>
+                                                    <Text
+                                                        fontSize={{ base: 'lg', md: '2xl' }}
+                                                        fontWeight="bold"
+                                                        color="gray.800"
+                                                        textAlign={"left"}
+                                                    >
+                                                        {card.value}
+                                                    </Text>
+                                                </Box>
+                                            </Box>
+                                        </MotionBox>
+                                    ))}
+                            </motion.div>
+                        </motion.div>
 
                         <motion.div
                             initial={{ opacity: 0, y: 10 }}
@@ -302,10 +345,10 @@ export default function HomePage() {
                                 mx="auto"
                                 transition="all 0.2s ease"
                             >
-                                <Icon 
-                                    as={FiMapPin} 
+                                <Icon
+                                    as={FiMapPin}
                                     boxSize={{ base: 4, md: 5 }}
-                                    color="blue.500" 
+                                    color="blue.500"
                                     style={{ filter: "drop-shadow(0 2px 2px rgba(0, 0, 0, 0.1))" }}
                                 />
                                 <Text
