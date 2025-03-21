@@ -1,6 +1,7 @@
+/* eslint-disable react/no-unescaped-entities */
 import { motion } from 'framer-motion';
-import { Box, Heading, Text, Button, Flex, Icon } from '@chakra-ui/react';
-import { FiCompass, FiHome } from 'react-icons/fi';
+import { Box, Heading, Text, Button, Flex } from '@chakra-ui/react';
+import { FiHome } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 
 const NotFound = () => {

@@ -7,6 +7,7 @@ import HomePage from './pages/Homepage'
 import AboutUs from './pages/AboutUs'
 import Dashboard from './pages/Dashboard'
 import NotFound from './pages/NotFound'
+import './i18n.js'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
 	<ChakraProvider>

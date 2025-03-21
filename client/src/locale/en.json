@@ -1,0 +1,20 @@
+{
+    "translation": {
+        "homepageTitle": "Unlock Advanced Weather Insights",
+        "anErrorOccuredWhileFetchingWeatherData": "An error occurred while fetching weather data",
+        "seeConsoleForMoreDetails": "See console for more details",
+        "anErrorOccuredWhileFetchingLocationData": "An error occurred while fetching location data",
+        "geolocationIsNotSupportedByYourBrowser": "Geolocation is not supported by your browser",
+        "homepageDescription": "Dive deeper into hyper-local forecasts, historical trends, and real-time climate analytics",
+        "launchWeatherDashboard": "Launch Weather Dashboard",
+        "currentLocation": "Current Location: ",
+        "refreshData": "Refresh Data",
+        "temperature": "Temperature",
+        "feelsLike": "Feels Like",
+        "humidity": "Humidity",
+        "windSpeed": "Wind Speed",
+        "precipitation": "Precipitation",
+        "pressure": "Pressure",
+        "windDirection": "Wind Direction"
+    }
+}

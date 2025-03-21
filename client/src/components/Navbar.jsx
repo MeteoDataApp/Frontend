@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { Box, Flex, Heading, Text, HStack, Link, IconButton, Drawer, DrawerOverlay, DrawerContent, DrawerBody, VStack } from '@chakra-ui/react';
+import { Box, Flex, Heading, Text, HStack, Link, IconButton, Drawer, DrawerOverlay, DrawerContent, DrawerBody, VStack, Menu, MenuButton, MenuList, MenuItem } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
-import { FaDatabase, FaHome, FaInfoCircle, FaTimes } from 'react-icons/fa';
+import { FaDatabase, FaGlobe, FaHome, FaInfoCircle, FaTimes } from 'react-icons/fa';
 import { HamburgerIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
-import useLanguage from '../hooks/useLanguage';
+import { useTranslation } from 'react-i18next';
 
 const Navbar = () => {
     const navigate = useNavigate();
@@ -13,7 +13,7 @@ const Navbar = () => {
     const MotionBox = motion.create(Box);
     const MotionFlex = motion.create(Flex);
 
-    const { isChinese, toggleLanguage } = useLanguage();
+    const { i18n } = useTranslation();
 
     const links = [
         { name: 'Home', path: '/', icon: FaHome, cn: '主页' },
@@ -58,21 +58,27 @@ const Navbar = () => {
                 </MotionBox>
 
                 <HStack spacing={8} display={{ base: 'none', md: 'flex' }}>
-                    <IconButton
-                        aria-label="Toggle language"
-                        icon={<Text>{isChinese ? '中文' : 'EN'}</Text>}
-                        onClick={toggleLanguage}
-                        variant="ghost"
-                        borderRadius="full"
-                        size="lg"
-                        color="gray.600"
-                        _hover={{
-                            bg: 'whiteAlpha.300',
-                            color: '#4F46E5'
-                        }}
-                        transition="all 0.2s ease-in-out"
-                    />
-                    
+                    <Menu>
+                        <MenuButton
+                            as={IconButton}
+                            aria-label='Options'
+                            leftIcon={<FaGlobe />}
+                            variant='outline'
+                            px={3}
+                            color="gray.600"
+                        >
+                            Change Language
+                        </MenuButton>
+                        <MenuList>
+                            <MenuItem onClick={() => i18n.changeLanguage('en')}>
+                                English (EN)
+                            </MenuItem>
+                            <MenuItem onClick={() => i18n.changeLanguage('cn')}>
+                                中文 (CN)
+                            </MenuItem>
+                        </MenuList>
+                    </Menu>
+
                     {links.map((link) => (
                         <MotionBox key={link.name}>
                             <Link
@@ -90,7 +96,7 @@ const Navbar = () => {
                             >
                                 <HStack>
                                     <Box as={link.icon} />
-                                    <Text>{isChinese ? link.cn : link.name}</Text>
+                                    {/* <Text>{isChinese ? link.cn : link.name}</Text> */}
                                 </HStack>
                             </Link>
                         </MotionBox>
@@ -140,24 +146,6 @@ const Navbar = () => {
                                         transition="all 0.2s ease-in-out"
                                     />
                                 </Flex>
-
-                                {/* Language Toggle */}
-                                <Box mb={8} >
-                                    <IconButton
-                                        aria-label="Toggle language"
-                                        icon={<Text>{isChinese ? '中文' : 'EN'}</Text>}
-                                        onClick={toggleLanguage}
-                                        variant="ghost"
-                                        borderRadius="full"
-                                        size="lg"
-                                        color="gray.600"
-                                        _hover={{
-                                            bg: 'whiteAlpha.300',
-                                            color: '#4F46E5'
-                                        }}
-                                        transition="all 0.2s ease-in-out"
-                                    />
-                                </Box>
 
                                 {/* Navigation Links */}
                                 <VStack
@@ -214,7 +202,7 @@ const Navbar = () => {
                                                             color: '#4F46E5'
                                                         }}
                                                     >
-                                                        {isChinese ? link.cn : link.name}
+                                                        {/* {isChinese ? link.cn : link.name} */}
                                                     </Text>
                                                 </HStack>
                                             </Link>
