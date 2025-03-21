@@ -9,16 +9,11 @@ import { useShowToast } from '../extensions/useShowToast';
 import server from "../../networking";
 import ByStationLineChart from '../components/ByStationLineChart';
 import { FiArrowDown, FiArrowLeft, FiArrowUp, FiCalendar, FiMapPin } from 'react-icons/fi';
-import { useTranslation } from 'react-i18next';
 
 const Dashboard = () => {
     const MotionBox = motion.div;
 
     const showToast = useShowToast();
-
-    const { t, i18n } = useTranslation();
-
-    const activeLanguage = i18n.language;
 
     const [selectedStation, setSelectedStation] = useState(null);
     const [searchedStationCode, setSearchedStationCode] = useState(null);
@@ -50,10 +45,9 @@ const Dashboard = () => {
     const [screenIsNarrowerThan700px] = useMediaQuery("(max-width: 700px)");
     const [screenIsNarrowerThan610px] = useMediaQuery("(max-width: 610px)");
 
-    const sortAverageTemperature = useBreakpointValue({ base: t("avgTemp"), md: t("mdAvgTemp"),  lg: t("avgTemp") });
-    const sort5DayAverageTemperature = useBreakpointValue({ base: t("5-dayAvgTemp"), md: t("md5-dayAvgTemp"),  lg: t("5-dayAvgTemp") });
-    const avgTempLabel = useBreakpointValue({  base: t("baseAvgTemp"),  md: t("mdAvgTemp"),  lg: t("avgTemp") });
-    const fdAvgTempLabel = useBreakpointValue({  base: t("base5-dayAvgTemp"),  md: t("md5-dayAvgTemp"),  lg: t("5-dayAvgTemp") });
+    // const avgTempLabel = useBreakpointValue({  base: isChinese ? "均温" : "Avg.",  md: isChinese ? "平均温度" : "Average Temp.",  lg: isChinese ? "平均温度" : "Average Temperature" });
+    
+    // const fdAvgTempLabel = useBreakpointValue({  base: isChinese ? "5日均温" : "FDAvg.",  md: isChinese ? "5日平均温度" : "5-day Avg. Temp.",  lg: isChinese ? "5日平均温度" : "5-day Average Temperature" });
 
     ChartJS.register(
         CategoryScale,
@@ -64,76 +58,76 @@ const Dashboard = () => {
         Legend
     );
 
-    const TemperatureComparisonChart = ({ data, date }) => {
-        const chartData = {
-            labels: data.map(entry => stationList.find(s => s.code === entry.Station)?.name),
-            datasets: [{
-                label: `${t("avgTemp")} (°C) - ${date}`,
-                data: data.map(entry => entry.Avg),
-                backgroundColor: [
-                    'rgba(99, 102, 241, 0.8)',
-                    'rgba(236, 72, 153, 0.8)',
-                    'rgba(16, 185, 129, 0.8)'
-                ],
-                borderColor: [
-                    'rgba(99, 102, 241, 1)',
-                    'rgba(236, 72, 153, 1)',
-                    'rgba(16, 185, 129, 1)'
-                ],
-                borderWidth: 2,
-                borderRadius: 8,
-                hoverBorderWidth: 3
-            }]
-        };
+    // const TemperatureComparisonChart = ({ data, date }) => {
+    //     const chartData = {
+    //         labels: data.map(entry => isChinese ? entry.name : stationList.find(s => s.code === entry.Station)?.enName),
+    //         datasets: [{
+    //             label: isChinese ? `平均温度 (°C) - ${date}` : `Average Temperature (°C) - ${date}`,
+    //             data: data.map(entry => entry.Avg),
+    //             backgroundColor: [
+    //                 'rgba(99, 102, 241, 0.8)',
+    //                 'rgba(236, 72, 153, 0.8)',
+    //                 'rgba(16, 185, 129, 0.8)'
+    //             ],
+    //             borderColor: [
+    //                 'rgba(99, 102, 241, 1)',
+    //                 'rgba(236, 72, 153, 1)',
+    //                 'rgba(16, 185, 129, 1)'
+    //             ],
+    //             borderWidth: 2,
+    //             borderRadius: 8,
+    //             hoverBorderWidth: 3
+    //         }]
+    //     };
 
-        const options = {
-            responsive: true,
-            plugins: {
-                legend: {
-                    display: false
-                },
-                title: {
-                    display: true,
-                    text: `${t("avgTemp")} (°C) - ${date}`,
-                    color: useColorModeValue('#1A202C', '#FFFFFF'),
-                    font: { size: 18 }
-                }
-            },
-            scales: {
-                x: {
-                    grid: { display: false },
-                    ticks: {
-                        color: useColorModeValue('#1A202C', '#FFFFFF'),
-                        font: { weight: 'bold' }
-                    }
-                },
-                y: {
-                    grid: { color: useColorModeValue('rgba(0,0,0,0.1)', 'rgba(255,255,255,0.1)') },
-                    ticks: {
-                        color: useColorModeValue('#1A202C', '#FFFFFF'),
-                        stepSize: 5
-                    }
-                }
-            },
-            animation: {
-                duration: 1500,
-                easing: 'easeInOutQuart'
-            }
-        };
+    //     const options = {
+    //         responsive: true,
+    //         plugins: {
+    //             legend: {
+    //                 display: false
+    //             },
+    //             title: {
+    //                 display: true,
+    //                 text: isChinese ? `平均温度 (°C) - ${date}` : `Average Temperature (°C) - ${date}`,
+    //                 color: useColorModeValue('#1A202C', '#FFFFFF'),
+    //                 font: { size: 18 }
+    //             }
+    //         },
+    //         scales: {
+    //             x: {
+    //                 grid: { display: false },
+    //                 ticks: {
+    //                     color: useColorModeValue('#1A202C', '#FFFFFF'),
+    //                     font: { weight: 'bold' }
+    //                 }
+    //             },
+    //             y: {
+    //                 grid: { color: useColorModeValue('rgba(0,0,0,0.1)', 'rgba(255,255,255,0.1)') },
+    //                 ticks: {
+    //                     color: useColorModeValue('#1A202C', '#FFFFFF'),
+    //                     stepSize: 5
+    //                 }
+    //             }
+    //         },
+    //         animation: {
+    //             duration: 1500,
+    //             easing: 'easeInOutQuart'
+    //         }
+    //     };
 
-        return (
-            <MotionBox
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                bg={useColorModeValue('white', 'gray.700')}
-                p={6}
-                borderRadius="xl"
-                boxShadow="xl"
-            >
-                <Bar data={chartData} options={options} />
-            </MotionBox>
-        );
-    };
+    //     return (
+    //         <MotionBox
+    //             initial={{ opacity: 0, y: 20 }}
+    //             animate={{ opacity: 1, y: 0 }}
+    //             bg={useColorModeValue('white', 'gray.700')}
+    //             p={6}
+    //             borderRadius="xl"
+    //             boxShadow="xl"
+    //         >
+    //             <Bar data={chartData} options={options} />
+    //         </MotionBox>
+    //     );
+    // };
 
     const handleSubmitStation = async () => {
         if (!selectedStation) return;
@@ -149,20 +143,20 @@ const Dashboard = () => {
             const response = await server.get(`/by_station?${query}`);
             setData(response.data.data);
             if (response.data.length === 0) {
-                showToast(
-                    "error",
-                    "",
-                    t("tryAnotherStationOrDate")
-                );
+                // showToast(
+                //     "error",
+                //     "",
+                //     isChinese ? "请尝试其他车站或日期范围" : "Please try another station or date range"
+                // );
             }
         } catch (error) {
             setData([]);
             if (error.response.data.success === false) {
-                showToast(
-                    "error",
-                    t("error"),
-                    error.response?.data?.error
-                );
+                // showToast(
+                //     "error",
+                //     isChinese ? "请求失败" : "",
+                //     error.response.data.error
+                // );
             }
         } finally {
             setLoading(false);
@@ -183,11 +177,11 @@ const Dashboard = () => {
         } catch (error) {
             setData([]);
             if (error.response.data.success === false) {
-                showToast(
-                    "error",
-                    t("error"),
-                    error.response?.data?.error
-                );
+                // showToast(
+                //     "error",
+                //     isChinese ? "请求失败" : "",
+                //     error.response.data.error
+                // );
             }
         } finally {
             setLoading(false);
@@ -196,16 +190,16 @@ const Dashboard = () => {
 
     const openAdvancedAnalysisModal = async () => {
         if (advancedAnalysisList.length < 2) {
-            showToast(
-                "error",
-                t("selectAtLeastTwoStations")
-            );
+            // showToast(
+            //     "error",
+            //     isChinese ? "请至少选择两个车站" : "Please select at least 2 stations"
+            // );
             return;
         } else if (advancedAnalysisList.length > 3) {
-            showToast(
-                "error",
-                t("selectMaxThreeStations")
-            );
+            // showToast(
+            //     "error",
+            //     isChinese ? "最多只能选择3个车站" : "You can select a max of 3 stations"
+            // );
             return;
         } else {
             onOpen();
@@ -225,11 +219,11 @@ const Dashboard = () => {
             setChartModalOpen(true);
         } catch (error) {
             if (error.response.data.success === false) {
-                showToast(
-                    "error",
-                    t("error"),
-                    error.response?.data?.error
-                );
+                // showToast(
+                //     "error",
+                //     isChinese ? "请求失败" : "",
+                //     error.response.data.error
+                // );
             }
         } finally {
             setAdvancedLoading(false);
@@ -283,19 +277,19 @@ const Dashboard = () => {
     };
 
     const stationList = [
-        { code: 58349, name: t("Suzhou"), image: "Suzhou.jpg" },
-        { code: 58238, name: t("Nanjing"), image: "Nanjing.jpg" },
-        { code: 58354, name: t("Wuxi"), image: "Wuxi.jpg" },
-        { code: 58343, name: t("Changzhou"), image: "Changzhou.jpg" },
-        { code: 58252, name: t("Zhenjiang"), image: "Zhenjiang.jpg" },
-        { code: 58259, name: t("Nantong"), image: "Nantong.jpg" },
-        { code: 58246, name: t("Taizhou"), image: "Taizhou.jpg" },
-        { code: 58245, name: t("Yangzhou"), image: "Yangzhou.jpg" },
-        { code: 58027, name: t("Xuzhou"), image: "Xuzhou.jpg" },
-        { code: 58044, name: t("Lianyungang"), image: "Lianyungang.jpg" },
-        { code: 58141, name: t("Huaian"), image: "Huaian.jpg" },
-        { code: 58154, name: t("Yancheng"), image: "Yancheng.jpg" },
-        { code: 58131, name: t("Suqian"), image: "Suqian.jpg" },
+        { code: 58349, enName: "Suzhou", name: "苏州", image: "Suzhou.jpg" },
+        { code: 58238, enName: "Nanjing", name: "南京", image: "Nanjing.jpg" },
+        { code: 58354, enName: "Wuxi", name: "无锡", image: "Wuxi.jpg" },
+        { code: 58343, enName: "Changzhou", name: "常州", image: "Changzhou.jpg" },
+        { code: 58252, enName: "Zhenjiang", name: "镇江", image: "Zhenjiang.jpg" },
+        { code: 58259, enName: "Nantong", name: "南通", image: "Nantong.jpg" },
+        { code: 58246, enName: "Taizhou", name: "泰州", image: "Taizhou.jpg" },
+        { code: 58245, enName: "Yangzhou", name: "扬州", image: "Yangzhou.jpg" },
+        { code: 58027, enName: "Xuzhou", name: "徐州", image: "Xuzhou.jpg" },
+        { code: 58044, enName: "Lianyungang", name: "连云港", image: "Lianyungang.jpg" },
+        { code: 58141, enName: "Huai'an", name: "淮安", image: "Huaian.jpg" },
+        { code: 58154, enName: "Yancheng", name: "盐城", image: "Yancheng.jpg" },
+        { code: 58131, enName: "Suqian", name: "宿迁", image: "Suqian.jpg" },
     ];
 
     const paginateData = (data) => {
@@ -349,7 +343,7 @@ const Dashboard = () => {
                             mb={3}
                             mt={24}
                         >
-                            {t("dashboardTitle")}
+                            {/* {isChinese ? '天气数据仪表盘' : 'Weather Dashboard'} */}
                         </Heading>
                     </MotionBox>
 
@@ -383,7 +377,7 @@ const Dashboard = () => {
                                     borderRadius="full"
                                     transition="all 0.2s"
                                 >
-                                    {t("searchByStation")}
+                                    {/* {isChinese ? '按站点查询' : 'Search By Station'} */}
                                 </Tab>
                                 <Tab
                                     onClick={() => {
@@ -404,7 +398,7 @@ const Dashboard = () => {
                                     borderRadius="full"
                                     transition="all 0.2s"
                                 >
-                                    {t("searchByDate")}
+                                    {/* {isChinese ? '按日期查询' : 'Search By Date'} */}
                                 </Tab>
                             </TabList>
                             <TabPanels mb={4}>
@@ -427,7 +421,7 @@ const Dashboard = () => {
                                                     w={{ base: "100%", sm: "auto" }}
                                                     mt={{ base: 0, sm: 0, md: 7 }}
                                                 >
-                                                    {selectedStation ? `${stationList.find(s => s.code === selectedStation).name} (${selectedStation})` : t("selectStation")}
+                                                    {/* {selectedStation ? isChinese ? `${stationList.find(s => s.code === selectedStation).name} (${selectedStation})` : `${stationList.find(s => s.code === selectedStation).enName} (${selectedStation})` : isChinese ? '选择站点' : 'Select Station'} */}
                                                 </MenuButton>
                                                 <MenuList maxH="300px" overflowY="auto">
                                                     {stationList.map(station => (
@@ -435,7 +429,7 @@ const Dashboard = () => {
                                                             key={station.code}
                                                             onClick={() => setSelectedStation(station.code)}
                                                         >
-                                                            {station.name} ({station.code})
+                                                            {/* {isChinese ? station.name : station.enName} ({station.code}) */}
                                                         </MenuItem>
                                                     ))}
                                                 </MenuList>
@@ -450,7 +444,7 @@ const Dashboard = () => {
                                             width={{ base: "100%", sm: "auto" }}
                                         >
                                             <FormControl w={{ base: "100%", sm: "200px" }}>
-                                                <FormLabel fontSize="sm" color="gray.300">{t("startDate")}</FormLabel>
+                                                {/* <FormLabel fontSize="sm" color="gray.300">{isChinese ? '开始日期' : 'Start Date'}</FormLabel> */}
                                                 <Input
                                                     type="date"
                                                     value={startDate}
@@ -463,7 +457,7 @@ const Dashboard = () => {
                                             </FormControl>
 
                                             <FormControl w={{ base: "100%", sm: "200px" }}>
-                                                <FormLabel fontSize="sm" color="gray.300">{t("endDate")}</FormLabel>
+                                                {/* <FormLabel fontSize="sm" color="gray.300">{isChinese ? '结束日期' : 'End Date'}</FormLabel> */}
                                                 <Input
                                                     type="date"
                                                     value={endDate}
@@ -499,7 +493,7 @@ const Dashboard = () => {
                                                 isLoading={loading}
                                                 isDisabled={!selectedStation}
                                             >
-                                                {t("search")}
+                                                {/* {isChinese ? '搜索' : 'Search'} */}
                                             </Button>
                                         </Flex>
                                     </Flex>
@@ -548,7 +542,7 @@ const Dashboard = () => {
                                                 }}
                                                 isLoading={loading}
                                             >
-                                                {t("search")}
+                                                {/* {isChinese ? '搜索' : 'Search'} */}
                                             </Button>
                                         </Flex>
 
@@ -571,7 +565,7 @@ const Dashboard = () => {
                                                 isLoading={advancedLoading}
                                                 isDisabled={advancedAnalysisList.length < 2}
                                             >
-                                                {t("advancedAnalysis")}
+                                                {/* {isChinese ? '高级分析' : 'Advanced Analysis'} */}
                                             </Button>
                                         )}
                                     </Flex>
@@ -591,23 +585,26 @@ const Dashboard = () => {
                                 <TableContainer bg="white" borderRadius="xl" boxShadow="xl" mb="8rem">
                                     <Table variant="striped">
                                         <Thead>
-                                            <Tr>
+                                            {/* <Tr>
 
-                                                <Th>{t("station")}</Th>
-                                                <Th>{t("date")}</Th>
+                                                <Th>{isChinese ? '站点' : 'Station'}</Th>
+                                                <Th>
+                                                    {isChinese ? '日期' : 'Date'}
+                                                </Th>
                                                 <Th cursor="pointer" onClick={sortDataAvg}>
-                                                    {t("avgTemp")}(°C)
+                                                    {isChinese ? '平均温度 (°C)' : 'Avg Temp (°C)'}
                                                     {sortOrderAvg === 'asc' ? ' ↑' : ' ↓'}
                                                 </Th>
                                                 <Th cursor="pointer" onClick={sortDataFD}>
-                                                    {t("5-dayAvgTemp")}(°C)
+                                                    {isChinese ? '五日平均温度 (°C)' : '5-day Avg Temp (°C)'}
                                                     {sortOrderFD === 'asc' ? ' ↑' : ' ↓'}
                                                 </Th>
-                                            </Tr>
+                                            </Tr> */}
                                         </Thead>
                                         <Tbody>
                                             {displayedData.map((record) => {
-                                                const stationInfo = stationList.find(s => s.code === record.Station);
+                                                // const stationInfo = stationList.find(s => s.code === record.Station);
+
                                                 return (
                                                     <Tr key={record._id}>
                                                         <Td>
@@ -623,7 +620,7 @@ const Dashboard = () => {
                                                                         borderColor={"gray.400"}
                                                                     />
                                                                 )}
-                                                                {screenIsNarrowerThan700px ? stationInfo.name : `${stationInfo.name} (${record.Station})`}
+                                                                {screenIsNarrowerThan700px ? (isChinese ? stationInfo.name : stationInfo.enName) : isChinese ? `${stationInfo.name} (${record.Station})` : `${stationInfo.enName} (${record.Station})`}
                                                             </Box>
                                                         </Td>
                                                         <Td>{record.Date}</Td>
@@ -638,7 +635,7 @@ const Dashboard = () => {
                             </MotionBox>
                         ) : (
                             <Text textAlign="center" fontSize="xl" fontWeight="bold" color="gray.500" p={10}>
-                                {t("tableNotSupported")}
+                                {/* {isChinese ? "请切换到横屏模式或使用更大屏幕以获得更好体验" : "Please switch to landscape mode or view on a larger screen"} */}
                             </Text>
                         )
                     )}
@@ -705,7 +702,7 @@ const Dashboard = () => {
                                             textShadow: '4px 4px 8px rgba(0,0,0,0.1)',
                                         }}
                                     >
-                                        {selectedStationName ? stationList.find(s => s.code === searchedStationCode)?.name : "Station"}
+                                        {/* {selectedStationName ? (isChinese ? selectedStationName : stationList.find(s => s.code === searchedStationCode)?.enName) : "Station"} */}
                                     </Text>
                                 </Box>
 
@@ -760,13 +757,13 @@ const Dashboard = () => {
                                                 mb={{ base: 4, md: 0 }} 
                                                 boxShadow="xl"
                                             >
-                                                {`${
-                                                    t("sortBy")
+                                                {/* {`${
+                                                    isChinese ? "排序依据" : "Sort by"
                                                 } ${{
-                                                    date: t("date"),
-                                                    avg: sortAverageTemperature,
-                                                    FD: sort5DayAverageTemperature
-                                                }[sortType]}`}
+                                                    date: isChinese ? "日期" : "Date",
+                                                    avg: isChinese ? "温度" : "Temperature",
+                                                    FD: isChinese ? "5日均温" : "5-Day Avg"
+                                                }[sortType]}`} */}
                                             </Button>
                                         )
                                     })}
@@ -897,10 +894,7 @@ const Dashboard = () => {
                                     transition={{ duration: 0.5 }}
                                 >
                                     <Heading size="md" mb={4} bgGradient="linear(to-r, #6366f1, #ec4899)" bgClip="text" fontSize={{ base: '3xl', md: '4xl' }} mt={14}>
-                                        {activeLanguage === "en" 
-                                            ? `${t("weatherDataTrendIn")} ${selectedStationName ? stationList.find(s => s.code === searchedStationCode)?.name : "Station"}`
-                                            : `${selectedStationName ? stationList.find(s => s.code === searchedStationCode)?.name : "Station"} ${t("weatherDataTrendIn")}`
-                                        }
+                                        {/* {isChinese ? `${selectedStationName ? (isChinese ? selectedStationName : stationList.find(s => s.code === searchedStationCode)?.enName) : "Station"} 天气数据趋势` : `Weather Data Trend in ${selectedStationName ? (isChinese ? selectedStationName : stationList.find(s => s.code === searchedStationCode)?.enName) : "Station"}`} */}
                                     </Heading>
                                     <Box h={{ base: '40vh', md: '50vh' }} w="90vw" mb={32} alignItems="center" justifyContent="center" mx="auto" position="relative">
                                         {!isSorting ? (
@@ -911,16 +905,16 @@ const Dashboard = () => {
                                                 yAxisKeys={["Avg", "FDAvg"]}
                                                 currentStartDate={currentStartDate}
                                                 currentEndDate={currentEndDate}
-                                                selectedStationName={stationList.find(s => s.code === searchedStationCode)?.name}
+                                                // selectedStationName={isChinese ? selectedStationName : stationList.find(s => s.code === searchedStationCode)?.enName}
                                             />
                                         ) : (
                                             <VStack spacing={4} align="center" justify="center">
                                                 <Text fontSize="xl" fontWeight="bold" color="gray.500" textAlign="center">
-                                                    {t("lineChartNotSupported")}
+                                                    {/* {isChinese ? "排序数据时，天气数据趋势不可用。" : "Weather Data Trend is not available when sorting data."} */}
                                                 </Text>
                                                 <HStack spacing={2}>
                                                     <Text fontSize="xl" fontWeight="bold" color="gray.500">
-                                                        {t("click")}
+                                                        {/* {isChinese ? "点击" : "Click"} */}
                                                     </Text>
                                                     <Button
                                                         onClick={handleSubmitStation} // Same function as the search button
@@ -941,10 +935,10 @@ const Dashboard = () => {
                                                         px={4}
                                                         borderRadius={8}
                                                     >
-                                                        {t("here")}
+                                                        {/* {isChinese ? "这里" : "Here"} */}
                                                     </Button>
                                                     <Text fontSize="xl" fontWeight="bold" color="gray.500">
-                                                        {t("toViewItAgain")}
+                                                        {/* {isChinese ? "再次查看。" : "to view it again."} */}
                                                     </Text>
                                                 </HStack>
                                             </VStack>
@@ -975,19 +969,17 @@ const Dashboard = () => {
                 >
                     {(!screenIsNarrowerThan800px || data.length === 0) && (
                         <Text fontSize="sm" color="gray.600" alignContent={{ base: 'center', md: 'left' }} p={3}>
-                            {t("footerLeft")}
+                            {/* {isChinese ? '数据时间范围：2018年1月1日至2025年3月9日' : 'Data is available from 1 January 2018 until 9 March 2025'} */}
                         </Text>
                     )}
 
                     {data.length > 0 && (
                         <Flex align="center">
                             <Text fontSize="sm" color="gray.600">
-                            {t("paginationMessage", {
-                                start: ((currentPage - 1) * recordsPerPage) + 1,
-                                end: Math.min(currentPage * recordsPerPage, data.length),
-                                total: data.length,
-                                recordText: data.length === 1 ? t("record") : t("records")
-                            })}
+                                {/* {isChinese
+                                    ? `显示 ${((currentPage - 1) * recordsPerPage) + 1} - ${Math.min(currentPage * recordsPerPage, data.length)} 条，共 ${data.length} 条 ${data.length === 1 ? "记录" : "记录"}`
+                                    : `Showing ${((currentPage - 1) * recordsPerPage) + 1} - ${Math.min(currentPage * recordsPerPage, data.length)} of ${data.length} ${data.length === 1 ? "record" : "records"}`
+                                } */}
                             </Text>
 
                             <IconButton
@@ -1029,8 +1021,8 @@ const Dashboard = () => {
                             color="white"
                             borderTopRadius="md"
                         >
-                            <ModalHeader>{t("selectedStationsAnalysis")}</ModalHeader>
-                            <ModalCloseButton color="black" />
+                            {/* <ModalHeader>{isChinese ? '选定站点分析' : 'Selected Stations Analysis'}</ModalHeader> */}
+                            <ModalCloseButton color="white" />
                         </MotionBox>
 
                         <ModalBody>
@@ -1043,7 +1035,7 @@ const Dashboard = () => {
                                 <Box>
                                     <Text fontWeight="bold" mb={3} display="flex" alignItems="center">
                                         <FiMapPin style={{ marginRight: '12px', fontSize: '1.2em' }} />
-                                        {t("selectedStations")}
+                                        {/* {isChinese ? '已选站点：' : 'Selected Stations:'} */}
                                     </Text>
                                     <Flex wrap="wrap" gap={2}>
                                         {advancedAnalysisList.map(code => (
@@ -1060,7 +1052,7 @@ const Dashboard = () => {
                                                 >
                                                     <TagLeftIcon as={FiMapPin} />
                                                     <TagLabel>
-                                                        {stationList.find(s => s.code === code)?.name} ({code})
+                                                        {/* {isChinese ? stationList.find(s => s.code === code)?.name : stationList.find(s => s.code === code)?.enName} ({code}) */}
                                                     </TagLabel>
                                                 </Tag>
                                             </MotionBox>
@@ -1081,7 +1073,7 @@ const Dashboard = () => {
                                 _hover={{ bgGradient: 'linear(to-r, #6366f1, #ec4899)', opacity: 0.9 }}
                                 mb={3}
                             >
-                                {t("analyzeTrends")}
+                                {/* {isChinese ? '分析趋势' : 'Analyze Trends'} */}
                             </Button>
 
                             <Button
@@ -1091,7 +1083,7 @@ const Dashboard = () => {
                                 width={"100%"}
                                 borderRadius="full"
                             >
-                                {t("cancel")}
+                                {/* {isChinese ? '取消' : 'Cancel'} */}
                             </Button>
                         </ModalFooter>
                     </ModalContent>
@@ -1106,11 +1098,11 @@ const Dashboard = () => {
                         color="white"
                         borderTopRadius="md"
                     >
-                        <ModalHeader>{t("advancedAnalysisComplete")}</ModalHeader>
+                        {/* <ModalHeader>{isChinese ? '高级分析结果' : 'Advanced Analysis Complete'}</ModalHeader> */}
                         <ModalCloseButton />
                     </MotionBox>
 
-                    <ModalBody>
+                    {/* <ModalBody>
                         {advancedData.length > 0 ? (
                             <TemperatureComparisonChart
                                 data={
@@ -1121,9 +1113,9 @@ const Dashboard = () => {
                                 date={selectedAnalysisDate}
                             />
                         ) : (
-                            <Text textAlign="center" py={8}>{t("noDataAvailableForComparison")}</Text>
+                            <Text textAlign="center" py={8}>{isChinese ? '没有可用于比较的数据' : 'No data available for comparison'}</Text>
                         )}
-                    </ModalBody>
+                    </ModalBody> */}
                 </ModalContent>
             </Modal>
         </>
