@@ -1,13 +1,12 @@
 /* eslint-disable react/prop-types */
 import { motion } from 'framer-motion';
-import { Heading, Button, Tabs, TabList, TabPanels, Tab, TabPanel, Menu, MenuButton, MenuList, MenuItem, Flex, Input, Table, Thead, Tbody, Tr, Th, Td, TableContainer, Box, Text, IconButton, Checkbox, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Stack, Tag, TagLabel, TagLeftIcon, SimpleGrid, VStack, useDisclosure, useColorModeValue, HStack, useMediaQuery, FormControl, FormLabel, useBreakpointValue } from '@chakra-ui/react';
+import { Heading, Button, Tabs, TabList, TabPanels, Tab, TabPanel, Menu, MenuButton, MenuList, MenuItem, Flex, Input, Table, Thead, Tbody, Tr, Th, Td, TableContainer, Box, Text, IconButton, Checkbox, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Stack, Tag, TagLabel, TagLeftIcon, SimpleGrid, VStack, useDisclosure, HStack, useMediaQuery, FormControl, FormLabel, useBreakpointValue } from '@chakra-ui/react';
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
-import { Bar } from 'react-chartjs-2';
 import { useState } from 'react';
 import { useShowToast } from '../extensions/useShowToast';
 import server from "../../networking";
 import ByStationLineChart from '../components/ByStationLineChart';
+import ByDateBarChart from '../components/ByDateBarChart';
 import { FiArrowDown, FiArrowLeft, FiArrowUp, FiCalendar, FiMapPin } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
 
@@ -54,86 +53,6 @@ const Dashboard = () => {
     const sort5DayAverageTemperature = useBreakpointValue({ base: t("5-dayAvgTemp"), md: t("md5-dayAvgTemp"),  lg: t("5-dayAvgTemp") });
     const avgTempLabel = useBreakpointValue({  base: t("baseAvgTemp"),  md: t("mdAvgTemp"),  lg: t("avgTemp") });
     const fdAvgTempLabel = useBreakpointValue({  base: t("base5-dayAvgTemp"),  md: t("md5-dayAvgTemp"),  lg: t("5-dayAvgTemp") });
-
-    ChartJS.register(
-        CategoryScale,
-        LinearScale,
-        BarElement,
-        Title,
-        Tooltip,
-        Legend
-    );
-
-    const TemperatureComparisonChart = ({ data, date }) => {
-        const chartData = {
-            labels: data.map(entry => stationList.find(s => s.code === entry.Station)?.name),
-            datasets: [{
-                label: `${t("avgTemp")} (°C) - ${date}`,
-                data: data.map(entry => entry.Avg),
-                backgroundColor: [
-                    'rgba(99, 102, 241, 0.8)',
-                    'rgba(236, 72, 153, 0.8)',
-                    'rgba(16, 185, 129, 0.8)'
-                ],
-                borderColor: [
-                    'rgba(99, 102, 241, 1)',
-                    'rgba(236, 72, 153, 1)',
-                    'rgba(16, 185, 129, 1)'
-                ],
-                borderWidth: 2,
-                borderRadius: 8,
-                hoverBorderWidth: 3
-            }]
-        };
-
-        const options = {
-            responsive: true,
-            plugins: {
-                legend: {
-                    display: false
-                },
-                title: {
-                    display: true,
-                    text: `${t("avgTemp")} (°C) - ${date}`,
-                    color: useColorModeValue('#1A202C', '#FFFFFF'),
-                    font: { size: 18 }
-                }
-            },
-            scales: {
-                x: {
-                    grid: { display: false },
-                    ticks: {
-                        color: useColorModeValue('#1A202C', '#FFFFFF'),
-                        font: { weight: 'bold' }
-                    }
-                },
-                y: {
-                    grid: { color: useColorModeValue('rgba(0,0,0,0.1)', 'rgba(255,255,255,0.1)') },
-                    ticks: {
-                        color: useColorModeValue('#1A202C', '#FFFFFF'),
-                        stepSize: 5
-                    }
-                }
-            },
-            animation: {
-                duration: 1500,
-                easing: 'easeInOutQuart'
-            }
-        };
-
-        return (
-            <MotionBox
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                bg={useColorModeValue('white', 'gray.700')}
-                p={6}
-                borderRadius="xl"
-                boxShadow="xl"
-            >
-                <Bar data={chartData} options={options} />
-            </MotionBox>
-        );
-    };
 
     const handleSubmitStation = async () => {
         if (!selectedStation) return;
@@ -1112,12 +1031,11 @@ const Dashboard = () => {
 
                     <ModalBody>
                         {advancedData.length > 0 ? (
-                            <TemperatureComparisonChart
-                                data={
-                                    advancedData.map(d => (
-                                        { ...d, name: `${stationList.find(s => s.code === d.Station)?.name} (${d.Station})` }
-                                    ))
-                                }
+                            <ByDateBarChart
+                                data={advancedData.map(d => ({
+                                ...d,
+                                name: `${stationList.find(s => s.code === d.Station)?.name} (${d.Station})`
+                                }))}
                                 date={selectedAnalysisDate}
                             />
                         ) : (
