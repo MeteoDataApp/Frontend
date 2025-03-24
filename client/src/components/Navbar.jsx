@@ -169,10 +169,16 @@ const Navbar = () => {
                                             {t("navbarChangeLanguage")}
                                         </MenuButton>
                                         <MenuList>
-                                            <MenuItem onClick={() => i18n.changeLanguage('en')}>
+                                            <MenuItem onClick={() => {
+                                                    i18n.changeLanguage("en")
+                                                    localStorage.setItem("i18nextLng", "en")
+                                                }}>
                                                 English (EN)
                                             </MenuItem>
-                                            <MenuItem onClick={() => i18n.changeLanguage('cn')}>
+                                            <MenuItem onClick={() => {
+                                                i18n.changeLanguage("cn")
+                                                    localStorage.setItem("i18nextLng", "cn")
+                                                }}>
                                                 中文 (CN)
                                             </MenuItem>
                                         </MenuList>
