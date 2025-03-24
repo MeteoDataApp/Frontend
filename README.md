@@ -96,17 +96,23 @@ This decorator function serves to help render the custom 404 Page when a unregis
 ### 2. Get Weather Data by Station
 
 #### Purpose
-- Retrieves the weather records for a specific station from the database. The results are returned in chronological order (oldest first after reversing).
+- Retrieves weather records for a specific station from the database, optionally filtered by a date range. The records are returned in chronological order (from oldest to newest).
 
 #### Request
 - **URL:** `/by_station` 
 - **Method:** `GET`  
-- **Parameters:** station
+- **Parameters:** station, start, end
 
 #### Query Parameters
 - **station** (required)
   - **Type:** Integer (passed as a string in the query and then converted to an integer)
   - **Description:** The unique identifier for the station. This parameter is used to filter the records in the database.
+- **start** (optional)
+  - **Type**: String (formatted as "YYYY-MM-DD")
+  - **Description**: The start date for the date range filter.
+- **end** (optional)
+  - **Type**: String (formatted as "YYYY-MM-DD")
+  - **Description**: The end date for the date range filter.
 
 #### Error Handling
 `400 Bad Request`: If the `station` argument was not received, the server responds with `400 Bad Request`.
@@ -119,6 +125,8 @@ This decorator function serves to help render the custom 404 Page when a unregis
 - The server queries the MongoDB collection for documents where the `Station` field matches the provided value.
 - The query results are sorted in descending order by the `Date` field to capture the most recent records.
 - The result set is ordered from oldest to newest.
+- If start and/or end are provided, the endpoint filters the documents based on the provided date range. The dates must follow the YYYY-MM-DD format.
+- The endpoint removes any duplicate entries based on the combination of Station and formatted Date.
 
 #### Success Response
 - **Content-Type:** `application/json`
@@ -302,4 +310,4 @@ Retrieves historical weather analytics for a range of specified stations, on a s
 
 **Documentation written by [Joshua](https://github.com/Sadliquid) and [Lincoln](https://github.com/lincoln0623)**
 
-**API Documentation and Database Schema Last Updated on `24 March 2025 10:57 AM`**
+**API Documentation and Database Schema Last Updated on `24 March 2025 11:19 AM`**
