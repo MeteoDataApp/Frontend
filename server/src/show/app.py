@@ -236,6 +236,9 @@ def advanced_analysis():
             "success": False,
             "error": "Invalid request method"
         }), 405
+    
+def main():
+    app.run(debug=True)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    main()

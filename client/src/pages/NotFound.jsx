@@ -3,26 +3,14 @@ import { motion } from 'framer-motion';
 import { Box, Heading, Text, Button, Flex } from '@chakra-ui/react';
 import { FiHome } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const NotFound = () => {
     const navigate = useNavigate();
     const MotionBox = motion.create(Box);
     const MotionButton = motion.create(Button);
 
-    const [activeLanguage, setActiveLanguage] = useState(null);
-
-    const i18nextLng = localStorage.getItem("i18nextLng");
-
-    useEffect(() => {
-        if (!i18nextLng) {
-            localStorage.setItem("i18nextLng", "en");
-        }
-
-        setActiveLanguage(i18nextLng);
-        console.log("Language set to: ", i18nextLng);
-
-    }, [i18nextLng]);
+    const { t } = useTranslation();
 
     return (
         <MotionBox
@@ -62,7 +50,7 @@ const NotFound = () => {
                         mx="auto"
                         mb={8}
                     >
-                        {activeLanguage === "en" ? "Oops! The page you were looking for could not be found." : "糟糕！您要查找的页面不存在。"}
+                        {t("404Description")}
                     </Text>
                     <MotionButton
                         size="lg"
@@ -79,7 +67,7 @@ const NotFound = () => {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                     >
-                        {activeLanguage === "en" ? "Return to home" : "返回首页"}
+                        {t("returnToHome")}
                     </MotionButton>
                 </MotionBox>
             </Flex>
