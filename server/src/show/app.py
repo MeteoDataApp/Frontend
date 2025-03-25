@@ -44,7 +44,7 @@ def server():
 @app.route("/by_station", methods=["GET"])
 def by_station():
     if request.method == "GET":
-        selected_station = request.args.get("stations")
+        selected_station = request.args.get("station")
         start_date = request.args.get("start")
         end_date = request.args.get("end")
 
