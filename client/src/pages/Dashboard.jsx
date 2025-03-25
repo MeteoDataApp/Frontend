@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { motion } from 'framer-motion';
-import { Heading, Button, Tabs, TabList, TabPanels, Tab, TabPanel, Menu, MenuButton, MenuList, MenuItem, Flex, Input, Table, Thead, Tbody, Tr, Th, Td, TableContainer, Box, Text, IconButton, Checkbox, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Stack, Tag, TagLabel, TagLeftIcon, SimpleGrid, VStack, useDisclosure, HStack, useMediaQuery, FormControl, FormLabel, useBreakpointValue, CheckboxGroup } from '@chakra-ui/react';
+import { Heading, Button, Tabs, TabList, TabPanels, Tab, TabPanel, Menu, MenuButton, MenuList, MenuItem, Flex, Input, Table, Thead, Tbody, Tr, Th, Td, TableContainer, Box, Text, IconButton, Checkbox, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Stack, Tag, TagLabel, TagLeftIcon, SimpleGrid, VStack, useDisclosure, HStack, useMediaQuery, FormControl, FormLabel, useBreakpointValue, CheckboxGroup, RadioGroup, Radio } from '@chakra-ui/react';
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { useState } from 'react';
 import { useShowToast } from '../extensions/useShowToast';
@@ -22,6 +22,7 @@ const Dashboard = () => {
     const [selectedStation, setSelectedStation] = useState(null);
     const [selectedStations, setSelectedStations] = useState([]);
     const [confirmedStations, setConfirmedStations] = useState([]);
+    const [selectedTempType, setSelectedTempType] = useState("avg");
     const [searchedStationCode, setSearchedStationCode] = useState(null);
     const [selectedStationName, setSelectedStationName] = useState("");
     const [startDate, setStartDate] = useState("2025-03-09");
@@ -51,10 +52,10 @@ const Dashboard = () => {
     const [screenIsNarrowerThan700px] = useMediaQuery("(max-width: 700px)");
     const [screenIsNarrowerThan610px] = useMediaQuery("(max-width: 610px)");
 
-    const sortAverageTemperature = useBreakpointValue({ base: t("avgTemp"), md: t("mdAvgTemp"),  lg: t("avgTemp") });
-    const sort5DayAverageTemperature = useBreakpointValue({ base: t("5-dayAvgTemp"), md: t("md5-dayAvgTemp"),  lg: t("5-dayAvgTemp") });
-    const avgTempLabel = useBreakpointValue({  base: t("baseAvgTemp"),  md: t("mdAvgTemp"),  lg: t("avgTemp") });
-    const fdAvgTempLabel = useBreakpointValue({  base: t("base5-dayAvgTemp"),  md: t("md5-dayAvgTemp"),  lg: t("5-dayAvgTemp") });
+    const sortAverageTemperature = useBreakpointValue({ base: t("avgTemp"), md: t("mdAvgTemp"), lg: t("avgTemp") });
+    const sort5DayAverageTemperature = useBreakpointValue({ base: t("5-dayAvgTemp"), md: t("md5-dayAvgTemp"), lg: t("5-dayAvgTemp") });
+    const avgTempLabel = useBreakpointValue({ base: t("baseAvgTemp"), md: t("mdAvgTemp"), lg: t("avgTemp") });
+    const fdAvgTempLabel = useBreakpointValue({ base: t("base5-dayAvgTemp"), md: t("md5-dayAvgTemp"), lg: t("5-dayAvgTemp") });
 
     const handleSubmitStation = async () => {
         if (!selectedStation) return;
@@ -118,7 +119,7 @@ const Dashboard = () => {
 
     const handleSubmitMultipleStations = async () => {
         if (selectedStations.length === 0) return;
-        setConfirmedStations(selectedStations); 
+        setConfirmedStations(selectedStations);
         setCurrentPage(1);
         setLoading(true);
         try {
@@ -156,11 +157,11 @@ const Dashboard = () => {
     const handleStationsSelection = (station) => {
         setSelectedStations((prevSelected) =>
             prevSelected.includes(station)
-                ? prevSelected.filter(s => s !== station)  
-                : [...prevSelected, station]             
+                ? prevSelected.filter(s => s !== station)
+                : [...prevSelected, station]
         );
     };
-    
+
     const openAdvancedAnalysisModal = async () => {
         if (advancedAnalysisList.length < 2) {
             showToast(
@@ -206,8 +207,8 @@ const Dashboard = () => {
 
     const sortDataDate = () => {
         const sorted = [...data].sort((a, b) => {
-            const dateA = new Date(a.Date);
-            const dateB = new Date(b.Date);
+            const dateA = new Date(a.Date || a.date);
+            const dateB = new Date(b.Date || b.date);
             return sortOrderDate === 'asc' ? dateA - dateB : dateB - dateA;
         });
         setData(sorted);
@@ -404,7 +405,7 @@ const Dashboard = () => {
                                         justify="center"
                                     >
                                         {/* First Row - Station Selection */}
-                                        <Flex 
+                                        <Flex
                                             width={{ base: "100%", sm: "auto" }}
                                             justifyContent="center"
                                         >
@@ -431,9 +432,9 @@ const Dashboard = () => {
                                         </Flex>
 
                                         {/* Second Row - Start & End Date Inputs */}
-                                        <Flex 
-                                            gap={3} 
-                                            justifyContent="center" 
+                                        <Flex
+                                            gap={3}
+                                            justifyContent="center"
                                             direction={{ base: "column", sm: "row" }}
                                             width={{ base: "100%", sm: "auto" }}
                                         >
@@ -465,7 +466,7 @@ const Dashboard = () => {
                                         </Flex>
 
                                         {/* Third Row - Search Button */}
-                                        <Flex 
+                                        <Flex
                                             justifyContent="center"
                                             mt={{ base: 0, sm: 0, md: 7 }}
                                             width={{ base: "100%", sm: "auto" }}
@@ -588,8 +589,8 @@ const Dashboard = () => {
                                                     <CheckboxGroup value={selectedStations}>
                                                         {stationList.map(station => (
                                                             <MenuItem key={station.code} as="div">
-                                                                <Checkbox 
-                                                                    value={station.code} 
+                                                                <Checkbox
+                                                                    value={station.code}
                                                                     isChecked={selectedStations.includes(station.code)}
                                                                     onChange={() => handleStationsSelection(station.code)}
                                                                 >
@@ -603,9 +604,9 @@ const Dashboard = () => {
                                         </Flex>
 
                                         {/* Second Row - Start & End Date Inputs */}
-                                        <Flex 
-                                            gap={3} 
-                                            justifyContent="center" 
+                                        <Flex
+                                            gap={3}
+                                            justifyContent="center"
                                             direction={{ base: "column", sm: "row" }}
                                             width={{ base: "100%", sm: "auto" }}
                                         >
@@ -637,7 +638,7 @@ const Dashboard = () => {
                                         </Flex>
 
                                         {/* Third Row - Search Button */}
-                                        <Flex 
+                                        <Flex
                                             justifyContent="center"
                                             mt={{ base: 0, sm: 0, md: 7 }}
                                             width={{ base: "100%", sm: "auto" }}
@@ -663,7 +664,7 @@ const Dashboard = () => {
                                             </Button>
                                         </Flex>
                                     </Flex>
-                                    </TabPanel>
+                                </TabPanel>
                             </TabPanels>
                         </Tabs>
                     </MotionBox>
@@ -841,20 +842,19 @@ const Dashboard = () => {
                                                     transform: "scale(1.05)"
                                                 }}
                                                 _active={{ transform: "scale(0.95)" }}
-                                                px={{ base: 4, md: 6 }} 
+                                                px={{ base: 4, md: 6 }}
                                                 borderRadius={10}
                                                 mx={2}
                                                 w={{ base: '80%', md: 'auto' }}
-                                                mb={{ base: 4, md: 0 }} 
+                                                mb={{ base: 4, md: 0 }}
                                                 boxShadow="xl"
                                             >
-                                                {`${
-                                                    t("sortBy")
-                                                } ${{
-                                                    date: t("date"),
-                                                    avg: sortAverageTemperature,
-                                                    FD: sort5DayAverageTemperature
-                                                }[sortType]}`}
+                                                {`${t("sortBy")
+                                                    } ${{
+                                                        date: t("date"),
+                                                        avg: sortAverageTemperature,
+                                                        FD: sort5DayAverageTemperature
+                                                    }[sortType]}`}
                                             </Button>
                                         )
                                     })}
@@ -939,7 +939,7 @@ const Dashboard = () => {
                                                                     display="inline-flex"
                                                                     alignItems="center"
                                                                     lineHeight="2"
-                                                                    fontSize={{ base: 'md', md: 'lg', lg:"xl" }}
+                                                                    fontSize={{ base: 'md', md: 'lg', lg: "xl" }}
                                                                     fontWeight="bold"
                                                                     gap={1}
                                                                     color={record.FDAvg > record.Avg ? 'red.600' : record.FDAvg === record.Avg ? "green.600" : 'blue.600'}
@@ -985,7 +985,7 @@ const Dashboard = () => {
                                     transition={{ duration: 0.5 }}
                                 >
                                     <Heading size="md" mb={4} bgGradient="linear(to-r, #6366f1, #ec4899)" bgClip="text" fontSize={{ base: '3xl', md: '4xl' }} mt={14}>
-                                        {activeLanguage === "en" 
+                                        {activeLanguage === "en"
                                             ? `${t("weatherDataTrendIn")} ${selectedStationName ? stationList.find(s => s.code === searchedStationCode)?.name : "Station"}`
                                             : `${selectedStationName ? stationList.find(s => s.code === searchedStationCode)?.name : "Station"} ${t("weatherDataTrendIn")}`
                                         }
@@ -1045,42 +1045,65 @@ const Dashboard = () => {
                     )}
 
                     {displayedData.length > 0 && activeTab === "tableAndLineChart" && (
-                        <MotionBox
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            mx="auto"
-                            maxW="1200px"
-                        >
-                            <TableContainer bg="white" borderRadius="xl" boxShadow="xl" mb="8rem" mx="4rem">
-                                <Table variant="striped">
-                                    <Thead>
-                                        <Tr>
-                                            <Th>Date</Th>
-                                            {confirmedStations.map(code => (
-                                                <Th key={code}>Station {code}</Th>
-                                            ))}
-                                        </Tr>
-                                    </Thead>
-                                    <Tbody>
-                                        {data.map((row, index) => (
-                                            <Tr key={index}>
-                                                <Td>{row.date}</Td>
-                                                {confirmedStations.map(code => (
-                                                    <Td key={code}>
-                                                        <Text fontWeight="bold" color="gray.700">
-                                                            Avg: {`${row[code]?.averageTemperature}°C` ?? "N/A"}
-                                                        </Text>
-                                                        <Text fontWeight="bold" color="gray.500">
-                                                            5-Day Avg: {`${row[code]?.fiveDayAverageTemperature}°C` ?? "N/A"}
-                                                        </Text>
-                                                    </Td>
-                                                ))}
+                        !screenIsNarrowerThan610px ? (
+                            <MotionBox
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                mx="auto"
+                                maxW="1200px"
+                            >
+                                {/* Radio Button for Toggle */}
+                                <Box display="flex" justifyContent="center" mb={4}>
+                                    <RadioGroup onChange={setSelectedTempType} value={selectedTempType}>
+                                        <HStack spacing={6}>
+                                            <Radio value="avg">{t("avgTemp")}</Radio>
+                                            <Radio value="5dayAvg">{t("5-dayAvgTemp")}</Radio>
+                                        </HStack>
+                                    </RadioGroup>
+                                </Box>
+
+                                <TableContainer bg="white" borderRadius="xl" boxShadow="xl" mb="8rem" mx="4rem">
+                                    <Table variant="striped">
+                                        <Thead>
+                                            <Tr>
+                                                <Th cursor="pointer" onClick={sortDataDate}>
+                                                    {t("date")}
+                                                    {sortOrderDate === 'asc' ? ' ↑' : ' ↓'}
+                                                </Th>
+                                                {confirmedStations.map(code => {
+                                                    const stationInfo = stationList.find(s => s.code === code);
+                                                    return (
+                                                        <Th key={code}>
+                                                            {stationInfo ? `${stationInfo.name} (${code})` : `Station ${code}`}
+                                                        </Th>
+                                                    );
+                                                })}
                                             </Tr>
-                                        ))}
-                                    </Tbody>
-                                </Table>
-                            </TableContainer>
-                        </MotionBox>
+                                        </Thead>
+                                        <Tbody>
+                                            {displayedData.map((row, index) => (
+                                                <Tr key={index}>
+                                                    <Td>{row.date}</Td>
+                                                    {confirmedStations.map(code => (
+                                                        <Td key={code}>
+                                                            <Text fontWeight="bold" color="gray.700">
+                                                                {selectedTempType === "avg"
+                                                                    ? `${row[code]?.averageTemperature ?? "N/A"}°C`
+                                                                    : `${row[code]?.fiveDayAverageTemperature ?? "N/A"}°C`}
+                                                            </Text>
+                                                        </Td>
+                                                    ))}
+                                                </Tr>
+                                            ))}
+                                        </Tbody>
+                                    </Table>
+                                </TableContainer>
+                            </MotionBox>
+                        ) : (
+                            <Text textAlign="center" fontSize="xl" fontWeight="bold" color="gray.500" p={10}>
+                                {t("tableNotSupported")}
+                            </Text>
+                        )
                     )}
                 </Box>
 
@@ -1109,12 +1132,12 @@ const Dashboard = () => {
                     {data.length > 0 && (
                         <Flex align="center">
                             <Text fontSize="sm" color="gray.600">
-                            {t("paginationMessage", {
-                                start: ((currentPage - 1) * recordsPerPage) + 1,
-                                end: Math.min(currentPage * recordsPerPage, data.length),
-                                total: data.length,
-                                recordText: data.length === 1 ? t("record") : t("records")
-                            })}
+                                {t("paginationMessage", {
+                                    start: ((currentPage - 1) * recordsPerPage) + 1,
+                                    end: Math.min(currentPage * recordsPerPage, data.length),
+                                    total: data.length,
+                                    recordText: data.length === 1 ? t("record") : t("records")
+                                })}
                             </Text>
 
                             <IconButton
@@ -1241,8 +1264,8 @@ const Dashboard = () => {
                         {advancedData.length > 0 ? (
                             <ByDateBarChart
                                 data={advancedData.map(d => ({
-                                ...d,
-                                name: `${stationList.find(s => s.code === d.Station)?.name} (${d.Station})`
+                                    ...d,
+                                    name: `${stationList.find(s => s.code === d.Station)?.name} (${d.Station})`
                                 }))}
                                 date={selectedAnalysisDate}
                             />
