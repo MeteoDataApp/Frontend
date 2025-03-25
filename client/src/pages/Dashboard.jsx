@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { motion } from 'framer-motion';
-import { Heading, Button, Tabs, TabList, TabPanels, Tab, TabPanel, Menu, MenuButton, MenuList, MenuItem, Flex, Input, Table, Thead, Tbody, Tr, Th, Td, TableContainer, Box, Text, IconButton, Checkbox, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Stack, Tag, TagLabel, TagLeftIcon, SimpleGrid, VStack, useDisclosure, HStack, useMediaQuery, FormControl, FormLabel, useBreakpointValue } from '@chakra-ui/react';
+import { Heading, Button, Tabs, TabList, TabPanels, Tab, TabPanel, Menu, MenuButton, MenuList, MenuItem, Flex, Input, Table, Thead, Tbody, Tr, Th, Td, TableContainer, Box, Text, IconButton, Checkbox, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Stack, Tag, TagLabel, TagLeftIcon, SimpleGrid, VStack, useDisclosure, HStack, useMediaQuery, FormControl, FormLabel, useBreakpointValue, CheckboxGroup } from '@chakra-ui/react';
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { useState } from 'react';
 import { useShowToast } from '../extensions/useShowToast';
@@ -20,6 +20,7 @@ const Dashboard = () => {
     const activeLanguage = i18n.language;
 
     const [selectedStation, setSelectedStation] = useState(null);
+    const [selectedStations, setSelectedStations] = useState([]);
     const [searchedStationCode, setSearchedStationCode] = useState(null);
     const [selectedStationName, setSelectedStationName] = useState("");
     const [startDate, setStartDate] = useState("2025-03-09");
@@ -94,6 +95,7 @@ const Dashboard = () => {
 
     const handleSubmitDate = async () => {
         if (!selectedDate) return;
+        setCurrentPage(1);
         setLoading(true);
         try {
             const response = await server.get(`/by_date?date=${selectedDate}`);
@@ -113,6 +115,50 @@ const Dashboard = () => {
         }
     };
 
+    const handleSubmitMultipleStations = async () => {
+        if (selectedStations.length === 0) return;
+        setCurrentPage(1);
+        setLoading(true);
+        try {
+            let query = `stations=${selectedStations.join(",")}`;
+            if (startDate) query += `&start=${startDate}`;
+            if (endDate) query += `&end=${endDate}`;
+
+            const response = await server.get(`/by_multiple_stations?${query}`);
+            setData(response.data.data);
+            if (response.data.length === 0) {
+                showToast(
+                    "error",
+                    "",
+                    t("tryAnotherStationOrDate")
+                );
+            }
+        } catch (error) {
+            setData([]);
+            if (error.response.data.success === false) {
+                showToast(
+                    "error",
+                    t("error"),
+                    error.response?.data?.error
+                );
+            }
+        } finally {
+            setLoading(false);
+            setIsSorting(false);
+            setSortOrderDate('desc');
+            setSortOrderAvg('desc');
+            setSortOrderFD('desc');
+        }
+    }
+
+    const handleStationsSelection = (station) => {
+        setSelectedStations((prevSelected) =>
+            prevSelected.includes(station)
+                ? prevSelected.filter(s => s !== station)  
+                : [...prevSelected, station]             
+        );
+    };
+    
     const openAdvancedAnalysisModal = async () => {
         if (advancedAnalysisList.length < 2) {
             showToast(
@@ -325,6 +371,27 @@ const Dashboard = () => {
                                 >
                                     {t("searchByDate")}
                                 </Tab>
+                                <Tab
+                                    onClick={() => {
+                                        setCurrentPage(1);
+                                        setActiveTab("table");
+                                        setData([]);
+                                    }}
+                                    _selected={{
+                                        bgGradient: "linear(to-r, #6366f1, #ec4899)",
+                                        color: "white",
+                                        boxShadow: "md",
+                                    }}
+                                    _hover={{ transform: "scale(1.05)" }}
+                                    _active={{ transform: "scale(0.95)" }}
+                                    mx={2}
+                                    px={6}
+                                    py={2}
+                                    borderRadius="full"
+                                    transition="all 0.2s"
+                                >
+                                    {t("tableAndLineChart")}
+                                </Tab>
                             </TabList>
                             <TabPanels mb={4}>
                                 <TabPanel>
@@ -495,6 +562,106 @@ const Dashboard = () => {
                                         )}
                                     </Flex>
                                 </TabPanel>
+                                <TabPanel>
+                                    <Flex
+                                        direction={{ base: "column", md: "row" }}
+                                        gap={3}
+                                        align="center"
+                                        justify="center"
+                                    >
+                                        {/* First Row - Multiple Station Selection */}
+                                        <Flex width={{ base: "100%", sm: "auto" }} justifyContent="center">
+                                            <Menu closeOnSelect={false}>
+                                                <MenuButton
+                                                    as={Button}
+                                                    rightIcon={<ChevronDownIcon />}
+                                                    w={{ base: "100%", sm: "auto" }}
+                                                    mt={{ base: 0, sm: 0, md: 7 }}
+                                                >
+                                                    {selectedStations.length > 0
+                                                        ? `${selectedStations.length} ${t("stationsSelected")}`
+                                                        : t("selectMultipleStations")}
+                                                </MenuButton>
+                                                <MenuList maxH="300px" overflowY="auto">
+                                                    <CheckboxGroup value={selectedStations}>
+                                                        {stationList.map(station => (
+                                                            <MenuItem key={station.code} as="div">
+                                                                <Checkbox 
+                                                                    value={station.code} 
+                                                                    isChecked={selectedStations.includes(station.code)}
+                                                                    onChange={() => handleStationsSelection(station.code)}
+                                                                >
+                                                                    {station.name} ({station.code})
+                                                                </Checkbox>
+                                                            </MenuItem>
+                                                        ))}
+                                                    </CheckboxGroup>
+                                                </MenuList>
+                                            </Menu>
+                                        </Flex>
+
+                                        {/* Second Row - Start & End Date Inputs */}
+                                        <Flex 
+                                            gap={3} 
+                                            justifyContent="center" 
+                                            direction={{ base: "column", sm: "row" }}
+                                            width={{ base: "100%", sm: "auto" }}
+                                        >
+                                            <FormControl w={{ base: "100%", sm: "200px" }}>
+                                                <FormLabel fontSize="sm" color="gray.300">{t("startDate")}</FormLabel>
+                                                <Input
+                                                    type="date"
+                                                    value={startDate}
+                                                    onChange={e => setStartDate(e.target.value)}
+                                                    size="md"
+                                                    borderRadius="md"
+                                                    w="100%"
+                                                    max="2025-03-09"
+                                                />
+                                            </FormControl>
+
+                                            <FormControl w={{ base: "100%", sm: "200px" }}>
+                                                <FormLabel fontSize="sm" color="gray.300">{t("endDate")}</FormLabel>
+                                                <Input
+                                                    type="date"
+                                                    value={endDate}
+                                                    onChange={e => setEndDate(e.target.value)}
+                                                    size="md"
+                                                    borderRadius="md"
+                                                    w="100%"
+                                                    max="2025-03-09"
+                                                />
+                                            </FormControl>
+                                        </Flex>
+
+                                        {/* Third Row - Search Button */}
+                                        <Flex 
+                                            justifyContent="center"
+                                            mt={{ base: 0, sm: 0, md: 7 }}
+                                            width={{ base: "100%", sm: "auto" }}
+                                        >
+                                            <Button
+                                                onClick={handleSubmitMultipleStations}
+                                                bgGradient="linear(to-r, #6366f1, #ec4899)"
+                                                color="white"
+                                                w={{ base: "100%", sm: "auto" }}
+                                                _hover={selectedStations.length > 0 && {
+                                                    bgGradient: "linear(to-r, #6366f1, #ec4899)",
+                                                    transform: "scale(1.05)",
+                                                    boxShadow: "lg",
+                                                }}
+                                                _active={selectedStations.length > 0 && {
+                                                    bgGradient: "linear(to-r, #6366f1, #ec4899)",
+                                                    transform: "scale(0.95)",
+                                                }}
+                                                isLoading={loading}
+                                                isDisabled={selectedStations.length === 0}
+                                            >
+                                                {t("search")}
+                                            </Button>
+                                        </Flex>
+                                    </Flex>
+                                    </TabPanel>
                             </TabPanels>
                         </Tabs>
                     </MotionBox>

@@ -95,6 +95,9 @@
         "tryAnotherStationOrDate": "Please try another station or date range",
         "requestFailed": "Request failed",
         "selectAtLeastTwoStations": "Please select at least 2 stations",
-        "selectMaxThreeStations": "You can select a max of 3 stations"
+        "selectMaxThreeStations": "You can select a max of 3 stations",
+        "tableAndLineChart": "Table and Line Chart",
+        "selectMultipleStations": "Select Multiple Stations",
+        "stationsSelected": "Stations Selected"
     }
 }

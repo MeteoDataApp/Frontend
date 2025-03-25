@@ -95,6 +95,9 @@
         "tryAnotherStationOrDate": "请尝试其他车站或日期范围",
         "requestFailed": "请求失败",
         "selectAtLeastTwoStations": "请至少选择两个车站",
-        "selectMaxThreeStations": "最多只能选择3个车站"
+        "selectMaxThreeStations": "最多只能选择3个车站",
+        "tableAndLineChart": "表格和折线图",
+        "selectMultipleStations": "选择多个站点",
+        "stationsSelected": "已选站点"
     }
 }
