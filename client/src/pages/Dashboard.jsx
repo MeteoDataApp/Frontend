@@ -676,7 +676,7 @@ const Dashboard = () => {
                                 mx="auto"
                                 maxW="1200px"
                             >
-                                <TableContainer bg="white" borderRadius="xl" boxShadow="xl" mb="8rem">
+                                <TableContainer bg="white" borderRadius="xl" boxShadow="xl" mb="8rem" mx="4rem">
                                     <Table variant="striped">
                                         <Thead>
                                             <Tr>
@@ -1051,7 +1051,7 @@ const Dashboard = () => {
                             mx="auto"
                             maxW="1200px"
                         >
-                            <TableContainer bg="white" boxShadow="xl" mb="8rem">
+                            <TableContainer bg="white" borderRadius="xl" boxShadow="xl" mb="8rem" mx="4rem">
                                 <Table variant="striped">
                                     <Thead>
                                         <Tr>
@@ -1068,10 +1068,10 @@ const Dashboard = () => {
                                                 {confirmedStations.map(code => (
                                                     <Td key={code}>
                                                         <Text fontWeight="bold" color="gray.700">
-                                                            Avg: {row[code]?.averageTemperature ?? "N/A"}
+                                                            Avg: {`${row[code]?.averageTemperature}°C` ?? "N/A"}
                                                         </Text>
                                                         <Text fontWeight="bold" color="gray.500">
-                                                            5-Day Avg: {row[code]?.fiveDayAverageTemperature ?? "N/A"}
+                                                            5-Day Avg: {`${row[code]?.fiveDayAverageTemperature}°C` ?? "N/A"}
                                                         </Text>
                                                     </Td>
                                                 ))}
@@ -1082,7 +1082,6 @@ const Dashboard = () => {
                             </TableContainer>
                         </MotionBox>
                     )}
-
                 </Box>
 
                 <Box
