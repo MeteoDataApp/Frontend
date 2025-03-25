@@ -1045,32 +1045,44 @@ const Dashboard = () => {
                     )}
 
                     {displayedData.length > 0 && activeTab === "tableAndLineChart" && (
-                        <TableContainer>
-                        <Table variant="striped" colorScheme="blue">
-                          <Thead>
-                            <Tr>
-                              <Th>Date</Th>
-                              {confirmedStations.map(code => (
-                                <Th key={code}>Station {code}</Th>
-                              ))}
-                            </Tr>
-                          </Thead>
-                          <Tbody>
-                            {data.map((row, index) => (
-                              <Tr key={index}>
-                                <Td>{row.date}</Td>
-                                {confirmedStations.map(code => (
-                                  <Td key={code}>
-                                    <p>Avg: {row[code]?.averageTemperature ?? "N/A"}</p>
-                                    <p>5-Day Avg: {row[code]?.fiveDayAverageTemperature ?? "N/A"}</p>
-                                  </Td>
-                                ))}
-                              </Tr>
-                            ))}
-                          </Tbody>
-                        </Table>
-                      </TableContainer>
+                        <MotionBox
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            mx="auto"
+                            maxW="1200px"
+                        >
+                            <TableContainer bg="white" boxShadow="xl" mb="8rem">
+                                <Table variant="striped">
+                                    <Thead>
+                                        <Tr>
+                                            <Th>Date</Th>
+                                            {confirmedStations.map(code => (
+                                                <Th key={code}>Station {code}</Th>
+                                            ))}
+                                        </Tr>
+                                    </Thead>
+                                    <Tbody>
+                                        {data.map((row, index) => (
+                                            <Tr key={index}>
+                                                <Td>{row.date}</Td>
+                                                {confirmedStations.map(code => (
+                                                    <Td key={code}>
+                                                        <Text fontWeight="bold" color="gray.700">
+                                                            Avg: {row[code]?.averageTemperature ?? "N/A"}
+                                                        </Text>
+                                                        <Text fontWeight="bold" color="gray.500">
+                                                            5-Day Avg: {row[code]?.fiveDayAverageTemperature ?? "N/A"}
+                                                        </Text>
+                                                    </Td>
+                                                ))}
+                                            </Tr>
+                                        ))}
+                                    </Tbody>
+                                </Table>
+                            </TableContainer>
+                        </MotionBox>
                     )}
+
                 </Box>
 
                 <Box
