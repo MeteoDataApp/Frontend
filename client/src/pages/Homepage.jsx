@@ -51,6 +51,7 @@ export default function HomePage() {
 
                 reverseGeocode(lat, lon);
             } else {
+                setRequestReceived(true);
                 showToast("error",
                     t("anErrorOccuredWhileFetchingWeatherData"),
                     t("seeConsoleForMoreDetails")
