@@ -21,6 +21,7 @@ const Dashboard = () => {
 
     const [selectedStation, setSelectedStation] = useState(null);
     const [selectedStations, setSelectedStations] = useState([]);
+    const [confirmedStations, setConfirmedStations] = useState([]);
     const [searchedStationCode, setSearchedStationCode] = useState(null);
     const [selectedStationName, setSelectedStationName] = useState("");
     const [startDate, setStartDate] = useState("2025-03-09");
@@ -117,6 +118,7 @@ const Dashboard = () => {
 
     const handleSubmitMultipleStations = async () => {
         if (selectedStations.length === 0) return;
+        setConfirmedStations(selectedStations); 
         setCurrentPage(1);
         setLoading(true);
         try {
@@ -374,7 +376,7 @@ const Dashboard = () => {
                                 <Tab
                                     onClick={() => {
                                         setCurrentPage(1);
-                                        setActiveTab("table");
+                                        setActiveTab("tableAndLineChart");
                                         setData([]);
                                     }}
                                     _selected={{
@@ -1040,6 +1042,34 @@ const Dashboard = () => {
                                 </MotionBox>
                             )}
                         </MotionBox>
+                    )}
+
+                    {displayedData.length > 0 && activeTab === "tableAndLineChart" && (
+                        <TableContainer>
+                        <Table variant="striped" colorScheme="blue">
+                          <Thead>
+                            <Tr>
+                              <Th>Date</Th>
+                              {confirmedStations.map(code => (
+                                <Th key={code}>Station {code}</Th>
+                              ))}
+                            </Tr>
+                          </Thead>
+                          <Tbody>
+                            {data.map((row, index) => (
+                              <Tr key={index}>
+                                <Td>{row.date}</Td>
+                                {confirmedStations.map(code => (
+                                  <Td key={code}>
+                                    <p>Avg: {row[code]?.averageTemperature ?? "N/A"}</p>
+                                    <p>5-Day Avg: {row[code]?.fiveDayAverageTemperature ?? "N/A"}</p>
+                                  </Td>
+                                ))}
+                              </Tr>
+                            ))}
+                          </Tbody>
+                        </Table>
+                      </TableContainer>
                     )}
                 </Box>
 
