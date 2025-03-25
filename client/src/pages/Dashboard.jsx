@@ -655,7 +655,7 @@ const Dashboard = () => {
                                                     transform: "scale(0.95)",
                                                 }}
                                                 isLoading={loading}
-                                                isDisabled={selectedStations.length === 0}
+                                                isDisabled={selectedStations.length <= 1}
                                             >
                                                 {t("search")}
                                             </Button>

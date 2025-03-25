@@ -44,7 +44,7 @@ def server():
 @app.route("/by_station", methods=["GET"])
 def by_station():
     if request.method == "GET":
-        selected_station = request.args.get("station")
+        selected_station = request.args.get("stations")
         start_date = request.args.get("start")
         end_date = request.args.get("end")
 
@@ -151,6 +151,77 @@ def by_date():
             "success": False,
             "error": "Invalid request method"
         }), 405
+
+@app.route("/by_multiple_stations", methods=["GET"])
+def by_multiple_stations():
+    if request.method == "GET":
+        stations = request.args.get("stations")
+        start_date = request.args.get("start")
+        end_date = request.args.get("end")
+        table_data = {}
+
+        if not stations:
+            return json.jsonify({"success": False, "error": "Stations parameter is required"}), 400
+
+        try:
+            station_codes = [int(s) for s in stations.split(",") if s.strip()]
+
+            query = {"Station": {"$in": station_codes}}
+
+            if start_date or end_date:
+                date_filter = {}
+                try:
+                    if start_date:
+                        start_date_obj = datetime.datetime.strptime(start_date, "%Y-%m-%d")
+                        date_filter["$gte"] = start_date_obj
+                    if end_date:
+                        end_date_obj = datetime.datetime.strptime(end_date, "%Y-%m-%d")
+                        date_filter["$lte"] = end_date_obj
+                    query["Date"] = date_filter
+                except ValueError:
+                    return json.jsonify({
+                        "success": False,
+                        "error": "Invalid date format. Use YYYY-MM-DD"
+                    }), 400
+
+            data = list(test_collection.find(query).sort("Date", -1))
+            data.reverse() 
+
+            if not data:
+                return json.jsonify({"success": False, "error": "No data found for the provided criteria"}), 404
+
+            # Remove duplicate records
+            unique_data = []
+            seen = set()
+            for doc in data:
+                key = (doc["Station"], doc["Date"].strftime("%Y-%m-%d"))
+                if key not in seen:
+                    seen.add(key)
+                    unique_data.append(doc)
+
+            for doc in unique_data:
+                date_str = doc["Date"].strftime("%Y-%m-%d")
+                station_code = str(doc["Station"])
+
+                # Initialize date key if not present
+                if date_str not in table_data:
+                    table_data[date_str] = {}
+
+                # Assign station data
+                table_data[date_str][station_code] = {
+                    "averageTemperature": doc["Avg"],
+                    "fiveDayAverageTemperature": doc["FDAvg"]
+                }
+
+            table_data_array = [{"date": date, **stations} for date, stations in table_data.items()]
+
+            return json.jsonify({"success": True, "data": table_data_array})
+
+        except Exception as e:
+            return json.jsonify({"success": False, "error": str(e)}), 500
+    else:
+        return json.jsonify({"success": False, "error": "Invalid request method"}), 405
+
 
 @app.route("/advancedAnalysis", methods=["POST"])
 def advanced_analysis():
