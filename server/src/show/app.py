@@ -21,10 +21,11 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
 
 # MongoDB connection string – replace the password/credentials as needed
-MONGO_CONNECTION_STRING = "mongodb+srv://jim:lucky0218@cluster0.lqm6b.mongodb.net/"
+MONGO_CONNECTION_STRING = "mongodb+srv://readonly_user:lucky0218@cluster0.lqm6b.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 client = MongoClient(MONGO_CONNECTION_STRING)
 db = client["meteo"]
 test_collection = db["test"]
+temprature_collection = db["temp"]
 
 def handle_api_error(e, message="Internal server error"):
     app.logger.error(f"Error: {str(e)}")
@@ -71,7 +72,7 @@ def by_station():
                 except ValueError as e:
                     return json.jsonify({"success": False, "error": "Invalid date format. Use YYYY-MM-DD"}), 400
 
-            data = list(test_collection.find(query).sort("Date", -1))
+            data = list(temperature_collection.find(query).sort("Date", -1))
             data.reverse()
 
             # Remove redundant results based on Station and Date
@@ -122,7 +123,7 @@ def by_date():
                     "error": "Invalid date format (YYYY-MM-DD required)"
                 }), 400
 
-            data = list(test_collection.find({
+            data = list(temperature_collection.find({
                 "Date": {"$gte": chosen_date, "$lt": next_day},
                 "Station": {"$in": station_list}
             }))
@@ -184,7 +185,7 @@ def by_multiple_stations():
                         "error": "Invalid date format. Use YYYY-MM-DD"
                     }), 400
 
-            data = list(test_collection.find(query).sort("Date", -1))
+            data = list(temperature_collection.find(query).sort("Date", -1))
             data.reverse() 
 
             if not data:
@@ -283,7 +284,7 @@ def advanced_analysis():
                 "Date": {"$gte": target_date, "$lt": next_day}
             }
 
-            data = list(test_collection.find(query))
+            data = list(temperature_collection.find(query))
 
             if not data:
                 return json.jsonify({

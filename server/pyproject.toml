@@ -19,3 +19,4 @@ packages = { find = { where = ["src"] } }
 
 [project.scripts]
 server = "show.app:main"
+test = "testmongo:main"
