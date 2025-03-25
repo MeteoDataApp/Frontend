@@ -22,6 +22,7 @@ export default function HomePage() {
     const [requestReceived, setRequestReceived] = useState(false);
     const [weatherData, setWeatherData] = useState(null);
     const [locationData, setLocationData] = useState(null);
+    const [realtimeReady, setRealtimeReady] = useState(false);
 
     const handleRefresh = () => {
         setWeatherData(null);
@@ -35,19 +36,26 @@ export default function HomePage() {
                 `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,precipitation,surface_pressure,wind_direction_10m`
             );
 
-            const data = await response.json();
+            if (response.ok) {
+                const data = await response.json();
 
-            setWeatherData({
-                temp: data.current.temperature_2m,
-                feels_like: data.current.apparent_temperature,
-                humidity: data.current.relative_humidity_2m,
-                wind_speed: data.current.wind_speed_10m,
-                precipitation: data.current.precipitation,
-                pressure: data.current.surface_pressure,
-                wind_direction: data.current.wind_direction_10m,
-            });
+                setWeatherData({
+                    temp: data.current.temperature_2m,
+                    feels_like: data.current.apparent_temperature,
+                    humidity: data.current.relative_humidity_2m,
+                    wind_speed: data.current.wind_speed_10m,
+                    precipitation: data.current.precipitation,
+                    pressure: data.current.surface_pressure,
+                    wind_direction: data.current.wind_direction_10m,
+                });
 
-            reverseGeocode(lat, lon);
+                reverseGeocode(lat, lon);
+            } else {
+                showToast("error",
+                    t("anErrorOccuredWhileFetchingWeatherData"),
+                    t("seeConsoleForMoreDetails")
+                );
+            }
         } catch (error) {
             console.error(error);
             showToast("error", 
@@ -66,6 +74,7 @@ export default function HomePage() {
             const data = await response.json();
 
             setLocationData([data.city, data.principalSubdivision, data.countryName].filter(Boolean).join(', '));
+            setRealtimeReady(true);
         } catch (error) {
             console.error(error);
             showToast(
@@ -171,7 +180,7 @@ export default function HomePage() {
                     </MotionButton>
                 </Stack>
 
-                {weatherData !== null && locationData !== null && (
+                {(weatherData !== null && locationData !== null && realtimeReady) && (
                     <>
                         <motion.div
                             style={{
