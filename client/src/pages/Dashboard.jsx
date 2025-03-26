@@ -9,6 +9,7 @@ import ByStationLineChart from '../components/ByStationLineChart';
 import ByDateBarChart from '../components/ByDateBarChart';
 import { FiArrowDown, FiArrowLeft, FiArrowUp, FiCalendar, FiMapPin } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
+import AvgAdvancedLineChart from '../components/AvgAdvanceLineChart';
 
 const Dashboard = () => {
     const MotionBox = motion.div;
@@ -1045,65 +1046,137 @@ const Dashboard = () => {
                     )}
 
                     {displayedData.length > 0 && activeTab === "tableAndLineChart" && (
-                        !screenIsNarrowerThan610px ? (
-                            <MotionBox
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                mx="auto"
-                                maxW="1200px"
-                            >
-                                {/* Radio Button for Toggle */}
-                                <Box display="flex" justifyContent="center" mb={4}>
-                                    <RadioGroup onChange={setSelectedTempType} value={selectedTempType}>
-                                        <HStack spacing={6}>
-                                            <Radio value="avg">{t("avgTemp")}</Radio>
-                                            <Radio value="5dayAvg">{t("5-dayAvgTemp")}</Radio>
-                                        </HStack>
-                                    </RadioGroup>
-                                </Box>
+                        <>
+                            {!screenIsNarrowerThan610px ? (
+                                <MotionBox
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    mx="auto"
+                                    maxW="1200px"
+                                >
+                                    {/* Radio Button for Toggle */}
+                                    <Box display="flex" justifyContent="center" mb={4}>
+                                        <RadioGroup onChange={setSelectedTempType} value={selectedTempType}>
+                                            <HStack spacing={6}>
+                                                <Radio value="avg">{t("avgTemp")}</Radio>
+                                                <Radio value="5dayAvg">{t("5-dayAvgTemp")}</Radio>
+                                            </HStack>
+                                        </RadioGroup>
+                                    </Box>
 
-                                <TableContainer bg="white" borderRadius="xl" boxShadow="xl" mb="8rem" mx="4rem">
-                                    <Table variant="striped">
-                                        <Thead>
-                                            <Tr>
-                                                <Th cursor="pointer" onClick={sortDataDate}>
-                                                    {t("date")}
-                                                    {sortOrderDate === 'asc' ? ' ↑' : ' ↓'}
-                                                </Th>
-                                                {confirmedStations.map(code => {
-                                                    const stationInfo = stationList.find(s => s.code === code);
-                                                    return (
-                                                        <Th key={code}>
-                                                            {stationInfo ? `${stationInfo.name} (${code})` : `Station ${code}`}
-                                                        </Th>
-                                                    );
-                                                })}
-                                            </Tr>
-                                        </Thead>
-                                        <Tbody>
-                                            {displayedData.map((row, index) => (
-                                                <Tr key={index}>
-                                                    <Td>{row.date}</Td>
-                                                    {confirmedStations.map(code => (
-                                                        <Td key={code}>
-                                                            <Text fontWeight="bold" color="gray.700">
-                                                                {selectedTempType === "avg"
-                                                                    ? `${row[code]?.averageTemperature ?? "N/A"}°C`
-                                                                    : `${row[code]?.fiveDayAverageTemperature ?? "N/A"}°C`}
-                                                            </Text>
-                                                        </Td>
-                                                    ))}
+                                    <TableContainer bg="white" borderRadius="xl" boxShadow="xl" mb="8rem" mx="4rem">
+                                        <Table variant="striped">
+                                            <Thead>
+                                                <Tr>
+                                                    <Th cursor="pointer" onClick={sortDataDate}>
+                                                        {t("date")}
+                                                        {sortOrderDate === 'asc' ? ' ↑' : ' ↓'}
+                                                    </Th>
+                                                    {confirmedStations.map(code => {
+                                                        const stationInfo = stationList.find(s => s.code === code);
+                                                        return (
+                                                            <Th key={code}>
+                                                                {stationInfo ? `${stationInfo.name} (${code})` : `Station ${code}`}
+                                                            </Th>
+                                                        );
+                                                    })}
                                                 </Tr>
-                                            ))}
-                                        </Tbody>
-                                    </Table>
-                                </TableContainer>
-                            </MotionBox>
-                        ) : (
-                            <Text textAlign="center" fontSize="xl" fontWeight="bold" color="gray.500" p={10}>
-                                {t("tableNotSupported")}
-                            </Text>
-                        )
+                                            </Thead>
+                                            <Tbody>
+                                                {displayedData.map((row, index) => (
+                                                    <Tr key={index}>
+                                                        <Td>{row.date}</Td>
+                                                        {confirmedStations.map(code => (
+                                                            <Td key={code}>
+                                                                <Text fontWeight="bold" color="gray.700">
+                                                                    {selectedTempType === "avg"
+                                                                        ? `${row[code]?.averageTemperature ?? "N/A"}°C`
+                                                                        : `${row[code]?.fiveDayAverageTemperature ?? "N/A"}°C`}
+                                                                </Text>
+                                                            </Td>
+                                                        ))}
+                                                    </Tr>
+                                                ))}
+                                            </Tbody>
+                                        </Table>
+                                    </TableContainer>
+                                </MotionBox>
+                            ) : (
+                                <Text textAlign="center" fontSize="xl" fontWeight="bold" color="gray.500" p={10}>
+                                    {t("tableNotSupported")}
+                                </Text>
+                            )}
+
+                            {displayedData.length > 0 && activeTab === "tableAndLineChart" && (
+                                <MotionBox
+                                    initial={{ y: 20 }}
+                                    animate={{ y: 0 }}
+                                    mx="auto"
+                                    maxW="1200px"
+                                    mt={8}
+                                    bg="white"
+                                    borderRadius="xl"
+                                    boxShadow="xl"
+                                    p={{ base: 4, md: 6 }}
+                                    textAlign="center"
+                                    mb={16}
+                                    transition={{ duration: 0.5 }}
+                                >
+                                    <Heading size="md" mb={4} bgGradient="linear(to-r, #6366f1, #ec4899)" bgClip="text" fontSize={{ base: '3xl', md: '4xl' }} mt={14}>
+                                        {t("weatherDataTrendIn")}
+                                    </Heading>
+                                    <Box h={{ base: '40vh', md: '50vh' }} w="90vw" mb={32} alignItems="center" justifyContent="center" mx="auto" position="relative">
+                                        {!isSorting ? (
+                                            <>
+                                                <AvgAdvancedLineChart
+                                                    key={chartKey}
+                                                    data={displayedData}
+                                                    xAxisKey="Date"
+                                                    stations={confirmedStations || []} 
+                                                    currentStartDate={startDate}
+                                                    currentEndDate={endDate} 
+                                                />
+                                            </>
+                                        ) : (
+                                            <VStack spacing={4} align="center" justify="center">
+                                                <Text fontSize="xl" fontWeight="bold" color="gray.500" textAlign="center">
+                                                    {t("lineChartNotSupported")}
+                                                </Text>
+                                                <HStack spacing={2}>
+                                                    <Text fontSize="xl" fontWeight="bold" color="gray.500">
+                                                        {t("click")}
+                                                    </Text>
+                                                    <Button
+                                                        onClick={handleSubmitMultipleStations} // Same function as the search button
+                                                        bgGradient="linear(to-r, #6366f1, #ec4899)"
+                                                        color="white"
+                                                        _hover={{
+                                                            bgGradient: "linear(to-r, #6366f1, #ec4899)",
+                                                            transform: "scale(1.05)",
+                                                            boxShadow: "lg",
+                                                        }}
+                                                        _active={{
+                                                            bgGradient: "linear(to-r, #6366f1, #ec4899)",
+                                                            transform: "scale(0.95)",
+                                                        }}
+                                                        isLoading={loading}
+                                                        size="md"
+                                                        px={4}
+                                                        borderRadius={8}
+                                                    >
+                                                        {t("here")}
+                                                    </Button>
+                                                    <Text fontSize="xl" fontWeight="bold" color="gray.500">
+                                                        {t("toViewItAgain")}
+                                                    </Text>
+                                                </HStack>
+                                            </VStack>
+
+                                        )}
+                                    </Box>
+                                </MotionBox>
+                            )}
+                        </>
                     )}
                 </Box>
 
