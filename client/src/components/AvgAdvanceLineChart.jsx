@@ -7,8 +7,7 @@ import "chartjs-adapter-date-fns";
 Chart.register(...registerables, zoomPlugin);
 import { useTranslation } from 'react-i18next';
 
-const AdvancedLineChart = ({ data, xAxisKey, stations, currentStartDate, currentEndDate }) => {
-    console.log(data, xAxisKey, stations, currentStartDate, currentEndDate);
+const AdvancedLineChart = ({ data, xAxisKey, stations, currentStartDate, currentEndDate, tempType }) => {
     const chartRef = useRef(null);
     const chartInstance = useRef(null);
     const { t } = useTranslation();
@@ -57,7 +56,8 @@ const AdvancedLineChart = ({ data, xAxisKey, stations, currentStartDate, current
                 label: stationData.name, 
                 data: data.map(item => {
                     const stationEntry = item[stationCode];
-                    return stationEntry?.averageTemperature ?? null;
+                    const tempKey = tempType === 'avg' ? 'averageTemperature' : 'fiveDayAverageTemperature';
+                    return stationEntry?.[tempKey] ?? null;
                 }),
                 borderColor: colors[index % colors.length],
                 backgroundColor: colors[index % colors.length] + "99",

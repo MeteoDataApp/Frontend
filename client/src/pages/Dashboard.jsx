@@ -1131,10 +1131,11 @@ const Dashboard = () => {
                                                 <AvgAdvancedLineChart
                                                     key={chartKey}
                                                     data={displayedData}
-                                                    xAxisKey="Date"
+                                                    xAxisKey="date"
                                                     stations={confirmedStations || []} 
                                                     currentStartDate={startDate}
-                                                    currentEndDate={endDate} 
+                                                    currentEndDate={endDate}
+                                                    tempType={selectedTempType}
                                                 />
                                             </>
                                         ) : (
