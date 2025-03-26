@@ -52,6 +52,7 @@ const AdvancedLineChart = ({ data, xAxisKey, stations, currentStartDate, current
         // Generate datasets for each station
         const datasets = stations.flatMap((stationCode, index) => {
             const stationData = stationList.find(s => s.code === stationCode);
+            if (!stationData) return [];
             return stationData ? [{
                 label: stationData.name, 
                 data: data.map(item => {
@@ -120,9 +121,7 @@ const AdvancedLineChart = ({ data, xAxisKey, stations, currentStartDate, current
                             callback: (value) => {
                                 const date = new Date(value);
                                 const monthKey = date.toLocaleString("en-US", { month: "short" }); 
-                                const formattedDate = `${date.getDate()} ${t(`${monthKey}`)} ${date.getFullYear()}`;
-                
-                                return formattedDate;
+                                return `${date.getDate()} ${t(monthKey)} ${date.getFullYear()}`;
                             },
                         },
                     },
@@ -155,33 +154,89 @@ const AdvancedLineChart = ({ data, xAxisKey, stations, currentStartDate, current
                 },
                 plugins: {
                     zoom: {
-                        zoom: { wheel: { enabled: true }, mode: "x" },
+                        zoom: { wheel: { enabled: true }, pinch: { enabled: true }, mode: "x" },
                         pan: { enabled: true, mode: "x" }
                     },
                     tooltip: {
+                        backgroundColor: "rgba(0, 0, 0, 0.9)",
+                        titleColor: "#fff",
+                        bodyColor: "#fff",
+                        borderColor: "rgba(255, 255, 255, 0.1)",
+                        borderWidth: 1,
+                        padding: 12,
+                        cornerRadius: 8,
+                        displayColors: true,
+                        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.2)",
                         callbacks: {
-                            label: (context) => {
+                            label: context => {
                                 const label = context.dataset.label || "";
                                 const value = context.raw ?? "N/A";
-                                return ` ${label}: ${value} °C`;
+                                return ` ${label} ${t("avgTemp")}: ${value} °C`;
                             },
+                        },
+                        titleFont: {
+                            family: "Inter, sans-serif",
+                            size: context => getFontSize(context.chart.width) + 2,
+                            weight: "600",
+                        },
+                        bodyFont: {
+                            family: "Inter, sans-serif",
+                            size: context => getFontSize(context.chart.width),
+                            weight: "500",
                         },
                     },
                     legend: {
                         display: true,
                         position: "top",
+                        align: "center",
+                        labels: {
+                            color: "#6b7280",
+                            font: {
+                                family: "Inter, sans-serif",
+                                size: context => getFontSize(context.chart.width),
+                                weight: "600",
+                            },
+                            padding: 10,
+                            boxWidth: 20,
+                            boxHeight: 20,
+                            usePointStyle: true,
+                            pointStyle: "circle",
+                        }
+                    },
+                    layout: {
+                        padding: {
+                            top: 10,
+                            right: 20,
+                            bottom: 20,
+                            left: 20,
+                        },
+                    },
+                    elements: {
+                        line: {
+                            borderWidth: 3,
+                        },
+                        point: {
+                            hoverRadius: context => context.chart.width < 600 ? 5 : 8,
+                            radius: context => context.chart.width < 600 ? 3 : 5,
+                            backgroundColor: "#fff",
+                            borderWidth: 2,
+                        },
                     },
                 },
             },
         });
 
-        return () => {
-            if (chartInstance.current) {
-                chartInstance.current.destroy();
-                chartInstance.current = null;
-            }
-        };
-    }, [data, xAxisKey, stations, currentStartDate, currentEndDate]);
+        return () => chartInstance.current?.destroy();
+    }, [data, stations, currentStartDate, currentEndDate, tempType]);
+
+    // Add zoom update effect
+    useEffect(() => {
+        if (chartInstance.current && currentStartDate && currentEndDate) {
+            chartInstance.current.options.scales.x.min = currentStartDate;
+            chartInstance.current.options.scales.x.max = currentEndDate;
+            chartInstance.current.update();
+        }
+    }, [currentStartDate, currentEndDate]);
 
     return <canvas ref={chartRef} />;
 };

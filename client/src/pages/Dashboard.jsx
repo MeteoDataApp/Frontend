@@ -10,6 +10,7 @@ import ByDateBarChart from '../components/ByDateBarChart';
 import { FiArrowDown, FiArrowLeft, FiArrowUp, FiCalendar, FiMapPin } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
 import AvgAdvancedLineChart from '../components/AvgAdvanceLineChart';
+import FiveDayAdvancedLineChart from '../components/5DayAdvanceLineChart';
 
 const Dashboard = () => {
     const MotionBox = motion.div;
@@ -678,7 +679,7 @@ const Dashboard = () => {
                                 mx="auto"
                                 maxW="1200px"
                             >
-                                <TableContainer bg="white" borderRadius="xl" boxShadow="xl" mb="8rem" mx={{ base: "2rem", md: "4rem", lg:"8rem"}}>
+                                <TableContainer bg="white" borderRadius="xl" boxShadow="xl" mb="8rem" mx={{ base: "2rem", md: "4rem", lg: "8rem" }}>
                                     <Table variant="striped">
                                         <Thead>
                                             <Tr>
@@ -1054,17 +1055,85 @@ const Dashboard = () => {
                                     mx="auto"
                                     maxW="1200px"
                                 >
-                                    {/* Radio Button for Toggle */}
-                                    <Box display="flex" justifyContent="center" mb={4}>
+                                    <Box
+                                        display="flex"
+                                        justifyContent="center"
+                                        mb={8}
+                                        position="relative"
+                                    >
+                                        <Box
+                                            position="absolute"
+                                            zIndex={-1}
+                                        />
+
                                         <RadioGroup onChange={setSelectedTempType} value={selectedTempType}>
-                                            <HStack spacing={6}>
-                                                <Radio size="lg" value="avg">{t("avgTemp")}</Radio>
-                                                <Radio size="lg" value="5dayAvg">{t("5-dayAvgTemp")}</Radio>
+                                            <HStack
+                                                spacing={4}
+                                                p={4}
+                                                borderRadius="2xl"
+                                                bg="whiteAlpha.100"
+                                                backdropFilter="blur(12px)"
+                                                boxShadow="0 8px 32px rgba(0, 0, 0, 0.1)"
+                                            >
+                                                {['avg', '5dayAvg'].map((value) => (
+                                                    <Radio
+                                                        hidden={true}
+                                                        key={value}
+                                                        value={value}
+                                                        size="lg"
+                                                        colorScheme="purple"
+                                                        _hover={{ transform: 'scale(1.05)' }}
+                                                        _active={{ transform: 'scale(0.95)' }}
+                                                        transition="all 0.2s cubic-bezier(.08,.52,.52,1)"
+                                                        sx={{
+                                                            'span:first-of-type': {
+                                                                w: 8,
+                                                                h: 8,
+                                                                border: '2px solid',
+                                                                borderColor: 'whiteAlpha.400',
+                                                                _checked: {
+                                                                    borderColor: 'purple.500',
+                                                                    bg: 'transparent',
+                                                                    '> span': {
+                                                                        transform: 'scale(0.6)',
+                                                                        bg: 'linear-gradient(45deg, #6366f1, #ec4899)'
+                                                                    }
+                                                                }
+                                                            }
+                                                        }}
+                                                    >
+                                                        <Box
+                                                            position="relative"
+                                                            p={3}
+                                                            borderRadius="xl"
+                                                            bg={selectedTempType === value ?
+                                                                'linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(236, 72, 153, 0.1))' :
+                                                                'transparent'}
+                                                            border="2px solid"
+                                                            borderColor={selectedTempType === value ? 'purple.500' : 'whiteAlpha.200'}
+                                                            boxShadow={selectedTempType === value ?
+                                                                '0 0 20px rgba(99, 102, 241, 0.3)' : 'none'}
+                                                            transition="all 0.3s ease-out"
+                                                        >
+                                                            <Text
+                                                                fontSize="xl"
+                                                                fontWeight="bold"
+                                                                bg={selectedTempType === value ?
+                                                                    'linear-gradient(45deg, #6366f1, #ec4899)' :
+                                                                    'none'}
+                                                                bgClip="text"
+                                                                color={selectedTempType === value ? 'transparent' : ""}
+                                                            >
+                                                                {value === 'avg' ? t("avgTemp") : t("5-dayAvgTemp")}
+                                                            </Text>
+                                                        </Box>
+                                                    </Radio>
+                                                ))}
                                             </HStack>
                                         </RadioGroup>
                                     </Box>
 
-                                    <TableContainer bg="white" borderRadius="xl" boxShadow="xl" mb="8rem" mx={{ base: "2rem", md: "4rem", lg:"8rem"}}>
+                                    <TableContainer bg="white" borderRadius="xl" boxShadow="xl" mb="8rem" mx={{ base: "2rem", md: "4rem", lg: "8rem" }}>
                                         <Table variant="striped">
                                             <Thead>
                                                 <Tr>
@@ -1127,17 +1196,27 @@ const Dashboard = () => {
                                     </Heading>
                                     <Box h={{ base: '40vh', md: '50vh' }} w="90vw" mb={32} alignItems="center" justifyContent="center" mx="auto" position="relative">
                                         {!isSorting ? (
-                                            <>
+                                            selectedTempType === "avg" ? (
                                                 <AvgAdvancedLineChart
                                                     key={chartKey}
                                                     data={displayedData}
                                                     xAxisKey="date"
-                                                    stations={confirmedStations || []} 
-                                                    currentStartDate={startDate}
-                                                    currentEndDate={endDate}
+                                                    stations={confirmedStations || []}
+                                                    currentStartDate={currentStartDate}
+                                                    currentEndDate={currentEndDate}
                                                     tempType={selectedTempType}
                                                 />
-                                            </>
+                                            ) : (
+                                                <FiveDayAdvancedLineChart
+                                                    key={chartKey}
+                                                    data={displayedData}
+                                                    xAxisKey="date"
+                                                    stations={confirmedStations || []}
+                                                    currentStartDate={currentStartDate}
+                                                    currentEndDate={currentEndDate}
+                                                    tempType={selectedTempType}
+                                                />
+                                            )
                                         ) : (
                                             <VStack spacing={4} align="center" justify="center">
                                                 <Text fontSize="xl" fontWeight="bold" color="gray.500" textAlign="center">
