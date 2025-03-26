@@ -11,7 +11,6 @@ import { FiArrowDown, FiArrowLeft, FiArrowUp, FiCalendar, FiMapPin } from 'react
 import { useTranslation } from 'react-i18next';
 import AvgAdvancedLineChart from '../components/AvgAdvanceLineChart';
 import FiveDayAdvancedLineChart from '../components/5DayAdvanceLineChart';
-import { min } from 'date-fns';
 
 const Dashboard = () => {
     const MotionBox = motion.div;
@@ -736,7 +735,7 @@ const Dashboard = () => {
                             >
                                 <TableContainer bg="white" borderRadius="xl" boxShadow="xl" mb="8rem" mx={{ base: "2rem", md: "4rem", lg: "8rem" }}>
                                     <Table>
-                                        <Thead bg="gray.100" color="white">
+                                        <Thead bg="gray.100">
                                             <Tr>
 
                                                 <Th>{t("station")}</Th>
