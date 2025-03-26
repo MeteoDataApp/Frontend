@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 // components/TemperatureComparisonChart.jsx
 import { motion } from 'framer-motion';
 import { useColorModeValue } from '@chakra-ui/react';
