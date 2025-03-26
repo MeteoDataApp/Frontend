@@ -207,6 +207,37 @@ const Dashboard = () => {
         }
     };
 
+    const getHottestAndColdestStations = (row) => {
+        let hottestTemp = -Infinity;
+        let coldestTemp = Infinity;
+        let hottestStations = [];
+        let coldestStations = [];
+    
+        confirmedStations.forEach(code => {
+            const temp = selectedTempType === "avg" 
+                ? row[code]?.averageTemperature 
+                : row[code]?.fiveDayAverageTemperature;
+    
+            if (temp !== undefined && temp !== null) {
+                if (temp > hottestTemp) {
+                    hottestTemp = temp;
+                    hottestStations = [code]; 
+                } else if (temp === hottestTemp) {
+                    hottestStations.push(code); 
+                }
+    
+                if (temp < coldestTemp) {
+                    coldestTemp = temp;
+                    coldestStations = [code]; 
+                } else if (temp === coldestTemp) {
+                    coldestStations.push(code); 
+                }
+            }
+        });
+    
+        return { hottestStations, coldestStations };
+    }
+
     const sortDataDate = () => {
         const sorted = [...data].sort((a, b) => {
             const dateA = new Date(a.Date || a.date);
@@ -1168,20 +1199,35 @@ const Dashboard = () => {
                                                 </Tr>
                                             </Thead>
                                             <Tbody>
-                                                {displayedData.map((row, index) => (
+                                            {displayedData.map((row, index) => {
+                                                const { hottestStations, coldestStations } = getHottestAndColdestStations(row);
+
+                                                return (
                                                     <Tr key={index}>
                                                         <Td>{row.date}</Td>
-                                                        {confirmedStations.map(code => (
-                                                            <Td key={code}>
-                                                                <Text fontWeight="bold" color="gray.700">
-                                                                    {selectedTempType === "avg"
-                                                                        ? `${row[code]?.averageTemperature ?? "N/A"}°C`
-                                                                        : `${row[code]?.fiveDayAverageTemperature ?? "N/A"}°C`}
-                                                                </Text>
-                                                            </Td>
-                                                        ))}
+                                                        {confirmedStations.map(code => {
+                                                            const temp = selectedTempType === "avg" 
+                                                                ? row[code]?.averageTemperature 
+                                                                : row[code]?.fiveDayAverageTemperature;
+                                                            
+                                                            const isHottest = hottestStations.includes(code);
+                                                            const isColdest = coldestStations.includes(code);
+                                                            const isNA = temp === undefined || temp === null;
+                                                            
+                                                            return (
+                                                                <Td key={code}>
+                                                                    <Text 
+                                                                        fontWeight="bold" 
+                                                                        color={isNA ? "gray.400" : isHottest ? "red.500" : isColdest ? "blue.500" : "gray.700"}
+                                                                    >
+                                                                        {isNA ? "N/A" : `${temp.toFixed(1)}°C`}
+                                                                    </Text>
+                                                                </Td>
+                                                            );
+                                                        })}
                                                     </Tr>
-                                                ))}
+                                                );
+                                            })}
                                             </Tbody>
                                         </Table>
                                     </TableContainer>
