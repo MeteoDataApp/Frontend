@@ -678,7 +678,7 @@ const Dashboard = () => {
                                 mx="auto"
                                 maxW="1200px"
                             >
-                                <TableContainer bg="white" borderRadius="xl" boxShadow="xl" mb="8rem" mx="4rem">
+                                <TableContainer bg="white" borderRadius="xl" boxShadow="xl" mb="8rem" mx={{ base: "2rem", md: "4rem", lg:"8rem"}}>
                                     <Table variant="striped">
                                         <Thead>
                                             <Tr>
@@ -1058,13 +1058,13 @@ const Dashboard = () => {
                                     <Box display="flex" justifyContent="center" mb={4}>
                                         <RadioGroup onChange={setSelectedTempType} value={selectedTempType}>
                                             <HStack spacing={6}>
-                                                <Radio value="avg">{t("avgTemp")}</Radio>
-                                                <Radio value="5dayAvg">{t("5-dayAvgTemp")}</Radio>
+                                                <Radio size="lg" value="avg">{t("avgTemp")}</Radio>
+                                                <Radio size="lg" value="5dayAvg">{t("5-dayAvgTemp")}</Radio>
                                             </HStack>
                                         </RadioGroup>
                                     </Box>
 
-                                    <TableContainer bg="white" borderRadius="xl" boxShadow="xl" mb="8rem" mx="4rem">
+                                    <TableContainer bg="white" borderRadius="xl" boxShadow="xl" mb="8rem" mx={{ base: "2rem", md: "4rem", lg:"8rem"}}>
                                         <Table variant="striped">
                                             <Thead>
                                                 <Tr>
