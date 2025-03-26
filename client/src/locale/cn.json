@@ -87,7 +87,7 @@
         "click": "点击",
         "here": "这里",
         "toViewItAgain": "再次查看。",
-        "footerLeft":"数据时间范围：2018年1月1日至2025年3月9日",
+        "footerLeft":"天气数据每天晚上9:00 (GMT+8) 更新",
         "paginationMessage": "显示 {{start}} - {{end}} 条，共 {{total}} 条 {{recordText}}",
         "record": "记录",
         "records": "记录",

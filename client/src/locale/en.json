@@ -87,7 +87,7 @@
         "cliack": "Click",
         "here": "Here",
         "toViewItAgain": "to view it again.",
-        "footerLeft": "Data is available from 1 January 2018 until 9 March 2025",
+        "footerLeft": "Weather data is updated daily at 9:00 PM (GMT+8).",
         "paginationMessage": "Showing {{start}} - {{end}} of {{total}} {{recordText}}",
         "record": "record",
         "records": "records",

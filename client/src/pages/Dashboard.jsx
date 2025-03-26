@@ -20,6 +20,16 @@ const Dashboard = () => {
     const { t, i18n } = useTranslation();
 
     const activeLanguage = i18n.language;
+    const getDynamicDate = () => {
+        const now = new Date();
+        if (now.getHours() < 21) {
+            const yesterday = new Date(now);
+            yesterday.setDate(now.getDate() - 1);
+            return yesterday.toISOString().split('T')[0];
+        } else {
+            return now.toISOString().split('T')[0];
+        }
+    };
 
     const [selectedStation, setSelectedStation] = useState(null);
     const [selectedStations, setSelectedStations] = useState([]);
@@ -27,9 +37,9 @@ const Dashboard = () => {
     const [selectedTempType, setSelectedTempType] = useState("avg");
     const [searchedStationCode, setSearchedStationCode] = useState(null);
     const [selectedStationName, setSelectedStationName] = useState("");
-    const [startDate, setStartDate] = useState("2025-03-09");
-    const [endDate, setEndDate] = useState("2025-03-09");
-    const [selectedDate, setSelectedDate] = useState("2025-03-09");
+    const [startDate, setStartDate] = useState(getDynamicDate());
+    const [endDate, setEndDate] = useState(getDynamicDate());
+    const [selectedDate, setSelectedDate] = useState(getDynamicDate());
     const [loading, setLoading] = useState(false);
     const [advancedLoading, setAdvancedLoading] = useState(false);
     const [advancedRenderReady, setAdvancedRenderReady] = useState(false);
@@ -212,50 +222,50 @@ const Dashboard = () => {
         let coldestTemp = Infinity;
         let hottestStations = [];
         let coldestStations = [];
-    
+
         confirmedStations.forEach(code => {
-            const temp = selectedTempType === "avg" 
-                ? row[code]?.averageTemperature 
+            const temp = selectedTempType === "avg"
+                ? row[code]?.averageTemperature
                 : row[code]?.fiveDayAverageTemperature;
-    
+
             if (temp !== undefined && temp !== null) {
                 if (temp > hottestTemp) {
                     hottestTemp = temp;
-                    hottestStations = [code]; 
+                    hottestStations = [code];
                 } else if (temp === hottestTemp) {
-                    hottestStations.push(code); 
+                    hottestStations.push(code);
                 }
-    
+
                 if (temp < coldestTemp) {
                     coldestTemp = temp;
-                    coldestStations = [code]; 
+                    coldestStations = [code];
                 } else if (temp === coldestTemp) {
-                    coldestStations.push(code); 
+                    coldestStations.push(code);
                 }
             }
         });
-    
+
         return { hottestStations, coldestStations };
     }
 
     const getExtremeStations = (data) => {
         if (data.length === 0) return { hottestStations: [], coldestStations: [] };
-      
+
         const maxAvg = Math.max(...data.map(d => d.Avg));
         const hottestCandidates = data.filter(d => d.Avg === maxAvg);
-        
+
         const minAvg = Math.min(...data.map(d => d.Avg));
         const coldestCandidates = data.filter(d => d.Avg === minAvg);
-      
+
         const resolveTie = (candidates, compareFn) => {
-          if (candidates.length === 1) return candidates;
-          const extremeFD = compareFn(...candidates.map(c => c.FDAvg));
-          return candidates.filter(c => c.FDAvg === extremeFD);
+            if (candidates.length === 1) return candidates;
+            const extremeFD = compareFn(...candidates.map(c => c.FDAvg));
+            return candidates.filter(c => c.FDAvg === extremeFD);
         };
-      
+
         return {
-          hottestStations: resolveTie(hottestCandidates, Math.max),
-          coldestStations: resolveTie(coldestCandidates, Math.min)
+            hottestStations: resolveTie(hottestCandidates, Math.max),
+            coldestStations: resolveTie(coldestCandidates, Math.min)
         };
     };
 
@@ -501,7 +511,6 @@ const Dashboard = () => {
                                                     size="md"
                                                     borderRadius="md"
                                                     w="100%"
-                                                    max="2025-03-09"
                                                 />
                                             </FormControl>
 
@@ -514,7 +523,6 @@ const Dashboard = () => {
                                                     size="md"
                                                     borderRadius="md"
                                                     w="100%"
-                                                    max="2025-03-09"
                                                 />
                                             </FormControl>
                                         </Flex>
@@ -569,7 +577,6 @@ const Dashboard = () => {
                                                 size="md"
                                                 borderRadius="md"
                                                 w={{ base: "100%", sm: "200px" }}
-                                                max="2025-03-09"
                                                 display={"flex"}
                                                 justifyContent={{ base: "center", sm: "flex-start" }}
                                             />
@@ -675,7 +682,6 @@ const Dashboard = () => {
                                                     size="md"
                                                     borderRadius="md"
                                                     w="100%"
-                                                    max="2025-03-09"
                                                 />
                                             </FormControl>
 
@@ -688,7 +694,6 @@ const Dashboard = () => {
                                                     size="md"
                                                     borderRadius="md"
                                                     w="100%"
-                                                    max="2025-03-09"
                                                 />
                                             </FormControl>
                                         </Flex>
@@ -1224,35 +1229,35 @@ const Dashboard = () => {
                                                 </Tr>
                                             </Thead>
                                             <Tbody>
-                                            {displayedData.map((row, index) => {
-                                                const { hottestStations, coldestStations } = getHottestAndColdestStations(row);
+                                                {displayedData.map((row, index) => {
+                                                    const { hottestStations, coldestStations } = getHottestAndColdestStations(row);
 
-                                                return (
-                                                    <Tr key={index}>
-                                                        <Td>{row.date}</Td>
-                                                        {confirmedStations.map(code => {
-                                                            const temp = selectedTempType === "avg" 
-                                                                ? row[code]?.averageTemperature 
-                                                                : row[code]?.fiveDayAverageTemperature;
-                                                            
-                                                            const isHottest = hottestStations.includes(code);
-                                                            const isColdest = coldestStations.includes(code);
-                                                            const isNA = temp === undefined || temp === null;
-                                                            
-                                                            return (
-                                                                <Td key={code}>
-                                                                    <Text 
-                                                                        fontWeight="bold" 
-                                                                        color={isNA ? "gray.400" : isHottest ? "red.500" : isColdest ? "blue.500" : "gray.700"}
-                                                                    >
-                                                                        {isNA ? "N/A" : `${temp.toFixed(1)}°C`}
-                                                                    </Text>
-                                                                </Td>
-                                                            );
-                                                        })}
-                                                    </Tr>
-                                                );
-                                            })}
+                                                    return (
+                                                        <Tr key={index}>
+                                                            <Td>{row.date}</Td>
+                                                            {confirmedStations.map(code => {
+                                                                const temp = selectedTempType === "avg"
+                                                                    ? row[code]?.averageTemperature
+                                                                    : row[code]?.fiveDayAverageTemperature;
+
+                                                                const isHottest = hottestStations.includes(code);
+                                                                const isColdest = coldestStations.includes(code);
+                                                                const isNA = temp === undefined || temp === null;
+
+                                                                return (
+                                                                    <Td key={code}>
+                                                                        <Text
+                                                                            fontWeight="bold"
+                                                                            color={isNA ? "gray.400" : isHottest ? "red.500" : isColdest ? "blue.500" : "gray.700"}
+                                                                        >
+                                                                            {isNA ? "N/A" : `${temp.toFixed(1)}°C`}
+                                                                        </Text>
+                                                                    </Td>
+                                                                );
+                                                            })}
+                                                        </Tr>
+                                                    );
+                                                })}
                                             </Tbody>
                                         </Table>
                                     </TableContainer>
