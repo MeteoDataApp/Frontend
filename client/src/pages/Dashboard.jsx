@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { motion } from 'framer-motion';
-import { Heading, Button, Tabs, TabList, TabPanels, Tab, TabPanel, Menu, MenuButton, MenuList, MenuItem, Flex, Input, Table, Thead, Tbody, Tr, Th, Td, TableContainer, Box, Text, IconButton, Checkbox, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Stack, Tag, TagLabel, TagLeftIcon, SimpleGrid, VStack, useDisclosure, HStack, useMediaQuery, FormControl, FormLabel, useBreakpointValue, CheckboxGroup, RadioGroup, Radio } from '@chakra-ui/react';
+import { Heading, Button, Tabs, TabList, TabPanels, Tab, TabPanel, Menu, MenuButton, MenuList, MenuItem, Flex, Input, Table, Thead, Tbody, Tr, Th, Td, TableContainer, Box, Text, IconButton, Checkbox, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Stack, Tag, TagLabel, TagLeftIcon, SimpleGrid, VStack, useDisclosure, HStack, useMediaQuery, FormControl, FormLabel, useBreakpointValue, CheckboxGroup, RadioGroup, Radio, CheckboxIcon } from '@chakra-ui/react';
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { useState } from 'react';
 import { useShowToast } from '../extensions/useShowToast';
@@ -595,6 +595,8 @@ const Dashboard = () => {
                                                                     value={station.code}
                                                                     isChecked={selectedStations.includes(station.code)}
                                                                     onChange={() => handleStationsSelection(station.code)}
+                                                                    colorScheme="purple"
+                                                                    icon={<CheckboxIcon bg="linear-gradient(45deg, #6366f1, #ec4899)" />}
                                                                 >
                                                                     {station.name} ({station.code})
                                                                 </Checkbox>
@@ -687,12 +689,20 @@ const Dashboard = () => {
                                                 <Th>{t("station")}</Th>
                                                 <Th>{t("date")}</Th>
                                                 <Th cursor="pointer" onClick={sortDataAvg}>
-                                                    {t("avgTemp")}(°C)
-                                                    {sortOrderAvg === 'asc' ? ' ↑' : ' ↓'}
+                                                    <Flex alignItems="center" gap={2}>
+                                                        {t("avgTemp")}(°C)
+                                                        <Text fontSize="xl">
+                                                            {sortOrderAvg === 'asc' ? ' ↑' : ' ↓'}
+                                                        </Text>
+                                                    </Flex>
                                                 </Th>
                                                 <Th cursor="pointer" onClick={sortDataFD}>
-                                                    {t("5-dayAvgTemp")}(°C)
-                                                    {sortOrderFD === 'asc' ? ' ↑' : ' ↓'}
+                                                    <Flex alignItems="center" gap={2}>
+                                                        {t("5-dayAvgTemp")}(°C)
+                                                        <Text fontSize="xl">
+                                                            {sortOrderFD === 'asc' ? ' ↑' : ' ↓'}
+                                                        </Text>
+                                                    </Flex>
                                                 </Th>
                                             </Tr>
                                         </Thead>
@@ -711,7 +721,9 @@ const Dashboard = () => {
                                                                             advancedAnalysisList.length >= 3
                                                                         }
                                                                         onChange={(e) => handleCheckboxChange(e, record.Station)}
-                                                                        borderColor={"gray.400"}
+                                                                        colorScheme="purple"
+                                                                        icon={<CheckboxIcon bg="linear-gradient(45deg, #6366f1, #ec4899)" />}
+                                                                        size="lg"
                                                                     />
                                                                 )}
                                                                 {screenIsNarrowerThan700px ? stationInfo.name : `${stationInfo.name} (${record.Station})`}
@@ -1137,9 +1149,13 @@ const Dashboard = () => {
                                         <Table variant="striped">
                                             <Thead>
                                                 <Tr>
-                                                    <Th cursor="pointer" onClick={sortDataDate}>
-                                                        {t("date")}
-                                                        {sortOrderDate === 'asc' ? ' ↑' : ' ↓'}
+                                                    <Th cursor="pointer" onClick={() => handleSort(sortDataDate)}>
+                                                        <Flex alignItems="center" gap={2}>
+                                                            {t("date")}
+                                                            <Text fontSize="xl">
+                                                                {sortOrderDate === 'asc' ? ' ↑' : ' ↓'}
+                                                            </Text>
+                                                        </Flex>
                                                     </Th>
                                                     {confirmedStations.map(code => {
                                                         const stationInfo = stationList.find(s => s.code === code);
