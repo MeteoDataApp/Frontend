@@ -25,7 +25,7 @@ MONGO_CONNECTION_STRING = "mongodb+srv://readonly_user:lucky0218@cluster0.lqm6b.
 client = MongoClient(MONGO_CONNECTION_STRING)
 db = client["meteo"]
 test_collection = db["test"]
-temprature_collection = db["temp"]
+temperature_collection = db["temp"]
 
 def handle_api_error(e, message="Internal server error"):
     app.logger.error(f"Error: {str(e)}")
