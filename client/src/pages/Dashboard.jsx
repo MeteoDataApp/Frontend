@@ -511,6 +511,7 @@ const Dashboard = () => {
                                                     size="md"
                                                     borderRadius="md"
                                                     w="100%"
+                                                    max={getDynamicDate()}
                                                 />
                                             </FormControl>
 
@@ -523,6 +524,7 @@ const Dashboard = () => {
                                                     size="md"
                                                     borderRadius="md"
                                                     w="100%"
+                                                    max={getDynamicDate()}
                                                 />
                                             </FormControl>
                                         </Flex>
@@ -579,6 +581,7 @@ const Dashboard = () => {
                                                 w={{ base: "100%", sm: "200px" }}
                                                 display={"flex"}
                                                 justifyContent={{ base: "center", sm: "flex-start" }}
+                                                max={getDynamicDate()}
                                             />
 
 
@@ -682,6 +685,7 @@ const Dashboard = () => {
                                                     size="md"
                                                     borderRadius="md"
                                                     w="100%"
+                                                    max={getDynamicDate()}
                                                 />
                                             </FormControl>
 
@@ -694,6 +698,7 @@ const Dashboard = () => {
                                                     size="md"
                                                     borderRadius="md"
                                                     w="100%"
+                                                    max={getDynamicDate()}
                                                 />
                                             </FormControl>
                                         </Flex>
