@@ -53,7 +53,7 @@ The application includes three main endpoints:
 
 ## Helper Functions
 
-```
+```python
 def handle_api_error(e, message="Internal server error"):
     app.logger.error(f"Error: {str(e)}")
     return json.jsonify({
@@ -66,7 +66,7 @@ This function serves to help abstract returning 500 errors from other endpoints.
 
 ---
 
-```
+```python
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
@@ -295,6 +295,106 @@ Retrieves historical weather analytics for a range of specified stations, on a s
 }
 ```
 
+### 5. Get Weather Data by Date
+
+**URL:** `/by_multiple_stations`
+**Method:** `GET`
+
+#### Purpose
+Retrieves weather records for multiple specified stations from the database, optionally filtered by a date range. Returns data grouped by date with nested station information.
+
+#### Request
+- **URL:** `/by_multiple_stations` 
+- **Method:** `GET`  
+- **Parameters:** stations, start, end
+
+#### Query Parameters
+- **stations** (required)
+  - **Type:** Comma-separated string of integers
+  - **Example:** `58238,58349,58354`
+  - **Description:** List of station identifiers to retrieve data for
+    
+- **start** (optional)
+  - **Type:** String 
+  - **Format:** `"YYYY-MM-DD"`
+  - **Description:** Start date for filtering records (inclusive)
+
+- **end** (optional)
+  - **Type:** String
+  - **Format:** `"YYYY-MM-DD"`
+  - **Description:** End date for filtering records (inclusive)
+
+#### Error Handling
+`400 Bad Request`: 
+- If `stations` parameter is missing
+- If invalid date format provided
+- If invalid station codes detected
+
+`404 Not Found`: If no data matches the query criteria
+
+`405 Method Not Allowed`: For non-GET requests
+
+`500 Internal Server Error`: For unexpected server errors
+
+#### Behavior
+- Accepts 1-13 station codes in comma-separated format
+- Returns data sorted chronologically (oldest to newest)
+- Groups results by date with nested station data
+- Automatically removes duplicate entries for same station+date combinations
+- Returns both average temperature and 5-day average temperature for each station
+
+#### Success Response
+- **Content-Type:** `application/json`
+- **HTTP Status Code:** `200 OK`
+- **Response Body:** A JSON object with:
+```json
+"success": true
+"data": [
+  {
+    "date": "YYYY-MM-DD",
+    "station_code1": {
+      "averageTemperature": float,
+      "fiveDayAverageTemperature": float
+    },
+    "station_code2": {
+      "averageTemperature": float,
+      "fiveDayAverageTemperature": float
+    }
+  }
+]
+```
+
+**Example Success Response:**
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "date": "2025-03-04",
+      "58238": {
+        "averageTemperature": 4.3,
+        "fiveDayAverageTemperature": 12.72
+      },
+      "58349": {
+        "averageTemperature": 6.2,
+        "fiveDayAverageTemperature": 14.38
+      }
+    },
+    {
+      "date": "2025-03-05",
+      "58238": {
+        "averageTemperature": 5.9,
+        "fiveDayAverageTemperature": 10.92
+      },
+      "58349": {
+        "averageTemperature": 6.4,
+        "fiveDayAverageTemperature": 12.66
+      }
+    }
+  ]
+}
+```
+
 ### Database Schema
 ```json
 [
@@ -310,4 +410,4 @@ Retrieves historical weather analytics for a range of specified stations, on a s
 
 **Documentation written by [Joshua](https://github.com/Sadliquid) and [Lincoln](https://github.com/lincoln0623)**
 
-**API Documentation and Database Schema Last Updated on `24 March 2025 11:19 AM`**
+**API Documentation and Database Schema Last Updated on `26 March 2025 12:15 PM`**
