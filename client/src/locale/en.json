@@ -98,6 +98,7 @@
         "selectMaxThreeStations": "You can select a max of 3 stations",
         "tableAndLineChart": "Table and Line Chart",
         "selectMultipleStations": "Select Multiple Stations",
-        "stationsSelected": "Stations Selected"
+        "stationsSelected": "Stations Selected",
+        "current": "Current"
     }
 }

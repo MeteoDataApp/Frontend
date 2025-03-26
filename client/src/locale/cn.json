@@ -98,6 +98,7 @@
         "selectMaxThreeStations": "最多只能选择3个车站",
         "tableAndLineChart": "表格和折线图",
         "selectMultipleStations": "选择多个站点",
-        "stationsSelected": "已选站点"
+        "stationsSelected": "已选站点",
+        "current": "当前"
     }
 }

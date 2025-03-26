@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Flex, Heading, Text, HStack, Link, IconButton, Drawer, DrawerOverlay, DrawerContent, DrawerBody, VStack, Menu, MenuButton, MenuList, MenuItem } from '@chakra-ui/react';
+import { Box, Flex, Heading, Text, HStack, Link, IconButton, Drawer, DrawerOverlay, DrawerContent, DrawerBody, VStack, Menu, MenuButton, MenuList, MenuItem, Badge } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { FaDatabase, FaGlobe, FaHome, FaInfoCircle, FaTimes } from 'react-icons/fa';
 import { HamburgerIcon } from '@chakra-ui/icons';
@@ -72,17 +72,36 @@ const Navbar = () => {
                             {t("navbarChangeLanguage")}
                         </MenuButton>
                         <MenuList>
-                            <MenuItem onClick={() => {
-                                    i18n.changeLanguage("en")
-                                    localStorage.setItem("i18nextLng", "en")
-                                }}>
+                            <MenuItem 
+                                onClick={() => {
+                                i18n.changeLanguage("en");
+                                localStorage.setItem("i18nextLng", "en");
+                                }}
+                            >
+                                <Box display="flex" justifyContent="space-between" alignItems="center" width="100%">
                                 English (EN)
+                                {i18n.language === "en" && (
+                                    <Badge colorScheme="purple" variant="subtle" borderRadius="full" px={2}>
+                                    {t("current")}
+                                    </Badge>
+                                )}
+                                </Box>
                             </MenuItem>
-                            <MenuItem onClick={() => {
-                                    i18n.changeLanguage("cn")
-                                    localStorage.setItem("i18nextLng", "cn")
-                                }}>
+                        
+                            <MenuItem 
+                                onClick={() => {
+                                i18n.changeLanguage("cn");
+                                localStorage.setItem("i18nextLng", "cn");
+                                }}
+                            >
+                                <Box display="flex" justifyContent="space-between" alignItems="center" width="100%">
                                 中文 (CN)
+                                {i18n.language === "cn" && (
+                                    <Badge colorScheme="purple" variant="subtle" borderRadius="full" px={2}>
+                                    {t("current")}
+                                    </Badge>
+                                )}
+                                </Box>
                             </MenuItem>
                         </MenuList>
                     </Menu>
@@ -168,18 +187,37 @@ const Navbar = () => {
                                         >
                                             {t("navbarChangeLanguage")}
                                         </MenuButton>
-                                        <MenuList>
-                                            <MenuItem onClick={() => {
-                                                    i18n.changeLanguage("en")
-                                                    localStorage.setItem("i18nextLng", "en")
-                                                }}>
+                                        <MenuList mr={10}>
+                                            <MenuItem 
+                                                onClick={() => {
+                                                i18n.changeLanguage("en");
+                                                localStorage.setItem("i18nextLng", "en");
+                                                }}
+                                            >
+                                                <Box display="flex" justifyContent="space-between" alignItems="center" width="100%">
                                                 English (EN)
+                                                {i18n.language === "en" && (
+                                                    <Badge colorScheme="purple" variant="subtle" borderRadius="full" px={2}>
+                                                    {t("current")}
+                                                    </Badge>
+                                                )}
+                                                </Box>
                                             </MenuItem>
-                                            <MenuItem onClick={() => {
-                                                i18n.changeLanguage("cn")
-                                                    localStorage.setItem("i18nextLng", "cn")
-                                                }}>
+                                        
+                                            <MenuItem 
+                                                onClick={() => {
+                                                i18n.changeLanguage("cn");
+                                                localStorage.setItem("i18nextLng", "cn");
+                                                }}
+                                            >
+                                                <Box display="flex" justifyContent="space-between" alignItems="center" width="100%">
                                                 中文 (CN)
+                                                {i18n.language === "cn" && (
+                                                    <Badge colorScheme="purple" variant="subtle" borderRadius="full" px={2}>
+                                                    {t("current")}
+                                                    </Badge>
+                                                )}
+                                                </Box>
                                             </MenuItem>
                                         </MenuList>
                                     </Menu>
