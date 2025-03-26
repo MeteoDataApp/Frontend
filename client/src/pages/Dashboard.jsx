@@ -11,6 +11,7 @@ import { FiArrowDown, FiArrowLeft, FiArrowUp, FiCalendar, FiMapPin } from 'react
 import { useTranslation } from 'react-i18next';
 import AvgAdvancedLineChart from '../components/AvgAdvanceLineChart';
 import FiveDayAdvancedLineChart from '../components/5DayAdvanceLineChart';
+import { min } from 'date-fns';
 
 const Dashboard = () => {
     const MotionBox = motion.div;
@@ -237,6 +238,27 @@ const Dashboard = () => {
     
         return { hottestStations, coldestStations };
     }
+
+    const getExtremeStations = (data) => {
+        if (data.length === 0) return { hottestStations: [], coldestStations: [] };
+      
+        const maxAvg = Math.max(...data.map(d => d.Avg));
+        const hottestCandidates = data.filter(d => d.Avg === maxAvg);
+        
+        const minAvg = Math.min(...data.map(d => d.Avg));
+        const coldestCandidates = data.filter(d => d.Avg === minAvg);
+      
+        const resolveTie = (candidates, compareFn) => {
+          if (candidates.length === 1) return candidates;
+          const extremeFD = compareFn(...candidates.map(c => c.FDAvg));
+          return candidates.filter(c => c.FDAvg === extremeFD);
+        };
+      
+        return {
+          hottestStations: resolveTie(hottestCandidates, Math.max),
+          coldestStations: resolveTie(coldestCandidates, Math.min)
+        };
+    };
 
     const sortDataDate = () => {
         const sorted = [...data].sort((a, b) => {
@@ -713,8 +735,8 @@ const Dashboard = () => {
                                 maxW="1200px"
                             >
                                 <TableContainer bg="white" borderRadius="xl" boxShadow="xl" mb="8rem" mx={{ base: "2rem", md: "4rem", lg: "8rem" }}>
-                                    <Table variant="striped">
-                                        <Thead>
+                                    <Table>
+                                        <Thead bg="gray.100" color="white">
                                             <Tr>
 
                                                 <Th>{t("station")}</Th>
@@ -739,9 +761,13 @@ const Dashboard = () => {
                                         </Thead>
                                         <Tbody>
                                             {displayedData.map((record) => {
+                                                const { hottestStations, coldestStations } = getExtremeStations(data);
                                                 const stationInfo = stationList.find(s => s.code === record.Station);
+                                                const isHottest = hottestStations.some(h => h.Station === record.Station);
+                                                const isColdest = coldestStations.some(c => c.Station === record.Station);
+
                                                 return (
-                                                    <Tr key={record._id}>
+                                                    <Tr key={record._id} bg={isHottest ? 'red.50' : isColdest ? 'blue.50' : 'white'}>
                                                         <Td>
                                                             <Box display="flex" gap={3}>
                                                                 {activeTab === "date" && (
