@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-    baseURL: "http://127.0.0.1:5000", // change this to actual server URL in deployment stage
+    baseURL: import.meta.env.BACKEND_URL,
 })
 
 instance.interceptors.request.use((config) => {
