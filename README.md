@@ -1,7 +1,7 @@
 ## About
 This is a website for meteorology enthusiasts to monitor & compare daily average & seasonal changes!
 
-### How to run the Frontend Server
+### How to run the Frontend Server locally
 1.) `npm i`
 
 2.) `npm run dev`
