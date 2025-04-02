@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { motion } from 'framer-motion';
-import { Box, Heading, Text, Icon, Grid, useBreakpointValue, Button } from '@chakra-ui/react';
+import { Box, Heading, Text, Icon, Grid, useBreakpointValue, Button, VStack, Avatar, Flex, Link } from '@chakra-ui/react';
 import { FiClock, FiAlertTriangle, FiUser } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -10,27 +10,52 @@ const AboutUs = () => {
 
     const MotionBox = motion.create(Box);
     const MotionButton = motion.create(Button);
+    const MotionFlex = motion.create(Flex);
 
     const { t } = useTranslation();
 
     const gridColumns = useBreakpointValue({ base: 1, md: 2, lg: 3 });
+    const creditsColumns = useBreakpointValue({ base: 1, md: 2, lg: 4 });
 
     const features = [
-        { 
-            icon: FiUser, 
-            title: t("easeOfUse"), 
-            description: t("intuitiveWebBasedSolutionForAccurateWeatherInformation") 
+        {
+            icon: FiUser,
+            title: t("easeOfUse"),
+            description: t("intuitiveWebBasedSolutionForAccurateWeatherInformation")
         },
-        { 
-            icon: FiClock, 
-            title: t("historicalData"), 
-            description: t("accessAccurateWeatherArchivesAndViewDetailedDataComparisons") 
+        {
+            icon: FiClock,
+            title: t("historicalData"),
+            description: t("accessAccurateWeatherArchivesAndViewDetailedDataComparisons")
         },
-        { 
-            icon: FiAlertTriangle, 
-            title: t("riskAnalysis"), 
+        {
+            icon: FiAlertTriangle,
+            title: t("riskAnalysis"),
             description: t("advancedImpactAssessmentForBusinesses")
         },
+    ];
+
+    const teamMembers = [
+        {
+            name: "Joshua Long",
+            github: "https://github.com/Sadliquid",
+            role: t("fullStackDeveloper")
+        },
+        {
+            name: "Lincoln Lim",
+            github: "https://github.com/lincoln0623",
+            role: t("fullStackDeveloper")
+        },
+        {
+            name: "twetrttr",
+            github: "https://github.com/lucky0218",
+            role: t("founderAndBackendDeveloper")
+        },
+        {
+            name: "tth37",
+            github: "https://github.com/tth37",
+            role: t("founderAndBackendDeveloper")
+        }
     ];
 
     return (
@@ -78,8 +103,16 @@ const AboutUs = () => {
                         borderRadius="2xl"
                         bg="whiteAlpha.900"
                         boxShadow="xl"
-                        whileHover={{ y: -10 }}
-                        transition={{ type: 'spring', stiffness: 300 }}
+                        initial={{ opacity: 0, y: 30, scale: 0.9 }}
+                        whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                        transition={{
+                            duration: 0.5,
+                            delay: index * 0.2,
+                            type: "spring",
+                            stiffness: 200,
+                            damping: 20
+                        }}
+                        viewport={{ once: true, margin: "-50px" }}
                     >
                         <Icon as={feature.icon} boxSize={12} color="#4F46E5" mb={4} />
                         <Heading fontSize="2xl" mb={4}>{feature.title}</Heading>
@@ -88,11 +121,87 @@ const AboutUs = () => {
                 ))}
             </Grid>
 
+            {/* Team Credits Section */}
+            <MotionBox
+                maxW="1200px"
+                mx="auto"
+                mb={16}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+                viewport={{ once: true }}
+            >
+                <Heading
+                    textAlign="center"
+                    mb={12}
+                    bgGradient="linear(to-r, #6366f1, #ec4899)"
+                    bgClip="text"
+                    fontSize={{ base: '3xl', md: '4xl' }}
+                >
+                    {t("meetOurTeam")}
+                </Heading>
+
+                <Grid
+                    templateColumns={`repeat(${creditsColumns}, 1fr)`}
+                    gap={6}
+                >
+                    {teamMembers.map((member, index) => (
+                        <Link key={index} href={member.github} isExternal _hover={{ textDecoration: "none" }}>
+                            <MotionFlex
+                                key={index}
+                                direction="column"
+                                alignItems="center"
+                                p={6}
+                                borderRadius="xl"
+                                bg="whiteAlpha.900"
+                                boxShadow="lg"
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                transition={{
+                                    duration: 0.3,
+                                    whileHover: { type: "spring", stiffness: 300, damping: 15 },
+                                    exit: { type: "tween", duration: 0.15 }
+                                }}
+                                viewport={{ once: true }}
+                                whileHover={{
+                                    cursor: "pointer",
+                                    y: -8,
+                                    scale: 1.03,
+                                    boxShadow: "rgba(0, 0, 0, 0.15) 0px 15px 25px, rgba(0, 0, 0, 0.05) 0px 5px 10px",
+                                    background: "linear-gradient(135deg, rgba(255,255,255,0.95), rgba(240,244,255,0.95))"
+                                }}
+                            >
+                                <Avatar
+                                    size="xl"
+                                    name={member.name}
+                                    mb={4}
+                                    bg="linear-gradient(135deg, #6366f1, #ec4899)"
+                                    color="white"
+                                />
+                                <VStack spacing={1} align="center">
+                                    <Text
+                                        fontWeight="bold"
+                                        fontSize="lg"
+                                        color="#4F46E5"
+                                    >
+                                        {member.name}
+                                    </Text>
+                                    <Text color="gray.500" fontSize="sm">
+                                        {member.role}
+                                    </Text>
+                                </VStack>
+                            </MotionFlex>
+                        </Link>
+                    ))}
+                </Grid>
+            </MotionBox>
+
             <MotionBox
                 textAlign="center"
                 initial={{ scale: 0.9 }}
                 whileInView={{ scale: 1 }}
                 viewport={{ once: true }}
+                mb={20}
             >
                 <Heading fontSize="3xl" mb={6}>
                     {t("readyForWeatherInsights")}
