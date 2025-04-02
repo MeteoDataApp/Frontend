@@ -39,22 +39,26 @@ const AboutUs = () => {
         {
             name: "Joshua Long",
             github: "https://github.com/Sadliquid",
-            role: t("fullStackDeveloper")
+            role: t("fullStackDeveloper"),
+            avatar: "/sadliquid.jpeg"
         },
         {
             name: "Lincoln Lim",
             github: "https://github.com/lincoln0623",
-            role: t("fullStackDeveloper")
+            role: t("fullStackDeveloper"),
+            avatar: "/lincoln0623.jpeg"
         },
         {
             name: "twetrttr",
             github: "https://github.com/lucky0218",
-            role: t("founderAndBackendDeveloper")
+            role: t("founderAndBackendDeveloper"),
+            avatar: "/lucky0218.png"
         },
         {
             name: "tth37",
             github: "https://github.com/tth37",
-            role: t("founderAndBackendDeveloper")
+            role: t("founderAndBackendDeveloper"),
+            avatar: "/tth37.jpeg"
         }
     ];
 
@@ -174,6 +178,7 @@ const AboutUs = () => {
                                 <Avatar
                                     size="xl"
                                     name={member.name}
+                                    src={member.avatar}
                                     mb={4}
                                     bg="linear-gradient(135deg, #6366f1, #ec4899)"
                                     color="white"
