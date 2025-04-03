@@ -156,6 +156,7 @@ const AboutUs = () => {
                                 direction="column"
                                 alignItems="center"
                                 p={6}
+                                m={2}
                                 borderRadius="xl"
                                 bg="whiteAlpha.900"
                                 boxShadow="lg"
