@@ -12,6 +12,17 @@ import { useTranslation } from 'react-i18next';
 import AvgAdvancedLineChart from '../components/AvgAdvanceLineChart';
 import FiveDayAdvancedLineChart from '../components/5DayAdvanceLineChart';
 
+const getTemperatureColor = (temperature) => {
+    const temp = parseFloat(temperature);
+    if (temp >= 30) return "red.500";
+    if (temp >= 25) return "orange.500";
+    if (temp >= 20) return "yellow.500";
+    if (temp >= 15) return "green.500";
+    if (temp >= 10) return "blue.300"; // light blue
+    if (temp >= 0) return "blue.600";  // medium blue
+    return "blue.800"; // dark blue for below 0
+};
+
 const Dashboard = () => {
     const MotionBox = motion.div;
 
@@ -341,11 +352,11 @@ const Dashboard = () => {
     const searchTermLower = searchTerm.toLowerCase();
 
     const filteredStations = stationList.filter(station =>
-        station.name.toLowerCase().includes(searchTermLower) || 
-        station.englishName.toLowerCase().includes(searchTermLower) || 
-        station.chineseName.includes(searchTerm) 
+        station.name.toLowerCase().includes(searchTermLower) ||
+        station.englishName.toLowerCase().includes(searchTermLower) ||
+        station.chineseName.includes(searchTerm)
     );
-    const otherStations = stationList.filter(station => 
+    const otherStations = stationList.filter(station =>
         !filteredStations.some(filtered => filtered.code === station.code)
     );
 
@@ -493,10 +504,10 @@ const Dashboard = () => {
                                         {/* First Row - Station Selection */}
                                         <Flex width={{ base: "100%", sm: "auto" }} justifyContent="center">
                                             <Menu>
-                                                <MenuButton 
-                                                    as={Button} 
-                                                    rightIcon={<ChevronDownIcon />} 
-                                                    w={{ base: "100%", sm: "auto" }} 
+                                                <MenuButton
+                                                    as={Button}
+                                                    rightIcon={<ChevronDownIcon />}
+                                                    w={{ base: "100%", sm: "auto" }}
                                                     mt={{ base: 0, sm: 0, md: 7 }}
                                                 >
                                                     {selectedStation ? `${stationList.find(s => s.code === selectedStation).name} (${selectedStation})` : t("selectStation")}
@@ -518,8 +529,8 @@ const Dashboard = () => {
                                                                     {searchTerm ? t("searched") : t("allStations")}
                                                                 </Text>
                                                                 {filteredStations.map(station => (
-                                                                    <MenuItem 
-                                                                        key={station.code} 
+                                                                    <MenuItem
+                                                                        key={station.code}
                                                                         onClick={() => setSelectedStation(station.code)}
                                                                     >
                                                                         {station.name} ({station.code})
@@ -535,8 +546,8 @@ const Dashboard = () => {
                                                             <>
                                                                 <Text fontWeight="bold">{t("others")}</Text>
                                                                 {otherStations.map(station => (
-                                                                    <MenuItem 
-                                                                        key={station.code} 
+                                                                    <MenuItem
+                                                                        key={station.code}
                                                                         onClick={() => setSelectedStation(station.code)}
                                                                     >
                                                                         {station.name} ({station.code})
@@ -1031,6 +1042,7 @@ const Dashboard = () => {
                                                 px={{ base: 4, md: 6 }}
                                                 borderRadius={10}
                                                 mx={2}
+                                                my={{ base: 0, md: 2 }}
                                                 w={{ base: '80%', md: 'auto' }}
                                                 mb={{ base: 4, md: 0 }}
                                                 boxShadow="xl"
@@ -1109,14 +1121,14 @@ const Dashboard = () => {
                                                         <Flex align="center" justify="space-between" flex={1}>
                                                             <Box>
                                                                 <Text
-                                                                    fontSize={{ base: '2xl', md: '3xl', lg: '4xl' }}
-                                                                    fontWeight="black"
-                                                                    color="gray.800"
-                                                                    lineHeight="1"
+                                                                    fontSize={{ base: 'xl', md: 'lg', lg: '3xl' }}
+                                                                    fontWeight={"black"}
+                                                                    color={getTemperatureColor(record.Avg)}
+                                                                    lineHeight={{ base: '2', md: '1.5', lg: '1.1' }}
                                                                 >
                                                                     {record.Avg}°C
                                                                 </Text>
-                                                                <Text fontSize={{ md: 'xs', lg: 'sm' }} color="gray.600" mt={1}>
+                                                                <Text fontSize={"xs"} color="gray.600" mt={1}>
                                                                     {avgTempLabel}
                                                                 </Text>
                                                             </Box>
@@ -1125,7 +1137,7 @@ const Dashboard = () => {
                                                                     display="inline-flex"
                                                                     alignItems="center"
                                                                     lineHeight="2"
-                                                                    fontSize={{ base: 'md', md: 'lg', lg: "xl" }}
+                                                                    fontSize={{ base: 'lg', md: 'md', lg: "lg" }}
                                                                     fontWeight="bold"
                                                                     gap={1}
                                                                     color={record.FDAvg > record.Avg ? 'red.600' : record.FDAvg === record.Avg ? "green.600" : 'blue.600'}
@@ -1141,7 +1153,7 @@ const Dashboard = () => {
                                                                         )}
                                                                     </Box>
                                                                 </Text>
-                                                                <Text fontSize={{ md: 'xs', lg: 'sm' }} color="gray.600">
+                                                                <Text fontSize={{ base:"xs", md:"2xs"}} color="gray.600" >
                                                                     {fdAvgTempLabel}
                                                                 </Text>
                                                             </Box>
