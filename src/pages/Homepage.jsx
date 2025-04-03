@@ -50,15 +50,10 @@ export default function HomePage() {
                 });
 
                 reverseGeocode(lat, lon);
-            } else {
-                setRequestReceived(true);
-                showToast("error",
-                    t("anErrorOccuredWhileFetchingWeatherData"),
-                    t("seeConsoleForMoreDetails")
-                );
             }
         } catch (error) {
             console.error(error);
+            setRequestReceived(true);
             showToast("error", 
                 t("anErrorOccuredWhileFetchingWeatherData"),
                 t("seeConsoleForMoreDetails")
@@ -98,10 +93,11 @@ export default function HomePage() {
                         fetchRealtimeWeatherData(latitude, longitude);
                     }, (error) => {
                         setRequestReceived(true);
+                        console.error(error)
                         showToast(
                             "error",
                             t("anErrorOccuredWhileFetchingLocationData"),
-                            error.message
+                            t("seeConsoleForMoreDetails")
                         );
                     }
                 );
