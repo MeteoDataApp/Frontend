@@ -1140,18 +1140,9 @@ const Dashboard = () => {
                                                                     fontSize={{ base: 'lg', md: 'md', lg: "lg" }}
                                                                     fontWeight="bold"
                                                                     gap={1}
-                                                                    color={record.FDAvg > record.Avg ? 'red.600' : record.FDAvg === record.Avg ? "green.600" : 'blue.600'}
+                                                                    color={getTemperatureColor(record.FDAvg)}
                                                                 >
-                                                                    {record.FDAvg.toFixed(1)}°C
-                                                                    <Box as="span" display="inline-block" mt="2px">
-                                                                        {record.FDAvg > record.Avg ? (
-                                                                            <FiArrowUp />
-                                                                        ) : record.FDAvg === record.Avg ? (
-                                                                            <FiArrowLeft />
-                                                                        ) : (
-                                                                            <FiArrowDown />
-                                                                        )}
-                                                                    </Box>
+                                                                    {record.FDAvg.toFixed(1)} °C
                                                                 </Text>
                                                                 <Text fontSize={{ base:"xs", md:"2xs"}} color="gray.600" >
                                                                     {fdAvgTempLabel}
