@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-    baseURL: "https://meteo-data-backend.vercel.app",
+    baseURL: import.meta.env.VITE_BACKEND_URL,
 })
 
 instance.interceptors.request.use((config) => {
