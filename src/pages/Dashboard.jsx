@@ -7,7 +7,7 @@ import { useShowToast } from '../extensions/useShowToast';
 import server from "../../networking";
 import ByStationLineChart from '../components/ByStationLineChart';
 import ByDateBarChart from '../components/ByDateBarChart';
-import { FiArrowDown, FiArrowLeft, FiArrowUp, FiCalendar, FiMapPin } from 'react-icons/fi';
+import { FiArrowDown, FiArrowUp, FiCalendar, FiMapPin } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
 import AvgAdvancedLineChart from '../components/AvgAdvanceLineChart';
 import FiveDayAdvancedLineChart from '../components/5DayAdvanceLineChart';

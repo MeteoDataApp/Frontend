@@ -99,6 +99,9 @@ export default function HomePage() {
                             t("anErrorOccuredWhileFetchingLocationData"),
                             t("seeConsoleForMoreDetails")
                         );
+                    },
+                    {
+                        timeout: 5000,
                     }
                 );
             } else {
