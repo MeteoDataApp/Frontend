@@ -5,11 +5,11 @@ import cnJSON from "./locale/cn.json";
 
 i18n.use(initReactI18next).init({
     resources: {
-        en: { ...enJSON },
         cn: { ...cnJSON },
+        en: { ...enJSON }
     },
-    lng: localStorage.getItem("i18nextLng") || "en",
-    fallbackLng: "en",
+    lng: localStorage.getItem("i18nextLng") || "cn",
+    fallbackLng: "cn",
     interpolation: {
         escapeValue: false,
     },

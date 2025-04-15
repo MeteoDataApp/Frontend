@@ -74,22 +74,6 @@ const Navbar = () => {
                         <MenuList>
                             <MenuItem 
                                 onClick={() => {
-                                i18n.changeLanguage("en");
-                                localStorage.setItem("i18nextLng", "en");
-                                }}
-                            >
-                                <Box display="flex" justifyContent="space-between" alignItems="center" width="100%">
-                                English (EN)
-                                {i18n.language === "en" && (
-                                    <Badge colorScheme="purple" variant="subtle" borderRadius="full" px={2}>
-                                    {t("current")}
-                                    </Badge>
-                                )}
-                                </Box>
-                            </MenuItem>
-                        
-                            <MenuItem 
-                                onClick={() => {
                                 i18n.changeLanguage("cn");
                                 localStorage.setItem("i18nextLng", "cn");
                                 }}
@@ -97,6 +81,22 @@ const Navbar = () => {
                                 <Box display="flex" justifyContent="space-between" alignItems="center" width="100%">
                                 中文 (CN)
                                 {i18n.language === "cn" && (
+                                    <Badge colorScheme="purple" variant="subtle" borderRadius="full" px={2}>
+                                    {t("current")}
+                                    </Badge>
+                                )}
+                                </Box>
+                            </MenuItem>
+
+                            <MenuItem 
+                                onClick={() => {
+                                i18n.changeLanguage("en");
+                                localStorage.setItem("i18nextLng", "en");
+                                }}
+                            >
+                                <Box display="flex" justifyContent="space-between" alignItems="center" width="100%">
+                                English (EN)
+                                {i18n.language === "en" && (
                                     <Badge colorScheme="purple" variant="subtle" borderRadius="full" px={2}>
                                     {t("current")}
                                     </Badge>
@@ -190,22 +190,6 @@ const Navbar = () => {
                                         <MenuList mr={10}>
                                             <MenuItem 
                                                 onClick={() => {
-                                                i18n.changeLanguage("en");
-                                                localStorage.setItem("i18nextLng", "en");
-                                                }}
-                                            >
-                                                <Box display="flex" justifyContent="space-between" alignItems="center" width="100%">
-                                                English (EN)
-                                                {i18n.language === "en" && (
-                                                    <Badge colorScheme="purple" variant="subtle" borderRadius="full" px={2}>
-                                                    {t("current")}
-                                                    </Badge>
-                                                )}
-                                                </Box>
-                                            </MenuItem>
-                                        
-                                            <MenuItem 
-                                                onClick={() => {
                                                 i18n.changeLanguage("cn");
                                                 localStorage.setItem("i18nextLng", "cn");
                                                 }}
@@ -213,6 +197,22 @@ const Navbar = () => {
                                                 <Box display="flex" justifyContent="space-between" alignItems="center" width="100%">
                                                 中文 (CN)
                                                 {i18n.language === "cn" && (
+                                                    <Badge colorScheme="purple" variant="subtle" borderRadius="full" px={2}>
+                                                    {t("current")}
+                                                    </Badge>
+                                                )}
+                                                </Box>
+                                            </MenuItem>
+
+                                            <MenuItem 
+                                                onClick={() => {
+                                                i18n.changeLanguage("en");
+                                                localStorage.setItem("i18nextLng", "en");
+                                                }}
+                                            >
+                                                <Box display="flex" justifyContent="space-between" alignItems="center" width="100%">
+                                                English (EN)
+                                                {i18n.language === "en" && (
                                                     <Badge colorScheme="purple" variant="subtle" borderRadius="full" px={2}>
                                                     {t("current")}
                                                     </Badge>
